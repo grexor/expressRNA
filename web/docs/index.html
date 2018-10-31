@@ -1,0 +1,305 @@
+    <link rel="stylesheet" href="/tippy/tippy.css">
+    <script src="/tippy/tippy.min.js"></script>
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <style>
+
+      .tippy-tooltip.light-theme {
+        font-family: 'Roboto', sans-serif;
+        font-size: 13px;
+        font-weight: 100;
+        text-align: justify;
+        background-color: #ffffff !important;
+      }
+
+      * {
+        font-family: 'Open Sans', sans-serif;
+      }
+
+      a {
+        text-decoration: none;
+        color: #2a6bcc;
+      }
+
+      a:hover {
+        text-decoration: none;
+        color: #0D4F8B;
+      }
+
+      .data-row {
+        font-size: 11px;
+        outline: none;
+      }
+
+      .header-row {
+        font-size: 11px;
+        outline: none;
+        background-color: #f1f1f1;
+        text-align: left;
+      }
+
+      .div_center {
+          font-size: 13px;
+          font-family: 'Open Sans', sans-serif;
+          width: 900px;
+          background-color: #ffffff;
+          opacity: 0.8;
+          margin: auto;
+      }
+    </style>
+
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['table']});
+      google.charts.setOnLoadCallback(drawTable);
+
+      var cssClassNames = {
+      'headerRow': '',
+      'tableRow': 'data-row',
+      'oddTableRow': 'data-row',
+      'selectedTableRow': '',
+      'hoverTableRow': '',
+      'headerCell': 'header-row',
+      'tableCell': '',
+      'rowNumberCell': ''
+    };
+
+      function drawTable() {
+        var data = new google.visualization.DataTable();
+
+        data.addColumn('string', 'Gene ID');
+        data.addColumn('string', 'Strand');
+        data.addColumn('string', 'Gene Name');
+        data.addColumn('string', 'Gene Biotype');
+        data.addColumn('number', '#PolyA Sites');
+        data.addColumn('number', 'Proximal Loc');
+        data.addColumn('number', 'Proximal Exp');
+        data.addColumn('number', 'Distal Loc');
+        data.addColumn('number', 'Distal Exp');
+        data.addColumn('string', 'Pair Type');
+        data.addColumn('number', 'Proximal Fold Change');
+        data.addColumn('number', 'Distal Fold Change');
+        data.addColumn('number', 'Proximal PAdj');
+        data.addColumn('number', 'Distal Padj');
+        data.addColumn('string', 'Gene Class');
+
+        data.addRows([
+          ["ENSMUSG00000056579", "-", "Tug1", "processed_transcript", 2,	3643942,	163, 3643942,	163, "tandem", 	-1.02,	0.88, 0.05972,	0.05915, "enhanced"],
+          ["ENSMUSG00000056579", "-", "Tug1", "processed_transcript", 2,	3643942,	163, 3643942,	163, "tandem", 	-1.02,	0.88, 0.05972,	0.05915, "enhanced"],
+          ["ENSMUSG00000056579", "-", "Tug1", "processed_transcript", 2,	3643942,	163, 3643942,	163, "tandem", 	-1.02,	0.88, 0.05972,	0.05915, "enhanced"],
+          ["ENSMUSG00000056579", "-", "Tug1", "processed_transcript", 2,	3643942,	163, 3643942,	163, "tandem", 	-1.02,	0.88, 0.05972,	0.05915, "enhanced"],
+          ["ENSMUSG00000056579", "-", "Tug1", "processed_transcript", 2,	3643942,	163, 3643942,	163, "tandem", 	-1.02,	0.88, 0.05972,	0.05915, "enhanced"],
+          ["ENSMUSG00000056579", "-", "Tug1", "processed_transcript", 2,	3643942,	163, 3643942,	163, "tandem", 	-1.02,	0.88, 0.05972,	0.05915, "enhanced"],
+          ["ENSMUSG00000056579", "-", "Tug1", "processed_transcript", 2,	3643942,	163, 3643942,	163, "tandem", 	-1.02,	0.88, 0.05972,	0.05915, "enhanced"],
+          ["ENSMUSG00000056579", "-", "Tug1", "processed_transcript", 2,	3643942,	163, 3643942,	163, "tandem", 	-1.02,	0.88, 0.05972,	0.05915, "enhanced"],
+          ["ENSMUSG00000056579", "-", "Tug1", "processed_transcript", 2,	3643942,	163, 3643942,	163, "tandem", 	-1.02,	0.88, 0.05972,	0.05915, "enhanced"],
+          ["ENSMUSG00000056579", "-", "Tug1", "processed_transcript", 2,	3643942,	163, 3643942,	163, "tandem", 	-1.02,	0.88, 0.05972,	0.05915, "enhanced"],
+          ["ENSMUSG00000056579", "-", "Tug1", "processed_transcript", 2,	3643942,	163, 3643942,	163, "tandem", 	-1.02,	0.88, 0.05972,	0.05915, "enhanced"],
+          ["ENSMUSG00000056579", "-", "Tug1", "processed_transcript", 2,	3643942,	163, 3643942,	163, "tandem", 	-1.02,	0.88, 0.05972,	0.05915, "enhanced"],
+        ]);
+
+        var table = new google.visualization.Table(document.getElementById('table_div'));
+
+        table.draw(data, {showRowNumber: false, allowHtml: true, width: '100%', height: '100%', 'cssClassNames': cssClassNames});
+      }
+    </script>
+
+    <div class="div_center" style="margin-top: 30px;">
+      <b>APA: alternative polyadenylation and processing 3'-end targeted sequence data</b><br>
+      <div style="padding-left: 10px; padding-top: 5px; font-size: 13px;">
+        <a href="#t1">Differential Gene Expression (DGE) results</a><br>
+        <a href="#t2">Alternative polyadenylation (APA) results</a>
+      </div>
+
+      <br>
+      <b><a id="t1"></a>Differential Gene Expression (DGE) results</b>
+      <br>
+      <div style="padding-left: 10px; padding-top: 10px; font-size: 13px;">
+          Since we have 3'-end sequencing data, we can easily sum up all polyA site information annotated to each gene (estimate gene expression) and perform differential gene expression analysis. To detect differentially expressed genes, we define a <font color="darkgreen" class="btn" title="Set of <b>control experiments</b> to be compared to a set of <b>test experiments</b>. Usually a set of experiments is a group of technical or biological replicates.">comparison</font>. We then apply the R software <a href="https://academic.oup.com/bioinformatics/article-lookup/doi/10.1093/bioinformatics/btp616" target="_edger">edgeR (Robinson et al., 2010)</a>. For each gene, this analysis returns the log2 fold-change and adjusted (<font color="darkgreen" class="btn" title="FDR: <b>F</b>alse <b>D</b>iscovery <b>R</b>ate">FDR</font>) p-value.
+        </div>
+        <div style="padding-left: 10px; padding-top: 10px; font-size: 13px;">
+          To discover the detailed information about the fields in the DE genes table, please mouse over the column names.
+        </div>
+
+        <div style="padding-left: 10px; padding-top: 10px; font-size: 13px;">
+          <table border=0 style="font-size: 11px;">
+            <tr style="background-color: #eeeeee;">
+              <td style="padding-left: 3px;"><font color="darkgreen" class="btn" title="Ensembl Gene ID">gene_id</font></td>
+              <td style="padding-left: 3px;"><font color="darkgreen" class="btn" title="Ensembl Gene Strand">gene_strand</font></td>
+              <td style="padding-left: 3px;"><font color="darkgreen" class="btn" title="Ensembl Gene Name">gene_name</font></td>
+              <td style="padding-left: 3px;"><font color="darkgreen" class="btn" title="One of the following:<br><br>Protein coding<br>Pseudogene<br>Long noncoding<br>Short noncoding<br><br>For more information <a href=http://www.ensembl.org/Help/Faq?id=468 target=_pt>see this link</a>.">gene_biotype</font></td>
+              <td style="padding-left: 3px;"><font color="darkgreen" class="btn" title="Number of polyA sites that give a signal (from your data) on this gene.">polya_sites</font></td>
+              <td style="padding-left: 3px;"><font color="darkgreen" class="btn" title="Sum of all the reads that mapped to this gene.">gene_expression</font></td>
+              <td style="padding-left: 3px;"><font color="darkgreen" class="btn" title="Normalized expression of the gene in control condition 1.">c1:c1_name</font></td>
+              <td style="padding-left: 3px;"><font color="darkgreen" class="btn" title="Normalized expression of the gene in control condition 2.">c2:c2_name</font></td>
+              <td style="padding-left: 3px;"><font color="darkgreen" class="btn" title="Normalized expression of the gene in test condition 1.">t1:t1_name</font></td>
+              <td style="padding-left: 3px;"><font color="darkgreen" class="btn" title="Normalized expression of the gene in test condition 2.">t2:t2_name</font></td>
+            </tr>
+            <tr style="background-color: #ffffff;">
+              <td>ENSG00000067057</td>
+              <td align=center>+</td>
+              <td>PFKP</td>
+              <td>protein_coding</td>
+              <td align=right>1</td>
+              <td align=right>2624</td>
+              <td align=right>397.6</td>
+              <td align=right>425.5</td>
+              <td align=right>118.1</td>
+              <td align=right>104.9</td>
+            </tr>
+            <tr style="background-color: #ffffff;">
+              <td>ENSG00000256545</td>
+              <td align=center>+</td>
+              <td>AL139819.1</td>
+              <td>pseudogene</td>
+              <td align=right>2</td>
+              <td align=right>8784</td>
+              <td align=right>1172.3</td>
+              <td align=right>1174.4</td>
+              <td align=right>613.1</td>
+              <td align=right>543</td>
+            </tr>
+            <tr style="background-color: #ffffff;">
+              <td>ENSG00000120948</td>
+              <td align=center>+</td>
+              <td>TARDBP</td>
+              <td>protein_coding</td>
+              <td align=right>3</td>
+              <td align=right>843</td>
+              <td align=right>120.5</td>
+              <td align=right>153.9</td>
+              <td align=right>15.2</td>
+              <td align=right>26</td>
+            </tr>
+          </table>
+          <div style="font-size: 12px; padding-left: 5px; padding-top: 5px; color: #333333;">DE genes table: final result of differential gene expression analysis from 3'-end sequencing protocols</div>
+        </div>
+      </div>
+    </div>
+
+    <br>
+
+    <div class="div_center">
+      <b><a id="t1"></a>Alternative polyadenylation (APA) results</b>
+      <br>
+      <div style="padding-left: 10px; padding-top: 10px; font-size: 13px;">
+          To detect the genes that undergo alternative polyadenylation, we define a <font color="darkgreen" class="btn" title="Set of <b>control experiments</b> to be compared to a set of <b>test experiments</b>. Usually a set of experiments is a group of technical or biological replicates.">comparison</font>. We then apply the R software <a href="http://genome.cshlp.org/content/22/10/2008" target="_dexseq">DEXSeq (Anders et al., 2012)</a>. For each polyA site in a gene, this analysis returns the log2 fold-change and adjusted (<font color="darkgreen" class="btn" title="FDR: <b>F</b>alse <b>D</b>iscovery <b>R</b>ate">FDR</font>) p-value.
+        </div>
+        <div style="padding-left: 10px; padding-top: 10px; font-size: 13px;">
+          For the genes which have more than one (>1) annotated polyA sites, we choose only two (2) most significantly changed (control vs. test) polyA sites, with an additional requirement that the polyA sites have fold-changes of opposite sign (direction). We classify these two polyA sites into <b>proximal</b> and <b>distal</b>. The final result of APA analysis in the APA pairs table.
+        </div>
+        <div style="padding-left: 10px; padding-top: 10px; font-size: 13px;">
+          To discover the detailed information about the fields in the APA pairs table, please mouse over the column names. Since there are many columns, the table columns are split in two parts.
+        </div>
+
+        <div style="padding-left: 10px; padding-top: 10px; font-size: 13px;">
+          <table border=0 style="font-size: 11px;">
+            <tr style="background-color: #eeeeee;">
+              <td style="padding-left: 3px;"><font color="darkgreen" class="btn" title="Ensembl Gene ID">gene_id</font></td>
+              <td style="padding-left: 3px;"><font color="darkgreen" class="btn" title="Ensembl Gene Strand">gene_strand</font></td>
+              <td style="padding-left: 3px;"><font color="darkgreen" class="btn" title="Ensembl Gene Name">gene_name</font></td>
+              <td style="padding-left: 3px;"><font color="darkgreen" class="btn" title="One of the following:<br><br>Protein coding<br>Pseudogene<br>Long noncoding<br>Short noncoding<br><br>For more information <a href=http://www.ensembl.org/Help/Faq?id=468 target=_pt>see this link</a>.">gene_biotype</font></td>
+              <td style="padding-left: 3px;"><font color="darkgreen" class="btn" title="Number of polyA sites that give a signal (from your data) on this gene.">polya_sites</font></td>
+              <td style="padding-left: 3px;"><font color="darkgreen" class="btn" title="Genomic loci of the selected proximal polyA site.">proximal_loc</font></td>
+              <td style="padding-left: 3px;"><font color="darkgreen" class="btn" title="Number of reads aligned (forming the signal) at the proximal polyA site.">proximal_exp</td>
+              <td style="padding-left: 3px;"><font color="darkgreen" class="btn" title="Genomic loci of the selected distal polyA site.">distal_loc</font></td>
+              <td style="padding-left: 3px;"><font color="darkgreen" class="btn" title="Number of reads aligned (forming the signal) at the distal polyA site.">distal_exp</font></td>
+              <td style="padding-left: 3px;"><font color="darkgreen" class="btn" title="Based on the loci of the proximal and distal polyA sites, this is either:<br><br><img src='media/pair_type.png' width=360><br><br>For details, please see <a href='http://www.cell.com/action/showImagesData?pii=S2211-1247%2817%2930522-3' target=_fig2>Rot et al. (2016), Figure 2</a>.">pair_type</font></td>
+            </tr>
+            <tr style="background-color: #ffffff;">
+              <td>ENSG00000065183</td>
+              <td align=center>+</td>
+              <td>WDR3</td>
+              <td>protein_coding</td>
+              <td>5</td>
+              <td>118502380</td>
+              <td>61</td>
+              <td>118502722</td>
+              <td>85</td>
+              <td>same_exon</td>
+            </tr>
+            <tr style="background-color: #ffffff;">
+              <td>ENSG00000242110</td>
+              <td align=center>-</td>
+              <td>AMACR</td>
+              <td>protein_coding</td>
+              <td>2</td>
+              <td>33988395</td>
+              <td>42</td>
+              <td>33985583</td>
+              <td>33</td>
+              <td>same_exon</td>
+            </tr>
+            <tr style="background-color: #ffffff;">
+              <td>ENSG00000072501</td>
+              <td align=center>-</td>
+              <td>SMC1A</td>
+              <td>protein_coding</td>
+              <td>2</td>
+              <td>53406618</td>
+              <td>1650</td>
+              <td>53401071</td>
+              <td>235</td>
+              <td>same_exon</td>
+            </tr>
+          </table>
+
+          <br>
+
+          <table border=0 style="font-size: 11px;">
+            <tr style="background-color: #eeeeee;">
+              <td style="padding-left: 3px;"><font color="darkgreen" class="btn" title="Number of reads contributing to the proximal polyA site, separately for each control condition (divided by semicolon ;).">proximal_control</font></td>
+              <td style="padding-left: 3px;"><font color="darkgreen" class="btn" title="Number of reads contributing to the distal polyA site, separately for each control condition (divided by semicolon ;).">distal_control</font></td>
+              <td style="padding-left: 3px;"><font color="darkgreen" class="btn" title="Number of reads contributing to the proximal polyA site, separately for each test condition (divided by semicolon ;).">proximal_test</font></td>
+              <td style="padding-left: 3px;"><font color="darkgreen" class="btn" title="Number of reads contributing to the distal polyA site, separately for each test condition (divided by semicolon ;).">distal_test</font></td>
+              <td style="padding-left: 3px;"><font color="darkgreen" class="btn" title="Proximal polyA site fold-change as computed by DEXSeq. For more information on how fold-changes are computed, please see <a href=http://genome.cshlp.org/content/22/10/2008 target=_dexseq>DEXSeq (Anders et al., 2012)</a>.">proximal_fc</font></td>
+              <td style="padding-left: 3px;"><font color="darkgreen" class="btn" title="Distal polyA site fold-change as computed by DEXSeq. For more information on how fold-changes are computed, please see <a href=http://genome.cshlp.org/content/22/10/2008 target=_dexseq>DEXSeq (Anders et al., 2012)</a>.">distal_fc</font></td>
+              <td style="padding-left: 3px;"><font color="darkgreen" class="btn" title="Proximal polyA site adjusted p-value (FDR corrected) as computed by DEXSeq. For more information on how p-values are computed, please see <a href=http://genome.cshlp.org/content/22/10/2008 target=_dexseq>DEXSeq (Anders et al., 2012)</a>.">proximal_pval</font></td>
+              <td style="padding-left: 3px;"><font color="darkgreen" class="btn" title="Distal polyA site adjusted p-value (FDR corrected) as computed by DEXSeq. For more information on how p-values are computed, please see <a href=http://genome.cshlp.org/content/22/10/2008 target=_dexseq>DEXSeq (Anders et al., 2012)</a>.">diatal_pval</font></td>
+              <td style="padding-left: 3px;"><font color="darkgreen" class="btn" title="The <b>gene class</b> tells you the direction of polyA site regulation between control and test (your comparison). Significantly changed polyA sites are selected based on adjusted p-value or cDNA counts (if no significantly changed polyA sites). The direction of change is determined by fold-change.<br><br><img src=media/gene_class.png width=360><br><br><b>Each gene</b> as a whole is classified into one of the classes:<br><br><b>enhanced</b>: proximal up-regulated, distal down-regulated<br><b>repressed</b>: proximal down-regulated, distal up-regulated<br><b>c_up</b>: non-significant enhanced<br><b>c_down</b>: non-significant repressed<br><br>Up-regulated (enhanced) and down-regulated (repressed) is always relative to the proximal site, and always relative to control vs. test in your comparison.">gene_class</font></td>
+            </tr>
+            <tr style="background-color: #ffffff;">
+              <td align=left>14;3;7;10;6;7</td>
+              <td align=left>5;0;1;1;1;1</td>
+              <td align=left>1;1;4;2;2;4</td>
+              <td align=left>7;17;17;5;18;12</td>
+              <td align=right>-1.05</td>
+              <td align=right>1.29</td>
+              <td align=right>0.00001</td>
+              <td align=right>0.00001</td>
+              <td align=center>enhanced</td>
+            </tr>
+            <tr style="background-color: #ffffff;">
+              <td align=left>1;5;2;10;3;3</td>
+              <td align=left>0;0;0;0;0;0</td>
+              <td align=left>2;7;2;3;1;3</td>
+              <td align=left>5;6;11;1;6;4</td>
+              <td align=right>-0.26</td>
+              <td align=right>5.38</td>
+              <td align=right>0.00001</td>
+              <td align=right>0.00001</td>
+              <td align=center>enhanced</td>
+            </tr>
+            <tr style="background-color: #ffffff;">
+              <td align=left>37;35;32;54;17;31</td>
+              <td align=left>41;24;36;63;33;31</td>
+              <td align=left>164;316;237;143;351;233</td>
+              <td align=left>1;3;0;1;0;2</td>
+              <td align=right>0.34</td>
+              <td align=right>-3.22</td>
+              <td align=right>0.00001</td>
+              <td align=right>0.00001</td>
+              <td align=center>repressed</td>
+            </tr>
+          </table>
+
+          <div style="font-size: 12px; padding-left: 5px; padding-top: 5px; color: #333333;">APA pairs table: result of alternative polyadenylation analysis</div>
+
+        </div>
+
+      </div>
+    </div>
+
+    <script>
+      tippy('.btn', {theme: 'light', interactive: true});
+    </script>

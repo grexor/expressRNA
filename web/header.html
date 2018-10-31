@@ -1,0 +1,192 @@
+<html>
+
+    <title>expressRNA: post-transcriptional research platform</title>
+    <meta name="keywords" content="polyadenylation,apa,express rna,rna,express">
+    <meta name="description" content="expressRNA: post-transcriptional research platform">
+
+    <link rel="icon"  type="image/png" href="http://expressrna.org/favicon.png">
+
+    <head>
+        <link rel="stylesheet" type="text/css" href="expressRNA.css">
+        <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <meta name="google-signin-client_id" content="791006066118-1m577h8b7nplonckttm8qtql82ijj6pc.apps.googleusercontent.com">
+        <link rel="stylesheet" href="/tippy/tippy.css">
+        <script src="/tippy/tippy.min.js"></script>
+        <script src="general.js"></script>
+    </head>
+
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+    <script src="/software/vex/dist/js/vex.combined.min.js"></script>
+    <script>vex.defaultOptions.className = 'vex-theme-flat-attack'</script>
+    <link rel="stylesheet" href="/software/vex/dist/css/vex.css" />
+    <link rel="stylesheet" href="/software/vex/dist/css/vex-theme-os.css" />
+    <link rel="stylesheet" href="/software/vex/dist/css/vex-theme-flat-attack.css" />
+    <link rel="stylesheet" type="text/css" href="expressRNA_vex.css">
+
+<body>
+
+<div class="menu_top">
+    <div class="menu_top_content">
+      <table border=0>
+          <tr>
+              <td valign=top style="padding-top:5px; padding-left: 8px;"><a href="javascript:open_about();" id="logo_link"><img src="media/logo.png" style='height:22px;'></a></td>
+              <td valign=top style="width: 70%; text-align: left; padding-top: 4px;">
+                <div style="float: left; width: 20px; text-align:center; padding-top: 3px;"><font color="lightgray" size=1px>|</font></div>
+                <div style="float: left;"><img src=media/start.png height=16 style="margin-top:-2px;vertical-align:middle">&nbsp;<a id="menu_analyses" href="javascript:open_analyses();">Analyses</a></div>
+                <div style="float: left; width: 20px; text-align:center; padding-top: 3px;"><font color="lightgray" size=1px>|</font></div>
+                <div style="float: left;"><img src=media/icon_data.png height=16 style="margin-top:-2px;vertical-align:middle">&nbsp;<a id="menu_libraries" href="javascript:open_libraries();">Libraries</a></div>
+                <div style="float: left; width: 20px; text-align:center; padding-top: 3px;"><font color="lightgray" size=1px>|</font></div>
+                <div style="float: left;"><img src=media/help.png height=16 style="margin-top:-3px;vertical-align:middle">&nbsp;<a href="javascript:open_help();" id="menu_help">Help</a></div>
+                <div style="float: left; width: 20px; text-align:center; padding-top: 3px;"><font color="lightgray" size=1px>|</font></div>
+                <div style="float: left;"><img src=media/news.png height=16 style="margin-top:-4px;vertical-align:middle">&nbsp;<a id="menu_info" href="javascript:open_info();">Info</a></div>
+                <div style="float: left; width: 20px; text-align:center; padding-top: 3px;"><font color="lightgray" size=1px>|</font></div>
+                <div style="float: left;"><img src=media/about2.png height=20 style="margin-top:-4px;vertical-align:middle">&nbsp;<a id="menu_about" href="javascript:open_about();">About</a></div>
+              </td>
+              <td valign=top style="width: 30%; text-align: right; padding-right: 10px; padding-top: 4px;">
+                <div style="float: right;"><div id="btn_signout" style="display: none; white-space: nowrap;"></div></div>
+                <div style="float: right;"><div id="btn_signin"></div></div>
+                <div style="float: right; width: 20px; text-align:center; padding-top: 3px;"><font color="lightgray" size=1px>|</font></div>
+                <div style="float: right;"><img src=media/idea.png height=20 style="margin-top:-4px;vertical-align:middle">&nbsp;<a id="menu_ideas" href="https://github.com/grexor/expressRNA2/issues" target=_new>Ideas and Issues</a></div>
+              </td>
+          </tr>
+      </table>
+    </div>
+</div>
+
+<script>
+
+var pars={};
+window.location.search
+  .replace(/[?&]+([^=&]+)=([^&]*)/gi, function(str,key,value) {
+    pars[key] = value.replace(/%20/g, " ").replace(/\+/g, "#")
+  }
+);
+
+function login_ok(googleUser) {
+    google_user = googleUser;
+    $("#btn_signin").hide();
+    $("#btn_signout").show();
+    $("#btn_signout").html('<img src=media/icon_profile.png height=18 style="padding-right: 5px; margin-top:-4px;vertical-align:middle"><a href="javascript:open_profile();" id="link_profile">' + googleUser.getBasicProfile().getName() + '</a>');
+
+    $("#profile_note").html("<b>Your expressRNA profile information</b><br><br>");
+    $("#profile_email").html(googleUser.getBasicProfile().getEmail());
+    $("#profile_btn_signout").html('<img src=media/signout.png height=13 style="margin-top:-3px;vertical-align:middle; padding-right: 3px;"><a href="#" onclick="signOut();">Sign out</a>');
+
+    // update last login
+    post_data = {};
+    post_data["action"] = "login";
+    post_data["email"] = googleUser.getBasicProfile().getEmail();
+    $.post('/expressrna_gw/index.py', post_data);
+
+    // refresh datasets that depend on login
+    search_analyses();
+    search_libraries();
+
+    // after login, we can not do it before, that's why it's here
+    if (pars["action"]=="libraries") {
+      open_libraries();
+      return;
+    }
+
+    if (pars["action"]=="analyses") {
+      open_analyses();
+      return;
+    }
+
+    if (pars["action"]=="library") {
+      open_library(pars["library_id"]);
+      return;
+    }
+
+}
+
+function login_fail(error) {
+  google_user = undefined;
+  $("#btn_signin").show();
+  $("#btn_signout").hide();
+  $("#profile_note").html("Your are currently not signed in to expressRNA.");
+}
+
+function renderButton() {
+  gapi.signin2.render('btn_signin', {
+    'width': 70,
+    'height': 22,
+    'longtitle': false,
+    'theme': 'dark',
+    'onsuccess': login_ok,
+    'onfailure': login_fail
+  });
+}
+
+function signOut() {
+  var auth2 = gapi.auth2.getAuthInstance();
+  auth2.signOut().then(function () {
+    console.log('User signed out.');
+  });
+  $("#btn_signin").show();
+  $("#btn_signout").hide();
+  $("#lbl_name").html('');
+  email = "public";
+  session = "";
+}
+
+function menu_clear() {
+  $("#menu_about").attr('style', '');
+  $("#menu_info").attr("style", "");
+  $("#menu_help").attr('style', '');
+  $("#menu_profile").attr('style', '');
+  $("#menu_analyses").attr('style', '');
+  $("#menu_libraries").attr('style', '');
+}
+
+function menu_select(name) {
+  menu_clear();
+  $("#" + name).attr('style', 'border-bottom: 2px solid #c1c1c1;');
+}
+
+function add_history(data, url) {
+  if (pop_state==false)
+    window.history.pushState(data, '', url);
+}
+
+window.addEventListener('popstate', function(e) {
+  pop_state = true;
+  if (e.state==null) {
+    location.reload();
+    pop_state = false;
+    return;
+  }
+  if (e.state["action"]=="about")
+      open_about();
+  if (e.state["action"]=="info")
+      open_info();
+  if (e.state["action"]=="help")
+      open_help();
+  if (e.state["action"]=="libraries")
+      open_libraries();
+  if (e.state["action"]=="analyses")
+      open_analyses();
+  if (e.state["action"]=="analysis")
+      open_analysis(db["analysis"]["analysis_id"]);
+  if (e.state["action"]=="library")
+      open_library(db["library"]["library_id"]);
+  pop_state = false;
+});
+
+</script>
+
+<script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-38680782-5', 'auto');
+  ga('send', 'pageview');
+
+</script>

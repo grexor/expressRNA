@@ -1,0 +1,364 @@
+<script>
+  menu_select("link_search");
+</script>
+
+<style>
+.tags {
+    border-radius: 5px;
+    background: #DDDDDD;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    margin-right: 5px;
+    margin-top: 5px;
+    display: inline-block;
+    user-select: none;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+}
+.tags:hover {
+    cursor: pointer;
+}
+
+.tags_small {
+    border-radius: 2px;
+    background: #EEEEDD;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    margin-right: 4px;
+    display: inline-block;
+    user-select: none;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+}
+
+.apub {
+    color: #0000AA;
+}
+
+.apub:hover {
+    color: #0000DD;
+}
+
+</style>
+
+<style>
+.button {
+    background-color: #fafafa; /* Green */
+    border: 1px solid #f1f1f1;
+    color: white;
+    padding-left: 3px;
+    padding-right: 3px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 13px;
+    border-radius: 5px;
+    float: left;
+    margin-right: 10px;
+}
+</style>
+
+<div class="main">
+    <div class="main_content">
+    <table border=0>
+      <tr>
+        <td class="menu_info" valign=top align=right style="border-bottom: 1px dashed #e1e1e1; border-right: none; padding-bottom: 5px;">
+          <div id="link_software" onclick="open_software();" class="button" style="width:90px; cursor:pointer;">></div>
+          <div id="link_apa" onclick="open_apa();" class="button" style="width:190px; cursor:pointer;">></div>
+          <div id="link_publications" onclick="open_publications();" class="button" style="width:90px; cursor:pointer;">></div>
+        </td>
+      </tr>
+
+      <tr>
+        <td id="td_software" class="content_table" valign=top>
+          <table border=0 style="background-color:#FFFFFF; padding-left: 5px; padding-right:10px; margin-top: -2px; padding-top: 0px; padding-bottom: 10px;">
+            <tr>
+              <td class="content_table" valign=top width=750>
+                <b><font color=#555555>Genome processing</font></font></b><br>
+                <div style="padding-left:8px; padding-top:5px;">
+                  <table border=0 class="info_table">
+                    <tr><td class="content_table" valign=top><font color=#888888>></font></td>
+                    <td class="content_table"><a href="https://github.com/grexor/pybio" target="_pybio"><b>pybio</b>: genome annotation handling</a>
+                    </td></tr>
+                    <tr><td class="content_table" valign=top><font color=#888888>></font></td>
+                    <td class="content_table"><a href="https://github.com/alexdobin/STAR" target="_star"><b>STAR</b>: short read aligner</a>
+                    </td></tr>
+                  </table>
+                </div>
+                <br>
+                <b><font color=#555555>RNAmotifs</font></b><br>
+                <div style="padding-left:8px; padding-top:5px;">
+                  <table border=0 class="info_table">
+                    <tr><td class="content_table" valign=top><font color=#888888>></font></td>
+                    <td class="content_table" valign=top><a href="https://github.com/grexor/rnamotifs2" target="_rnamotifs"><b>RNAmotifs</b>: latest version on Github</a>
+                    </td></tr>
+                    <tr><td class="content_table" valign=top><font color=#888888>></font></td>
+                    <td class="content_table" valign=top><a href="https://genomebiology.biomedcentral.com/articles/10.1186/gb-2014-15-1-r20" target="_rnamotifs">Cereda, M. et al. (2014) <b>RNAmotifs</b>: prediction of multivalent RNA motifs that control alternative splicing. Genome Biol., 15, R20</a>
+                    </td></tr>
+                  </table>
+                </div>
+
+                <br>
+                <b><font color=#555555>Differential analysis</font></b><br>
+                <div style="padding-left:8px; padding-top:5px;">
+                  <table border=0 class="info_table">
+                    <tr><td class="content_table" valign=top><font color=#888888>></font></td>
+                    <td class="content_table" valign=top><a href="https://bioconductor.org/packages/release/bioc/html/edgeR.html" target="_edgeR"><b>edgeR</b>: differential expression analysis of RNA-seq expression profiles with biological replication</a>
+                    </td></tr>
+                  </table>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </td>
+
+
+        <td id="td_apa" class="content_table" valign=top>
+          <table border=0 style="background-color:#FFFFFF; padding-left: 5px; padding-right:10px; margin-top: -2px; padding-top: 0px; padding-bottom: 10px;">
+            <tr>
+              <td class="content_table" valign=top width=750>
+                  <b><font color=#555555>Alternative polyadenylation databases and data repositories</font></b><br>
+                  <br>
+                  We are trying to collect a comprehensive list of computational resources to study alternative polyadenylation. If your software / database / tool is missing, please <a href="mailto:gregor.rot@gmail.com" style="color: #3E5AFF">contact us</a></font>.
+                  <br><br>
+
+                  <div style="padding-left:8px; padding-top:5px;">
+
+                    <table class="info_table">
+                      <tr><td class="content_table" valign=top><font color=#888888>></font></td>
+                      <td class="content_table" valign=top><a href="http://www.polyasite.unibas.ch/"><b>PolyAsite</b>: Repository for 3' end sequencing data</a>
+                      </td></tr>
+                      <tr><td class="content_table" valign=top><font color=#888888>></font></td>
+                      <td class="content_table" valign=top><a href="http://tools.genxpro.net/apadb/"><b>APADB</b>: a database for mammalian alternative polyadenylation determined by 3'-end sequencing</a>
+                      </td></tr>
+                      <tr><td class="content_table" valign=top><font color=#888888>></font></td>
+                      <td class="content_table" valign=top><a href="http://exon.umdnj.edu/polya_db/"><b>PolyA_DB</b>: a web resource for analysis of pre-mRNA cleavage and polyadenylation sites (polyA sites)</a>
+                      </td></tr>
+                    </table>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </td>
+
+        <td id="td_publications" class="content_table" valign=top>
+          <table border=0 style="background-color:#FFFFFF; padding-left: 5px; padding-right:10px; margin-top: -2px; padding-top: 0px; padding-bottom: 10px;">
+            <tr>
+              <td class="content_table" valign=top>
+                <i>This is a curated (tagged) publication repository of polyadenylation and splicing documents (work in progress). If your publication is missing or mistagged, please <a href="mailto:gregor.rot@uzh.ch" style="color: #3E5AFF">contact us</a></font>.</i>
+                <br><br>
+                <b><font color=#555555>Tags (click to select)</font></b><br><br>
+                <div id="tag_polyadenylation" class=tags onclick="jaavscript:clicked_tag('tag_polyadenylation');">polyadenylation</div>
+                <div id="tag_apa" class=tags onclick="jaavscript:clicked_tag('tag_apa');">apa</div>
+                <div id="tag_splicing" class=tags onclick="jaavscript:clicked_tag('tag_splicing');">splicing</div>
+                <div id="tag_review" class=tags onclick="jaavscript:clicked_tag('tag_review');">review</div>
+                <div id="tag_protocol" class=tags onclick="jaavscript:clicked_tag('tag_protocol');">3'-end protocol</div>
+                <div id="tag_regulation" class=tags onclick="jaavscript:clicked_tag('tag_regulation');">regulation</div>
+                <div id="tag_brain" class=tags onclick="jaavscript:clicked_tag('tag_brain');">brain</div>
+                <div id="tag_disease" class=tags onclick="jaavscript:clicked_tag('tag_disease');">disease</div>
+                <div id="tag_human" class=tags onclick="jaavscript:clicked_tag('tag_human');">human</div>
+                <div id="tag_mouse" class=tags onclick="jaavscript:clicked_tag('tag_mouse');">mouse</div>
+                <div id="tag_yeast" class=tags onclick="jaavscript:clicked_tag('tag_yeast');">yeast</div>
+                <div id="tag_zebrafish" class=tags onclick="jaavscript:clicked_tag('tag_zebrafish');">zebrafish</div>
+                <div id="tag_celegans" class=tags onclick="jaavscript:clicked_tag('tag_celegans');">C. elegans</div>
+                <div id="tag_model" class=tags onclick="jaavscript:clicked_tag('tag_model');">model</div>
+                <br><br>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="content_table" valign=top width=750>
+                  <b><font color=#555555>Publications matching selected tags and sorted by year in descending order</font></b><br><br>
+
+                  <div style="padding-left:8px; padding-top:5px;">
+
+                    <table class="info_table" id="table_publications">
+                    </table>
+
+                  </div>
+
+                </div>
+              </td>
+            </tr>
+          </table>
+        </td>
+
+
+      </tr>
+    </table>
+</div>
+
+<script>
+
+function open_software() {
+  add_history("resources", {"section":"software"}, 'index.html?action=resources&section=software');
+  $("#td_software").show();
+  $("#td_publications").hide();
+  $("#td_apa").hide();
+  $("#link_software").html("<font color=#555555><b><a href='javascript:open_software();'>Software</a></b></font><br>");
+  $("#link_apa").html("<font color=#555555><a href='javascript:open_apa();'>Alternative polyadenylation</a></font><br>");
+  $("#link_publications").html("<font color=#555555><a href='javascript:open_publications();'>Publications</a></font><br>");
+}
+
+function open_apa() {
+  add_history("resources", {"section":"apa"}, 'index.html?action=resources&section=apa');
+  $("#td_software").hide();
+  $("#td_publications").hide();
+  $("#td_apa").show();
+  $("#link_software").html("<font color=#555555><a href='javascript:open_software();'>Software</a></font><br>");
+  $("#link_apa").html("<font color=#555555><b><a href='javascript:open_apa();'>Alternative polyadenylation</a></b></font><br>");
+  $("#link_publications").html("<font color=#555555><a href='javascript:open_publications();'>Publications</a></font><br>");
+}
+
+function open_publications() {
+  add_history("resources", {"section":"publications"}, 'index.html?action=resources&section=publications');
+  $("#td_software").hide();
+  $("#td_publications").show();
+  $("#td_apa").hide();
+  $("#link_software").html("<font color=#555555><a href='javascript:open_software();'>Software</a></font><br>");
+  $("#link_apa").html("<font color=#555555><a href='javascript:open_apa();'>Alternative polyadenylation</a></font><br>");
+  $("#link_publications").html("<font color=#555555><b><a href='javascript:open_publications();'>Publications</a></b></font><br>");
+  get_publications("all", 0);
+}
+
+function clicked_tag(name)
+{
+  if ($("#"+name).css("background-color")=="rgb(221, 221, 221)")
+  {
+    $("#" + name).css("background-color", "#FFC7CC");
+  } else {
+    $("#" + name).css("background-color", "#DDDDDD");
+  }
+
+  var tags = [];
+  if ($("#tag_polyadenylation").css("background-color")=="rgb(255, 199, 204)") {
+    tags.push("polyadenylation");
+  }
+  if ($("#tag_apa").css("background-color")=="rgb(255, 199, 204)") {
+    tags.push("apa");
+  }
+  if ($("#tag_protocol").css("background-color")=="rgb(255, 199, 204)") {
+    tags.push("protocol");
+  }
+  if ($("#tag_brain").css("background-color")=="rgb(255, 199, 204)") {
+    tags.push("brain");
+  }
+  if ($("#tag_disease").css("background-color")=="rgb(255, 199, 204)") {
+    tags.push("disease");
+  }
+  if ($("#tag_review").css("background-color")=="rgb(255, 199, 204)") {
+    tags.push("review");
+  }
+  if ($("#tag_regulation").css("background-color")=="rgb(255, 199, 204)") {
+    tags.push("regulation");
+  }
+  if ($("#tag_zebrafish").css("background-color")=="rgb(255, 199, 204)") {
+    tags.push("zebrafish");
+  }
+  if ($("#tag_yeast").css("background-color")=="rgb(255, 199, 204)") {
+    tags.push("yeast");
+  }
+  if ($("#tag_human").css("background-color")=="rgb(255, 199, 204)") {
+    tags.push("human");
+  }
+  if ($("#tag_mouse").css("background-color")=="rgb(255, 199, 204)") {
+    tags.push("mouse");
+  }
+  if ($("#tag_celegans").css("background-color")=="rgb(255, 199, 204)") {
+    tags.push("celegans");
+  }
+  if ($("#tag_model").css("background-color")=="rgb(255, 199, 204)") {
+    tags.push("model");
+  }
+  if ($("#tag_splicing").css("background-color")=="rgb(255, 199, 204)") {
+    tags.push("splicing");
+  }
+  get_publications(tags.join("|||"), 0);
+}
+
+function get_publications(tags, page) {
+  var tag_stag = {};
+  tag_stag["protocol"] = "3'-end protocol";
+  tag_stag["apa"] = "apa";
+  tag_stag["review"] = "review";
+  tag_stag["polyadenylation"] = "polyadenylation";
+  tag_stag["brain"] = "brain";
+  tag_stag["disease"] = "disease";
+  tag_stag["regulation"] = "regulation";
+  tag_stag["zebrafish"] = "zebrafish";
+  tag_stag["yeast"] = "yeast";
+  tag_stag["human"] = "human";
+  tag_stag["mouse"] = "mouse";
+  tag_stag["celegans"] = "celegans";
+  tag_stag["model"] = "model";
+  tag_stag["splicing"] = "splicing";
+
+  post_data = {};
+  post_data["action"] = "publications";
+  post_data["tags"] = tags;
+  $.post('/expressrna_gw/index.py', post_data)
+      .success(function(result) {
+          data = $.parseJSON(result);
+          var html = "";
+          for (var i=(page*5); i<Math.min(data.length, (page+1)*5); i++) {
+            p_tags = String(data[i][1]).split(",");
+            html += "<tr><td class='content_table' valign=top>" + data[i][2] + "<br><a style='color: #3E5AFF' href='" +data[i][5]+"' target='_p'" + i + "'>"+ data[i][3] + "</a><br>";
+            html += "Published: " + data[i][0] + "<br>";
+            html += "Tags: ";
+            for (var t=0; t<p_tags.length; t++) {
+              html += "<div class=tags_small>" + tag_stag[p_tags[t]] + "</div>";
+            }
+            html +="<br>" + data[i][4] + "<br><br></td></tr>";
+          }
+          html += "<tr><td><p align=left>displaying " + (page*5+1) + "-" + (page+1)*5 + " publications of " + data.length + " found";
+          html += "<div style='float:left; width:80'>";
+          if (page>0) {
+            html += "<a href=\"javascript:get_publications('" + tags + "', " + (page-1) + ")\">";
+          }
+          html += "< page " + (page);
+          if (page>0) {
+            html+= "</a>";
+          }
+          html += "</div>";
+
+          if ((data.length/5)>(page+1)) {
+            html += "<div style='float:left; width:80'><a href=\"javascript:get_publications('" + tags + "', " + (page+1) + ")\">page " + (page+2) + " ></a></div>";
+          }
+          html += "<br></tr></td>";
+
+          $("#table_publications").html(html);
+      })
+      .error(function(){
+          console.log('Error loading page');
+  })
+
+
+}
+
+function open_section() {
+  if (pars["section"]=="software") {
+    open_software();
+  }
+  if (pars["section"]=="apa") {
+    open_apa();
+  }
+  if (pars["section"]=="publications") {
+    open_publications();
+    get_publications("all", 0);
+  }
+}
+
+open_section();
+
+</script>

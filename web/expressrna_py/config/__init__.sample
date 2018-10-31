@@ -1,0 +1,6 @@
+mysql_username = "root"
+mysql_password = ""
+mysql_host = "127.0.0.1"
+mysql_database = "apadb"
+mysql_pool_size = 20
+

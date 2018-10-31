@@ -1,0 +1,327 @@
+<script>
+  menu_select("menu_contributors");
+</script>
+
+<style>
+
+.button {
+    background-color: #fafafa; /* Green */
+    border: 1px solid #f1f1f1;
+    color: white;
+    padding-left: 3px;
+    padding-right: 3px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 13px;
+    border-radius: 5px;
+    float: left;
+    margin-right: 10px;
+}
+
+.button:hover {
+  font-weight: 600;
+}
+
+</style>
+
+<script>
+
+function scroll_to(name) {
+  window.scrollTo(0, $(name).position().top-60);
+}
+
+</script>
+
+<div class="content_center narrow">
+
+      <div style="text-align: right; position: fixed; left: calc(50% - 550px); padding-top: 0px; font-family: 'Roboto', sans-serif; font-weight: 300; font-size: 13px;">
+        <a href="javascript:scroll_to('#news');"><b>News</b></a><br>
+        <a href="javascript:scroll_to('#researchers');"><b>Researchers</b></a><br>
+        <a href="javascript:scroll_to('#samples');"><b>Experimental Samples</b></a><br>
+        <a href="javascript:scroll_to('#contact');"><b>Get In Touch</b></a>
+      </div>
+
+      <a id="news"></a>
+      <div class="div_header"><b>News</b></div>
+
+          <table border=0 style="padding-left: 0px; padding-right:10px; margin-top: -2px; padding-top: 0px; padding-bottom: 10px;">
+            <tr>
+              <td class="content_table" valign=top>
+                <b><font color=#555555>20. July 2018</font></b><br>
+                <div style="padding-left:8px; padding-top:5px;">
+                  Moving fast forward to expressRNA v2, with user sequence data upload. We now have separate interfaces for Libraries (experiment datasets) and Analyses (alternative polyadenylation and RNAmotifs2). The interface is redesigned to be more user friendly, with search+pagination and other niceties. Top right <a href="https://github.com/grexor/expressRNA2/issues" target=_new>you can suggest ideas and report issues over GitHub</a> :-)
+                  <br><br>
+                </div>
+              </td>
+            </tr>
+            <tr>
+
+            <tr>
+              <td class="content_table" valign=top>
+                <b><font color=#555555>5. January 2018</font></b><br>
+                <div style="padding-left:8px; padding-top:5px;">
+                  Yey! Further developments and improvements on the web interface part. Now collaborators can search and browse analysis and libraries. It was about time, since we are adding one new library per week on average! Stay tuned for more.
+                  <br><br>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="content_table" valign=top>
+                <b><font color=#555555>22. December 2017</font></b><br>
+                <div style="padding-left:8px; padding-top:5px;">
+                  The alternative polyadenylation analysis interface is now refreshed, and we added a fold-change interactive graph to explore genes that undergo major proximal/distal switches. An example you can explore is our <a href="javascript:open_analysis('paper_final_all', 'High-resolution RNA maps demonstrate common principles of splicing and polyadenylation regulation by TDP-43');">published TDP-43 KD analysis</a>.
+                  <br><br>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="content_table" valign=top>
+                <b><font color=#555555>20. December 2017</font></b><br>
+                <div style="padding-left:8px; padding-top:5px;">
+                  We are working on the web interface redesign and upgrade, especially the search and browsing of analysis and sequencing libraries. The top menu first icon changed from "Browse" to <a href="javascript:open_search('analysis');">"Start"</a>, since with a single click you can access and browse analysis results.
+                  <br><br>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="content_table" valign=top>
+                <b><font color=#555555>15. December 2017</font></b><br>
+                <div style="padding-left:8px; padding-top:5px;">
+                  The main focus of expressRNA is in the processing of 3'-end targeted sequence data, watch the video to follow our analysis on the showcase of TDP-43 and it's role in APA.<br><br>
+                  <center><iframe width="560" height="315" src="https://www.youtube.com/embed/WBcxEdxN3-I?rel=0" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>
+                  <br><br>
+                </div>
+              </td>
+            </tr>
+          <tr>
+            <td class="content_table" valign=top>
+              <b><font color=#555555>15. November 2017</font></b><br>
+              <div style="padding-left:8px; padding-top:5px;">
+                Exciting times for expressRNA in November, with several new ongoing collaborations and support for Nanopore and PacBio long-reads coming shortly. The long-reads spanning entire transcripts are ideal for the study of alternative polyadenylation and alternative splicing at the same time, and the team at expressRNA is developing a module to do just that. Stay tuned!
+                <br><br>
+              </div>
+            </td>
+          </tr>
+            <tr>
+              <td class="content_table" valign=top>
+                <b><font color=#555555>12. October 2017</font></b><br>
+                <div style="padding-left:8px; padding-top:5px;">
+                  expressRNA is undergoing extensive improvements and updates. Today we also moved to a new server. More news soon.
+                  <br><br>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="content_table" valign=top>
+                <b><font color=#555555>1. January 2017</font></font></b><br>
+                <div style="padding-left:8px; padding-top:5px;">
+                  The analysis platform is renamed to <b><font color=#555555>expressRNA</font></b>, since the platform combines several software for analysis of post-transcriptional processes, not only on the level of alternative polyadenylation.
+                  <br><br>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="content_table" valign=top>
+                <b><font color=#555555>25. June 2016</font></font></b><br>
+                <div style="padding-left:8px; padding-top:5px;">
+                  The alternative polyadenylation (APA) platform, apaExpress.org, is now online! In the preceding months, we applied the platform to several datasets and found it useful to share data and results between involved scientists. Now we are making it publicly available to serve the research community.
+                </div>
+              </td>
+            </tr>
+          </table>
+
+          <a id="researchers"></a>
+          <div class="div_header"><b>Involved Researchers</b></div>
+
+          <table border=0 style="padding-left: 0px; padding-right:10px; margin-top: -2px; padding-top: 0px; padding-bottom: 10px;">
+            <tr>
+              <td colspan=2 class="content_table" valign=top style="padding-bottom: 10px;"><b><font color=#555555>Contributors</font></b></td>
+            </tr>
+            <tr>
+              <td class="content_table" valign=top width=60><img src="media/gregor.png" style="height:50; opacity: 0.8;"></td>
+              <td class="content_table" valign=top style="text-align: justify"><a target=_gregor href="https://scholar.google.ch/citations?hl=en&user=Mzz8rBAAAAAJ&view_op=list_works&sortby=pubdate"><b>Gregor Rot</b></a><br>
+                Gregor is currently the main researcher, developer and coder at expressRNA. Gregor started working on iCLIP and alternative polyadenylation analysis with Tomaž Curk and Jernej Ule in 2009 and obtained his Phd with Christian von Mering from the University of Zurich in 2016. Gregor is currently an Independent Researcher, collaborating with several research laboratories around the world, mostly on computational analysis of post-transcriptional modifications, while keeping eyes open for a relevant PostDoc or Staff Scientist position (<a href="mailto:gregor.rot@gmail.com?subject=Postdoc">contact him over e-mail</a>;).
+              </td>
+            </tr>
+            <tr><td style="height:10px;"></td></tr>
+            <tr>
+              <td class="content_table" valign=top width=60><img src="media/curk.png" style="height:50; opacity: 0.8;"></td>
+              <td class="content_table" valign=top style="text-align: justify"><a target=_tomaz href="https://scholar.google.com/citations?hl=en&user=0QCwhhYAAAAJ&view_op=list_works&sortby=pubdate"><b>Tomaž Curk</b></a><br>
+                Tomaž developed the first version of the computational analysis pipeline of 3'-end targeted sequencing data. The data was obtained by applying the wet-lab protocol that Zhen Wang developed in Ule's lab. Tomaž continues to be involved in developing novel analysis methods of RNA-protein binding and post-transcriptional regulation and is Assistant Professor at the Faculty of Computer and Information Science, University of Ljubljana, Slovenia.
+              </td>
+            </tr>
+            <tr><td style="height:10px;"></td></tr>
+            <tr>
+              <td class="content_table" valign=top width=60><img src="media/joao.png" style="height:50; opacity: 0.8;"></td>
+              <td class="content_table" valign=top style="text-align: justify"><a target=_joao href="https://scholar.google.ch/citations?hl=en&user=HJAoBnkAAAAJ&view_op=list_works&sortby=pubdate"><b>João F. Matias Rodrigues</b></a><br>
+                Joao is helping with several ideas and suggestions on computational data analysis and statistics, among others on integrating regulatory signals to RBPs via RNA-maps.
+              </td>
+            </tr>
+            <tr><td style="height:10px;"></td></tr>
+            <tr>
+              <td class="content_table" valign=top width=60><img src="media/modic.png" style="height:50; opacity: 0.8;"></td>
+              <td class="content_table" valign=top style="text-align: justify"><a target=_miha href="https://scholar.google.com/citations?hl=en&user=Quocg7EAAAAJ&view_op=list_works&sortby=pubdate"><b>Miha Modic</b></a><br>
+                Miha is working with embryonic stem cells and studies the role of alternative polyadenylation in the context of cell differentiation and pluripotency, among other things. Miha contributed several datasets to expressRNA and suggested several improvements to the platform.
+              </td>
+            </tr>
+            <tr><td style="height:10px;"></td></tr>
+            <tr>
+              <td class="content_table" valign=top width=60><img src="media/hallegger.png" style="height:50; opacity: 0.8;"></td>
+              <td class="content_table" valign=top style="text-align: justify"><a target=_martina href="https://www.researchgate.net/profile/Martina_Hallegger"><b>Martina Hallegger</b></a><br>
+                Martina performed the iCLIP experiments of TDP-43 in HEK-293 cells, which provided the crucial dataset to compute RNA-maps of TDP-43, disclosing the regulatory function of the protein in alternative polyadenylation. Martina continues to perform experimental work and use expressRNA for the study of 3'-end processing.
+              </td>
+            </tr>
+          </table>
+
+          <table border=0 style="padding-left: 0px; padding-right:10px; margin-top: -2px; padding-top: 5px; padding-bottom: 10px;">
+            <tr>
+              <td colspan=2 class="content_table" valign=top style="padding-bottom: 10px;"><b><font color=#555555>Affiliated Research Groups</font></b></td>
+            </tr>
+            <tr>
+              <td class="content_table" valign=top width=60><img src="media/jernej.png" style="height:50; opacity: 0.8;"></td>
+              <td class="content_table" valign=top style="text-align: justify"><a target=_jernej href="http://ulelab.info"><b>Jernej Ule Laboratory, The Francis Crick Institute, London, UK</b></a><br>
+                Jernej Ule lab remains instrumental in guiding research on APA and helping develop all aspects of expressRNA, including RNAmotifs2 analysis software. Jernej holds a joint position between UCL and The Francis Crick Institute, London, UK.
+              </td>
+            </tr>
+            <tr><td style="height:10px;"></td></tr>
+            <tr>
+              <td class="content_table" valign=top width=60><img src="media/robinson.png" style="height:50; opacity: 0.8;"></td>
+              <td class="content_table" valign=top style="text-align: justify"><a target=_robinson href="http://www.imls.uzh.ch/en/research/robinson.html"><b>Mark Robinson Laboratory, Institute of Molecular Life Sciences, Zurich, Switzerland</b></a><br>
+                Mark Robinson lab is the main guide and advisor in analysis of long-read Nanopore and PacBio sequence data. There is a new wave of exciting opportunities arising from the long-read sequences spanning entire transcripts that expressRNA is trying to catch.
+              </td>
+            </tr>
+            <tr><td style="height:10px;"></td></tr>
+            <tr>
+              <td class="content_table" valign=top width=60><img src="media/christian.png" style="height:50; opacity: 0.8;"></td>
+              <td class="content_table" valign=top style="text-align: justify"><a target=_christian href="https://www.imls.uzh.ch/en/research/vonmering/people.html"><b>Christian von Mering Laboratory, Institute of Molecular Life Sciences, Zurich, Switzerland</b></a><br>
+                Christian von Mering lab provided the initial excellent research environment where expressRNA was developed. Several lab members contributed ideas and suggestions.
+              </td>
+            </tr>
+            <tr><td style="height:10px;"></td></tr>
+            <tr>
+              <td class="content_table" valign=top width=60><img src="media/ryan.png" style="height:50; opacity: 0.8;"></td>
+              <td class="content_table" valign=top style="text-align: justify"><a target=_ryan href="https://ccr.cancer.gov/Laboratory-of-Human-Carcinogenesis/brid-m-ryan"><b>Brid Ryan Laboratory, National Cancer Institute, Washington, USA</b></a><br>
+                Brid Ryan lab is using expressRNA to perform analysis of alternative polyadenylation in cancer since beginning of 2017. Brid and her team help develop expressRNA greatly by providing ideas and suggestions.
+              </td>
+            </tr>
+            <tr><td style="height:10px;"></td></tr>
+            <tr>
+              <td class="content_table" valign=top width=60><img src="media/hornstein.png" style="height:50; opacity: 0.8;"></td>
+              <td class="content_table" valign=top style="text-align: justify"><a target=_hornstein href="http://www.weizmann.ac.il/molgen/hornstein/"><b>Eran Hornstein Laboratory, Weizmann Institute of Science, Israel</b></a><br>
+                Eran Hornstein lab is using expressRNA to study alternative polyadentlation in several mouse experiments connected with ALS. Eran and his team provide ideas and point out advantages and disadvantages of several expressRNA analysis. This is incredibly valuable information for the team at expressRNA to further improve and develop the platform.
+              </td>
+            </tr>
+            <tr><td style="height:10px;"></td></tr>
+            <tr>
+              <td class="content_table" valign=top width=60><img src="media/fratta.png" style="height:50; opacity: 0.8;"></td>
+              <td class="content_table" valign=top style="text-align: justify"><a target=_fratta href="http://www.ucl.ac.uk/ion/departments/sobell/Research/PFratta/People"><b>Pietro Fratta Laboratory, UCL London, UK</b></a><br>
+                Pietro Fratta lab is applying expressRNA to libraries of 3'-end targeted and classic RNA-seq. Pietro and his team provide valuable input in terms of identifiying strenghts and weaknesses of expressRNA and help test the platform.
+              </td>
+            </tr>
+            <tr><td style="height:10px;"></td></tr>
+            <tr>
+              <td class="content_table" valign=top width=60><img src="media/lehner.png" style="height:50; opacity: 0.8;"></td>
+              <td class="content_table" valign=top style="text-align: justify"><a target=_lehner href="http://www.imls.uzh.ch/en/research/Lehner.html"><b>Christian Lehner Laboratory, Institute of Molecular Life Sciences, Zurich, Switzerland</b></a><br>
+                Christian Lehner lab is studying alternative polyadenylation in Drosophila, with a very interesting experimental setup that is challenging in terms of comparative analysis. The research provides lot's of developmental opportunities for expressRNA.
+              </td>
+            </tr>
+          </table>
+
+          <table border=0 style="padding-left: 0px; padding-right:10px; margin-top: -2px; padding-top: 5px; padding-bottom: 10px;">
+            <tr>
+              <td colspan=2 class="content_table" valign=top style="padding-bottom: 10px;"><b><font color=#555555>Past Contributors</font></b></td>
+            </tr>
+            <tr><td style="height:10px;"></td></tr>
+            <tr>
+              <td class="content_table" valign=top width=60><img src="media/zhen.png" style="height:50; opacity: 0.8;"></td>
+              <td class="content_table" valign=top style="text-align: justify"><a target=_zhen href="https://www.researchgate.net/profile/Zhen_Wang88"><b>Zhen Wang</b></a><br>
+                Zhen developed a 3'-end targeted sequencing protocol during her Phd and PostDoc in Jernej Ule's lab, among studying the role of TIA in splicing and alternative polyadenylation. Zhen is now working for a startup company in Paris.
+              </td>
+            </tr>
+            <tr><td style="height:10px;"></td></tr>
+            <tr>
+              <td class="content_table" valign=top width=60><img src="media/ina.png" style="height:50; opacity: 0.8;"></td>
+              <td class="content_table" valign=top style="text-align: justify"><a target=_ina href="http://www.hentze.embl.de/ina-huppertz/"><b>Ina Huppertz</b></a><br>
+                Ina performed the research work of alternative polyadenylation in HEK-293 cells in the context of TDP-43 knockdown. Ina's data provided one of the firts datasets to be analyzed with expressRNA and helped test and fine-tune the platform.
+              </td>
+            </tr>
+            <tr><td style="height:10px;"></td></tr>
+            <tr>
+              <td class="content_table" valign=top width=60><img src="media/tina.png" style="height:50; opacity: 0.8;"></td>
+              <td class="content_table" valign=top style="text-align: justify"><a target=_tina href="https://scholar.google.com/citations?hl=en&user=_1mBfGIAAAAJ&view_op=list_works&sortby=pubdate"><b>Tina Lenče</b></a><br>
+                Tina helped with initial experimental work and data analysis on the study of TDP-43 in alternative polyadelylation. Tina graduated recently and continues to do excellent scientific research.
+              </td>
+            </tr>
+            <tr><td style="height:10px;"></td></tr>
+            <tr>
+              <td class="content_table" valign=top width=60><img src="media/haberman.png" style="height:50; opacity: 0.8;"></td>
+              <td class="content_table" valign=top style="text-align: justify"><a target=_nejc href="https://www.researchgate.net/profile/Nejc_Haberman"><b>Nejc Haberman</b></a><br>
+                Nejc performed initial motif analysis for TDP-43 iCLIP which helped study the role of TDP-43 in alternative polyadenylation. Nejc is Postdoc at ICL, London.
+              </td>
+            </tr>
+          </table>
+
+          <a id="samples"></a>
+          <div class="div_header"><b>Samples and Data</b></div>
+
+          <table border=0 style="padding-left: 0px; padding-right:10px; margin-top: -2px; padding-top: 0px; padding-bottom: 10px;">
+            <tr>
+              <td class="content_table" valign=top>
+                <b><font color=#555555>Current expressRNA data structure</font></font></b><br>
+                <br>Some simple statistics to get an overview of how many experiments are currently processed in expressRNA.
+                <br><br>
+                <div style="padding-left:8px; padding-top:5px;">
+                  <table border=0 class="content_table">
+                    <tr>
+                        <td align=center><font color=#777777><b>Number of Experiments</b></td><td align=center><font color=#777777><b>Number of Reads in Million</b></td>
+                    </tr>
+
+                    <tr>
+                      <td height=10></td>
+                    </tr>
+
+                    <tr>
+                      <td><img src="media/1_statistics_experiments.png" width=300></td>
+                      <td><img src="media/1_statistics_reads.png" width=300></td>
+                    </tr>
+                  </table>
+                </div>
+              </td>
+            </tr>
+          </table>
+
+          <a id="contact"></a>
+          <div class="div_header"><b>Get In Touch</b></div>
+
+          <table border=0 style="padding-right:10px; margin-top: -2px; padding-top: 0px; padding-bottom: 10px;">
+            <tr>
+              <td class="content_table" style="padding-bottom: 7px;" valign=top><font color=#555555><b>Welcome to get in touch over e-mail: <a href="mailto:expressRNA@gmail.com">expressRNA@gmail.com</a></b></font>
+              </td>
+            </tr>
+            <tr>
+              <td class="content_table" valign=top>
+                <b><font color=#555555>Alternative Polyadenylation</font></font></b><br>
+                <div style="padding-left:8px; padding-top:5px;">
+                  expressRNA post-transcriptional research platform supports <a href="https://www.lexogen.com/quantseq-3mrna-sequencing/?gclid=CjwKCAiArrrQBRBbEiwAH_6sNDeibv54WcDSQ2d6QPTnnDlc_GMukhKdknN0Rbcd8bwFCAXd6znCSxoCG80QAvD_BwE" target=_lexogen>Lexogen QuantSeq</a> 3'-end targeted and <a href="https://nanoporetech.com/rna" target=_nanopore>Nanopore</a> long-reads data for alternative polyadenylation analysis. Research groups and companies are welcome to get in touch to establish new collaborations.
+                  Write to us directly <a href="mailto:expressRNA@gmail.com" style="color: #0000cc">expressRNA@gmail.com</a> to start new collaborations.
+                </div>
+                <br>
+                <b><font color=#555555>Post-transcriptional Bioinformatics</font></font></b><br>
+                <div style="padding-left:8px; padding-top:5px;">
+                  We are keen on starting new collaborations on bioinformatics data analysis of post-transcriptional processes.
+                  Please feel free to <a href="mailto:expressRNA@gmail.com" style="color: #0000cc">contact us</a> directly over e-mail with suggestions, questions or collaboration initiatives.
+                </div>
+                <br>
+                <b><font color=#555555>Using expressRNA/RNAmotifs2 on your own server</font></font></b><br>
+                <div style="padding-left:8px; padding-top:5px;">
+                  All software used for the analysis is available at the <a style="color: #0000cc" href="https://github.com/meringlab/apa">apa</a>,
+                  <a style="color: #0000cc" href="https://github.com/grexor/rnamotifs2">RNAmotifs2</a> and <a style="color: #0000cc" href="https://github.com/grexor/pybio">pybio</a> GitHub repositories and is free for non-commercial use (see <a style="color: #0000cc" href="javascript:open_licence();">Licence</a>).
+                </div>
+              </td>
+            </tr>
+          </table>
+
+</div>

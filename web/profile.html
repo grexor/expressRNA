@@ -1,0 +1,47 @@
+<link rel="stylesheet" href="/tippy/tippy.css">
+<script src="/tippy/tippy.min.js"></script>
+<style>
+.tippy-tooltip.light-theme {
+  font-family: 'Roboto', sans-serif;
+  font-size: 13px;
+  font-weight: 300;
+  text-align: justify;
+  background-color: #ffffff !important;
+}
+
+.search {
+    border: 0.8px solid #c1c1c1;
+    padding: 2px;
+    padding-left: 4px;
+    border-radius:5px;
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+    outline: none;
+    font-size: 12px;
+    color: #555555;
+    display: none;
+ }
+
+</style>
+
+<script>
+  menu_select("link_profile");
+</script>
+
+<div class="content_center">
+      <div id="profile_note"></div>
+      <div id="profile_email"></div>
+      <br>
+      <div id="profile_btn_signout"></div>
+
+</div>
+
+<script>
+  if (email!="public") {
+    $("#profile_note").html("<b>Your expressRNA profile information</b><br><br>");
+    $("#profile_email").html(email);
+    $("#profile_btn_signout").html('<img src=media/signout.png height=13 style="margin-top:-3px;vertical-align:middle">&nbsp;<a href="#" onclick="signOut();">Sign out</a>');
+  } else {
+    $("#profile_note").html("Your are currently not signed in to expressRNA.");
+  }
+</script>

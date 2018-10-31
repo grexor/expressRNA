@@ -1,0 +1,309 @@
+<script>
+  menu_select("link_about");
+</script>
+
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400" rel="stylesheet">
+
+<style>
+  div.plotly-notifier {
+    visibility: hidden;
+  }
+</style>
+
+<link rel="stylesheet" href="/tippy/tippy.css">
+<script src="/tippy/tippy.min.js"></script>
+
+<style>
+
+  b {
+    font-weight: 400;
+  }
+
+  .tippy-tooltip.light-theme {
+    font-family: 'Roboto', sans-serif;
+    font-size: 13px;
+    font-weight: 100;
+    text-align: justify;
+    background-color: #ffffff !important;
+  }
+
+  * {
+    font-family: 'Open Sans', sans-serif;
+  }
+
+  a {
+    text-decoration: none;
+    color: #2a6bcc;
+  }
+
+  a:hover {
+    text-decoration: none;
+    color: #0D4F8B;
+  }
+
+  .data-row {
+    font-size: 11px;
+    outline: none;
+  }
+
+  .header-row {
+    font-size: 11px;
+    outline: none;
+    background-color: #f1f1f1;
+    text-align: left;
+  }
+
+  .div_center {
+      font-size: 13px;
+      font-family: 'Open Sans', sans-serif;
+      width: 900px;
+      background-color: #ffffff;
+      opacity: 0.8;
+      margin: auto;
+  }
+</style>
+
+<style>
+#paper_div a:link { color: #885555; }
+#paper_div a:visited { color: #885555; }
+#paper_div a:hover { color: #ff5555; }
+#paper_div a:active { color: #ff5555; }
+
+.div_header {
+  background: linear-gradient(to right, #f1f1f1, #ffffff);
+  font-size: 13px;
+  padding: 3px;
+  color: #000000;
+  margin-bottom: 10px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+}
+
+.div_content {
+  padding-left: 3px;
+  text-align: justify;
+  margin-right: 10px;
+  font-size: 13px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+  line-height: 1.25;
+}
+
+.div_content a {
+  color: #885555;
+  font-weight: 400;
+}
+
+.div_content a:hover {
+  color: #ff5555;
+  font-weight: 400;
+}
+
+.div_git {
+  margin-right: 10px;
+  font-size: 13px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+}
+
+</style>
+
+
+  <div class="content_center">
+
+    <table border=0>
+      <tr>
+        <td class="content_table" valign=top>
+          <div class="div_content"><b>expressRNA*</b> is an umbrella term for the web application and platform to study post-transcriptional modifications. expressRNA builds upon several novel open-source bioinformatics packages (<a href=https://github.com/meringlab/apa target=_apa>apa</a>, <a href=https://github.com/grexor/rnamotifs2 target=_rna2>RNAmotifs2</a> and <a href=https://github.com/grexor/pybio target=_pybio>pybio</a>) to perform <b>alternative polyadenylation</b> and <b>alternative splicing</b> analysis. The platform also inter-connects several state-of-the-art tools like the short-read STAR aligner, DEXSeq for differential usage estimates and minimap2 for long-read alignment.</div>
+
+          <br>
+
+          <div class="div_header"><b>Latest News</b></div>
+
+          <div class="div_content">
+            20. July 2018<br>
+            Moving fast forward to expressRNA v2, with user sequence data upload. We now have separate interfaces for Libraries (experiment datasets) and Analyses (alternative polyadenylation and RNAmotifs2). The interface is redesigned to be more user friendly, with search+pagination and other niceties. Top right <a href="https://github.com/grexor/expressRNA2/issues" target=_new>you can suggest ideas and report issues over GitHub</a> :-)
+            <br>
+          </div>
+
+          <br>
+
+          <div class="div_header"><b>Alternative Polyadenylation (APA) Computational Analysis</b></div>
+          <div class="div_content">
+            expressRNA implements <b>alternative polyAdenylation (APA)</b> analysis from 3'-end short-read targeted sequence data and long-read Nanopore / PacBio data. In general the analysis is flexible to accomodate diverse sequence data, for example <a href="https://www.lexogen.com/quantseq-3mrna-sequencing/?gclid=CjwKCAjwhOvPBRBxEiwAx2nhLqPMeeMzqnWVmvDLAR3uSNW-YITTbG0UHBWCkiZk1w3wVdzd2ThL_BoCYCMQAvD_BwE" target=_lexogen>Lexogen Quantseq Forward and Reverse</a> protocols are well supported.
+
+            The following steps are crucial for APA analysis:
+
+            <div style="padding-left: 15px; padding-top: 10px;">
+              <li> map / align the reads to the reference with STAR short read aligner
+              <li> construct a polyA atlas / database by clustering alignment ends (or beginnings, depending on the protocol)
+              <li> filter out alignments from A-rich genomic regions (to avoid internal priming events in the atlas construction step)
+              <li> recover the signal by computing the "expression" of polyA sites by clustering
+              <li> define comparative analysis (set of control experiments vs. set of test experiments)
+              <li> run DEXSeq analysis on the polyA sites
+              <li> select two sites per gene to classify polyA events (shortening, lenghtening of genes)
+              <li> perform motif analysis around regulated sites with RNAmotifs2
+              <li> Gene Ontology Enrichment Analysis on APA regulated genes
+            </div>
+
+            <img src="media/analysis_steps.png" width=700px>
+
+            The above list is just a set of automated analysis that can be performed on a set of experiments. Of course several alternatives can be implemented, such as using a pre-existing polyA atlas (database) for the analysis and computing the polyA site usage (counts) on the provided polyA site atlas.
+            <br><br>
+            Part of an APA report is a graphical representation of gene shortening and lenghtening. Our case study was an experiment of HEK-293 control vs. <font color=green class="btn" title="TDP-43 is a DNA and RNA-binding protein.<br><br><a target=_tdp43 href=https://en.wikipedia.org/wiki/TARDBP>Open wiki page</a> on TDP-43 to start exploring more.">TDP-43</font> KD. Repressed genes are blue (proximal polyA site is less used compared to the distal), and vice-versa for the enhanced genes. <a href="javascript:open_analysis('paper_final_all', 'High-resolution RNA maps demonstrate common principles of splicing and polyadenylation regulation by TDP-43');">Open the analysis here</a>.
+            <br><br>
+            expressRNA provides the basic analysis in a completelly automatized fashion, however for research projects a lot of custom work still needs to be performed in terms of data quality control and pre-processing. Currently we are working to automatize all steps of analysis.
+
+          </div>
+
+          <br>
+
+          <div class="div_header"><b>Alternative Splicing Computational Analysis</b></div>
+          <div class="div_content">
+            expressRNA also implements computational analysis of alternative splicing in terms of calling DEXSeq to identify regulated exons and then calling RNAmotifs2 on the sets of regulated exons for detecting regulatory short-motifs. Additionally, RNAmotifs2 is a completelly independent package which can be also called separatelly.
+          </div>
+
+          <br>
+
+          <div class="div_header"><b>expressRNA is free?</b></div>
+          <div class="div_content">
+            The software packages that expressRNA builds upon are <b>free for non-commercial use</b>.
+
+            <br><br>
+
+            <b>Academic setting:</b> If you are part of a research group and would like to run APA analysis on our server, please <a href="mailto:expressRNA@gmail.com">contact us</a> to establish a research collaboration. We can then either help you (time permitting) to setup expressRNA on your server or suggest performing APA analysis on expressRNA.org directly. We are excited about new datasets and potential novel solutions developed during research collaborations. We are all scientist at expressRNA and are constantly improving the platform so new research collaborations are always welcome.
+
+            <br><br>
+
+            <b>Commercial setting:</b> If you would like the team at expressRNA to help you with data analysis on expressRNA.org in a commercial setting, please <a href="mailto:expressRNA@gmail.com">contact us</a> for an offer. Your contribution will cover time and infrastructure (disk space, CPU). There is also a possibility for you to apply expressRNA in a commercial setting on your own, for that you would need a <a href="javascript:open_licence()">commercial licence</a> for the entire platform.
+
+          </div>
+
+          <br>
+
+          <div class="div_header"><b>Architecture</b></div>
+          <div class="div_content">
+          <b>expressRNA</b> combines and integrates several existing software tools and proposes data integrative approaches
+          for better understanding the underlying processes of post-transcriptioanl modifications. The web exploratory interface facilitates the browsing and interpretation of results.
+          <br><br>
+          <center>
+          <img width=500px src="media/architecture.png?nocache=" + nocache>
+          </center>
+          </div>
+
+          <br>
+
+          <div class="div_header"><b>Citing expressRNA</b></div>
+            <div class="div_content">
+            <div style="padding-right: 10px;" id="paper_div"><a href="http://www.cell.com/cell-reports/abstract/S2211-1247(17)30522-3" target="_paper"><b>High-resolution RNA maps suggest common principles of splicing and polyadenylation regulation by TDP-43</b></a>
+            <br>Rot, G., Wang, Z., Huppertz, I., Modic, M., Lenče, T., Hallegger, M., Haberman, N., Curk, T., von Mering, C., Ule, J.
+            <br>Cell Reports , Volume 19 , Issue 5 , 1056 - 1067
+            </div>
+          </div>
+
+          <br>
+
+          <div class="div_header"><b>Contact</b></div>
+          <div class="div_content">
+          Collaborations, be it reseach or commercial, ideas and suggestions are always welcome: please see <a href="http://www.expressrna.org/index.html?action=info&section=contact">Contacts</a>.
+        </td>
+        <td width=260px class="menu_table" valign=top>
+          <table border=0>
+            <tr><td colspan=3><div style="font-size: 13px;">GitHub repositories</div></td></tr>
+            <tr>
+              <td align=center><div class="titlegit_font"><img src="media/GitHub-Mark-32px.png" height=13px>&nbsp;<a href="https://github.com/meringlab/apa" target="_apa_github">apa</a></div></td>
+              <td align=center><div class="titlegit_font"><img src="media/GitHub-Mark-32px.png" height=13px>&nbsp;<a href="https://github.com/grexor/rnamotifs2" target="_rnamotifs2_github">RNAmotifs2</a></div></td>
+              <td align=center><div class="titlegit_font"><img src="media/GitHub-Mark-32px.png" height=13px>&nbsp;<a href="https://github.com/grexor/pybio" target="_pybio_github">pybio</a></div></td>
+            </tr>
+          </table>
+          <br>
+          <div class="div_git" id="lbl_commits">
+          </div>
+        </td>
+      </tr>
+    </table>
+
+</div>
+
+<script>
+function open_contacts()
+{
+  tab_to_load = 'contact';
+  load_page("info.html");
+}
+</script>
+
+<script>
+
+  var combined = [];
+
+  function get_commits(url, done_function) {
+      $.ajax({type: "GET", url: url}).done(done_function);
+  }
+
+  $.ajax({
+    type: "GET",
+    url: "https://api.github.com/repos/meringlab/apa/commits",
+    })
+    .done(function(data) {
+      var commits = [];
+      for (i=0;i<=10;i++)
+      {
+        data[i].repo = "apa";
+        data[i].date = new Date(data[i].commit.author.date);
+        combined.push(data[i]);
+      }
+      $.ajax({
+        type: "GET",
+        url: "https://api.github.com/repos/grexor/rnamotifs2/commits",
+        })
+        .done(function(data2) {
+          var commits = [];
+          for (i=0;i<=10;i++)
+          {
+            data2[i].repo = "RNAmotifs2";
+            data2[i].date = new Date(data2[i].commit.author.date);
+            combined.push(data2[i]);
+          }
+
+          $.ajax({
+            type: "GET",
+            url: "https://api.github.com/repos/grexor/pybio/commits",
+            })
+            .done(function(data3) {
+              var commits = [];
+              for (i=0;i<=10;i++)
+              {
+                data3[i].repo = "pybio";
+                data3[i].date = new Date(data3[i].commit.author.date);
+                combined.push(data3[i]);
+              }
+
+            // finally, sort all the commits by date
+            combined.sort(function(a, b) {
+                a = new Date(a.commit.author.date);
+                b = new Date(b.commit.author.date);
+                return a>b ? -1 : a<b ? 1 : 0;
+              });
+
+            for (i=0;i<=30;i++)
+            {
+              var message = combined[i].commit.message;
+              var date = combined[i].date;
+              date = date.getDate() + " "+ months[(date.getMonth())] + " " + date.getFullYear();
+              url = combined[i].html_url;
+              repo = combined[i].repo;
+              commits.push("<div class='commits_font'><img src=media/checkbox.png width=12px>&nbsp;" + repo + "&nbsp;<a target='_commit' href='" + url + "'>" + date + ": " + message+"</a></div>");
+            }
+            $("#lbl_commits").html(commits.join(""));
+          });
+        });
+    });
+
+</script>
+
+<script>
+  add_history("about", "", "/development/")
+  tippy('.btn', {theme: 'light', interactive: true});
+</script>
