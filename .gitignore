@@ -1,1 +1,5 @@
 *.pyc
+web/comps
+web/fingerprintjs2/
+web/rnamotifs2
+web/share/
