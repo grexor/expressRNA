@@ -195,7 +195,7 @@ class TableClass():
             include_analysis = True
             if len(search)>=2:
                 include_analysis = False
-                if comps.name.lower().find(search)!=-1 or comps.notes.lower().find(search)!=-1 or comps.authors.lower().find(search)!=-1:
+                if comps.name.lower().find(search)!=-1 or comps.notes.lower().find(search)!=-1 or comps.authors.lower().find(search)!=-1 or comps.comps_id.lower().find(search)!=-1:
                     include_analysis = True
                     r["comps_name_search"] = self.replace_ignorecase(search, "<div style='display: inline; font-weight: bold; color: #FF0000'>", "</div>", r["comps_name_search"])
                     r["notes_search"] = self.replace_ignorecase(search, "<div style='display: inline; font-weight: bold; color: #FF0000'>", "</div>", r["notes_search"])
