@@ -1,0 +1,9 @@
+.div_analyses_result {
+  border-top: 1px dashed #e1e1e1;
+  padding-bottom: 5px;
+  padding-top: 5px;
+}
+
+.div_analyses_result:hover {
+  background-color: #fafafa !important;
+}
