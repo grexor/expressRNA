@@ -1,5 +1,8 @@
-AuthType None
-Require all granted
-#Satisfy Any
+AuthType Basic
+AuthName "Login"
+AuthBasicProvider file
+AuthUserFile /var/wwwpass
+Require user uzh
+
 Options +Includes
 XBitHack On
