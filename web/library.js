@@ -89,7 +89,7 @@ function upload_experiment() {
   html += "<td valign=top>";
   html += "<form id='form_eu' style='outline: none !important; margin-left: -8px;' name='form_eu' method='post' action='/expressrna_gw/index.py' enctype='multipart/form-data'>";
   html += "<label for='newfile' class='cfu'>Select FASTQ file</label>";
-  html += "<input type='file' id='newfile' name='newfile' style='display: none;' accept='.gz'>";
+  html += "<input type='file' id='newfile' name='newfile' style='display: none;' accept='.gz,.bz2'>";
   html += "<input type='hidden' name='action' value='upload_file'>";
   html += "</form>";
   html += "</td>";
@@ -98,7 +98,7 @@ function upload_experiment() {
   html += "</td>";
   html += "</tr></table>";
   html += "<div id='div_library_progress' style='display:none; padding-left: 20px;'>";
-  html += "Uploading file, please do not close this dialog until upload complete.<br>";
+  html += "Uploading file, please do not close this dialog until upload completes.<br>";
   html += "<div style='border-radius: 5px; border: 1px solid #999999; width: 500; color: #111111; text-align: center'><div id='div_library_perc' style='float: left; position: absolute; z-index: -1; width: 0; background-color: #779ecb;'>&nbsp;</div><div id='div_library_perc_text'>100%</div></div>";
   html += "</div>";
   var vex_upload = vex.dialog.open({unsafeMessage:html, showCloseButton: false, escapeButtonCloses: false, overlayClosesOnClick: false, buttons: [

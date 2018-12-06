@@ -17,6 +17,8 @@ import re
 import shutil
 from operator import itemgetter
 
+upload_folder = '/home/gregor/expressrna_dev/web/uploads'
+
 db = {}
 db["methods"] = {}
 db["methods"][""] = {"desc": "not selected"}
@@ -117,7 +119,7 @@ class TableClass():
         if 'newfile' in self.formdata and self.formdata['newfile'].filename != '':
             file_data = self.formdata['newfile'].file.read()
             filename = self.formdata['newfile'].filename
-            target = os.path.join('/home/gregor/expressrna/web/uploads', filename)
+            target = os.path.join(upload_folder, filename)
             f = open(target, 'wb')
             f.write(file_data)
             f.close()
