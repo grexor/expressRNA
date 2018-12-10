@@ -119,10 +119,16 @@ class TableClass():
         if 'newfile' in self.formdata and self.formdata['newfile'].filename != '':
             file_data = self.formdata['newfile'].file.read()
             filename = self.formdata['newfile'].filename
+            lib_id = self.pars.get("lib_id", None)
+            if lib_id==None:
+                return
             target = os.path.join(upload_folder, filename)
             f = open(target, 'wb')
             f.write(file_data)
             f.close()
+            library = apa.annotation.libs[lib_id]
+            library.add_empty_experiment()
+            library.save()
         return "done"
 
     def send_email(self, address_to, subject, message):
@@ -499,7 +505,7 @@ class TableClass():
         library.notes = self.pars.get("lib_notes", "")
         library.access = self.pars.get("lib_access", "").split(",")
         library.owner = self.pars.get("lib_owner", "").split(",")
-        apa.annotation.save(library)
+        library.save()
         r = {"status":"success"}
         return json.dumps(r, default=dthandler)
 
@@ -530,7 +536,7 @@ class TableClass():
         library = apa.annotation.Library(lib_id)
         library.owner = [email]
         library.access = [email]
-        apa.annotation.save(library)
+        library.save()
         r = {"status":"success", "lib_id":lib_id}
         return json.dumps(r, default=dthandler)
 

@@ -91,6 +91,7 @@ function upload_experiment() {
   html += "<label for='newfile' class='cfu'>Select FASTQ file</label>";
   html += "<input type='file' id='newfile' name='newfile' style='display: none;' accept='.gz,.bz2'>";
   html += "<input type='hidden' name='action' value='upload_file'>";
+  html += "<input type='hidden' name='lib_id' value='" + library.lib_id + "'>";
   html += "</form>";
   html += "</td>";
   html += "<td valign=top>";
@@ -150,6 +151,7 @@ function upload_experiment() {
                     },
                     success:function(){
                         vex.close(vex_upload); // close dialog
+                        get_library(library.lib_id); // refresh library experiments
                     }
                 });
 
