@@ -345,13 +345,6 @@ function display_analysis_apamap(div_name, pair_type) {
     $("#div_analysis_splicing").hide();
   }
 
-  function hide_analysis_apatype_all() {
-    $("#btn_analysis_same").css("background-color", "#e1e1e1");
-    $("#btn_analysis_composite").css("background-color", "#e1e1e1");
-    $("#btn_analysis_skipped").css("background-color", "#e1e1e1");
-    $("#btn_analysis_combined").css("background-color", "#e1e1e1");
-  }
-
   function open_analysis_div(analysis_module) {
     db["analysis"]["analysis_module"] = analysis_module;
     hide_analysis_div_all();
@@ -360,9 +353,12 @@ function display_analysis_apamap(div_name, pair_type) {
   }
 
   function open_analysis_pair_type(t_pair_type) {
+    $("#btn_same").removeClass("selected");
+    $("#btn_skipped").removeClass("selected");
+    $("#btn_composite").removeClass("selected");
+    $("#btn_combined").removeClass("selected");
+    $("#btn_"+t_pair_type).addClass("selected");
     db["analysis"]["pair_type"] = t_pair_type;
-    hide_analysis_apatype_all();
-    $("#btn_analysis_" + pair_type).css("background-color", "#c1c1c1");
     get_analysis(db["analysis"]["analysis_id"]);
   }
 
@@ -425,7 +421,6 @@ function display_analysis_apamap(div_name, pair_type) {
             comps_data = jQuery.extend(true, {}, data);
 
             display_analysis_experiments(data.control, data.test, data);
-
 
             display_analysis_go(comps_data.go);
             display_analysis_rnamap("analysis_proximal", "proximal", db["analysis"]["pair_type"], db["analysis"]["clip_index"]);

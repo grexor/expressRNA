@@ -48,14 +48,6 @@ function open_licence() {
   add_history({"action":"licence"}, "index.html?action=licence");
 }
 
-function open_licence() {
-  $("body").removeClass("waiting");
-  hide_all();
-  menu_select("menu_about");
-  $("#content_licence").show();
-  add_history({"action":"licence"}, "index.html?action=licence");
-}
-
 function open_info() {
   $("body").removeClass("waiting");
   hide_all();
@@ -97,5 +89,6 @@ function open_analysis(analysis_id) {
   menu_select("menu_analyses");
   $("#content_analysis").show();
   get_analysis(analysis_id);
+  open_analysis_pair_type("same");
   add_history({"action":"analysis", "analysis_id":analysis_id}, "index.html?action=analysis&analysis_id="+analysis_id);
 }

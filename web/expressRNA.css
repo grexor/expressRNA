@@ -412,6 +412,11 @@ tbody {
   cursor: pointer;
 }
 
+.apatype_menu td.selected {
+  background-color: #FFA07A !important;
+  cursor: pointer;
+}
+
 .gotype_menu {
   padding-left: 15px;
   padding-top: 5px;
