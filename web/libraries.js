@@ -1,6 +1,6 @@
 function new_library() {
   html = "<b>New Library</b><br>";
-  html += "Would you like to upload a new library, a place where you can upload your experiments?" + "<br>";
+  html += "Would you like to create a new library, a place where you can upload your experiments?" + "<br>";
   vex.dialog.open({
       unsafeMessage: html,
       buttons: [
