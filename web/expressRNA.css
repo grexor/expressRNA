@@ -439,9 +439,8 @@ tbody {
 }
 
 .menu_bottom {
-    margin-top: 15px;
-    padding-top: 15px;
-    padding-bottom: 15px;
+    padding-top: 10px;
+    padding-bottom: 0px;
     width: 100%;
     text-align: center;
     vertical-align: middle;
@@ -450,7 +449,6 @@ tbody {
     font-family: "Arial";
     color: #999999;
 }
-
 
 .download_table {
   font-size: 12px;
