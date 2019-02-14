@@ -35,3 +35,5 @@ db["analyses"]["current_page"] = 0;
 db["library"] = {};
 
 db["analysis"] = {};
+
+db["user"] = {};

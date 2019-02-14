@@ -16,7 +16,14 @@ function login_ok(googleUser) {
     post_data = {};
     post_data["action"] = "login";
     post_data["email"] = googleUser.getBasicProfile().getEmail();
-    $.post('/expressrna_gw/index.py', post_data);
+    $.post('/expressrna_gw/index.py', post_data)
+    .success(function(result) {
+        db["user"] = $.parseJSON(result);
+        $("#chk_user_news").prop("checked", db["user"]["news"]);
+    })
+    .error(function(){
+    })
+
     // refresh datasets that depend on login
     search_analyses();
     search_libraries();

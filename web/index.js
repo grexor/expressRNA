@@ -31,27 +31,29 @@ function login_done(force=false) {
 }
 
 function all_documents_loaded() {
-if (loaded_documents<9) {
-  return;
-}
-if (pars["action"]=="about")
-    open_about();
-else if (pars["action"]=="info")
-    open_info();
-else if (pars["action"]=="help")
-    open_help();
-else if (pars["action"]=="libraries")
-    open_libraries();
-else if (pars["action"]=="analyses")
-    open_analyses();
-else if (pars["action"]=="licence")
-    open_licence();
-else if (pars["action"]=="analysis")
-    open_analysis(pars["analysis_id"]);
-else if (pars["action"]=="library")
-    open_library(pars["library_id"]);
-else
-  open_about(); // default
+  if (loaded_documents<9) {
+    return;
+  }
+  if (pars["action"]=="profile")
+      open_profile();
+  else if (pars["action"]=="about")
+      open_about();
+  else if (pars["action"]=="info")
+      open_info();
+  else if (pars["action"]=="help")
+      open_help();
+  else if (pars["action"]=="libraries")
+      open_libraries();
+  else if (pars["action"]=="analyses")
+      open_analyses();
+  else if (pars["action"]=="licence")
+      open_licence();
+  else if (pars["action"]=="analysis")
+      open_analysis(pars["analysis_id"]);
+  else if (pars["action"]=="library")
+      open_library(pars["library_id"]);
+  else
+    open_about(); // default
 }
 
 function window_resize() {

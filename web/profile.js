@@ -7,3 +7,20 @@ if (email!="public") {
 } else {
   $("#profile_note").html("Your are currently not signed in to expressRNA.");
 }
+
+function user_news_click() {
+  db["user"]["news"] = !db["user"]["news"];
+  save_user_data();
+}
+
+function save_user_data() {
+  post_data = {};
+  post_data["action"] = "save_login";
+  post_data["data"] = JSON.stringify(db["user"]);
+  $.post('/expressrna_gw/index.py', post_data)
+  .success(function(result) {
+  })
+  .error(function(){
+})
+
+}

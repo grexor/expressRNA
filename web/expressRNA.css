@@ -131,6 +131,7 @@ body.waiting *
   padding-left: calc(50% - 500px);
   font-weight: 300;
   color: #444444;
+  margin-bottom: 10px;
 }
 
 .content_center a {

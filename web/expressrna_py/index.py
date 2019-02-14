@@ -200,6 +200,10 @@ class TableClass():
             r["method_search"] = db["methods"][comps.method]["desc"]
             r["genome"] = comps.genome
             r["genome_search"] = db["genomes"][comps.genome]["desc"]
+            if r["method_search"]!="not selected":
+                r["method_search"] = r["method_search"] % (db["methods"][r["method"]]["link"])
+            if r["genome_search"]!="not selected":
+                r["genome_search"] = r["genome_search"] % (db["genomes"][r["genome"]]["link_assembly"], db["genomes"][r["genome"]]["link_annotation"])
             include_analysis = True
             if len(search)>=2:
                 include_analysis = False
@@ -210,10 +214,8 @@ class TableClass():
                     r["authors_search"] = self.replace_ignorecase(search, "<div style='display: inline; font-weight: bold; color: #FF0000'>", "</div>", r["authors_search"])
                     if r["method_search"]!="not selected":
                         r["method_search"] = self.replace_ignorecase(search, "<div style='display: inline; font-weight: bold; color: #FF0000'>", "</div>", r["method_search"])
-                        r["method_search"] = r["method_search"] % (db["methods"][r["method"]]["link"])
                     if r["genome_search"]!="not selected":
                         r["genome_search"] = self.replace_ignorecase(search, "<div style='display: inline; font-weight: bold; color: #FF0000'>", "</div>", r["genome_search"])
-                        r["genome_search"] = r["genome_search"] % (db["genomes"][r["genome"]]["link_assembly"], db["genomes"][r["genome"]]["link_annotation"])
             if (email in comps.access) or ("public" in comps.access):
                 if include_analysis:
                     result.append(r)
@@ -337,6 +339,7 @@ class TableClass():
         r["polya_db"] = comps.polya_db
 
         r["genome_desc"] = db["genomes"][comps.genome]["desc"]
+        self.log(r["genome_desc"])
         if r["genome_desc"]!="not selected":
             r["genome_desc"] = db["genomes"][comps.genome]["desc"] % (db["genomes"][comps.genome]["link_assembly"], db["genomes"][comps.genome]["link_annotation"])
         r["method"] = comps.method
@@ -617,19 +620,38 @@ class TableClass():
         email = self.pars.get("email", email)
         conn = Session()
         q = conn.query(Users).filter(Users.email==email).all()
-        if len(q)==0 and email!="public": # add user to users table
+        result = {}
+        if len(q)==0:
             u = Users()
             u.email = email
             u.last_login = datetime.datetime.now()
+            conn.add(u)
+            conn.commit()
+            result["news"] = 1
+            result["email"] = email
+            result["status"] = "ok"
             if email!="gregor.rot@gmail.com":
                 self.send_email("gregor.rot@gmail.com", "expressRNA: user login", "Dear Gregor,\n\n%s is a new user with expressRNA!,\n\nBest,\nexpressRNA" % email)
-            conn.add(u)
         if len(q)==1:
             q[0].last_login = datetime.datetime.now()
-            #if email!="gregor.rot@gmail.com":
-            #    self.send_email("gregor.rot@gmail.com", "expressRNA: user login", "Dear Gregor,\n\n%s just logged in to expressRNA,\n\nBest,\nexpressRNA" % email)
-        conn.commit()
-        return "expressRNA: success for login of user %s" % (email)
+            conn.commit()
+            result["news"] = q[0].news
+            result["email"] = q[0].email
+            result["status"] = "ok"
+        return json.dumps(result)
+
+    def save_login(self):
+        data = self.pars.get("data", None)
+        if data==None:
+            return "fail"
+        data = json.loads(data)
+        conn = Session()
+        q = conn.query(Users).filter(Users.email==data["email"]).all()
+        if len(q)==1:
+            q[0].last_login = datetime.datetime.now()
+            q[0].news = data["news"]
+            conn.commit()
+        return "saved"
 
     def close(self):
         Session.remove()
