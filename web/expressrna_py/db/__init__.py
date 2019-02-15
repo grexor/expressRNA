@@ -49,6 +49,9 @@ class Comps(Basic):
 class Comps_perm(Basic):
     pass
 
+class Tickets(Basic):
+    pass
+
 meta = MetaData()
 meta.reflect(bind=engine, views=True)
 
@@ -60,3 +63,6 @@ mapper(Comps, comps_table)
 
 comps_perm_table = meta.tables["comps_perm"]
 mapper(Comps_perm, comps_perm_table)
+
+tickets_table = meta.tables["tickets"]
+mapper(Tickets, tickets_table)

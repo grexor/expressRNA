@@ -2,6 +2,7 @@ menu_select("link_search");
 
 function edit_library() {
   html = "<b>Library Edit</b> (" + library.lib_id + ")<br>";
+  html += "<div style='font-size: 12px; color: #444444;'>Annotating your experiments is super easy, simply provide annotation fields (one per line), and also provide which fields you would like to show in the table of the experiment (some fields can remain hidden).</div>"
   public_library = "";
   library_access = Object.assign([], library.access); // make object copy
   var index = library_access.indexOf("public");
@@ -14,21 +15,25 @@ function edit_library() {
   for (var i=0; i<library.columns.length; i++) {
     columns.push(library.columns[i][0]);
   }
+  columns_display = [];
+  for (var i=0; i<library.columns_display.length; i++) {
+    columns_display.push(library.columns_display[i][0]);
+  }
   vex.dialog.open({
       unsafeMessage: html,
       input: [
-          '<textarea name="lib_name" rows=1 placeholder="Name of Library" style="margin-bottom:10px;">' + library.name + '</textarea>',
-          '<textarea name="lib_notes" rows=4 placeholder="Additional Notes">' + library.notes + '</textarea>',
+          '<textarea name="name" rows=1 placeholder="Name of Library" style="margin-bottom:10px;">' + library.name + '</textarea>',
+          '<textarea name="notes" rows=4 placeholder="Additional Notes">' + library.notes + '</textarea>',
           '<table style="font-size: inherit; font-weight: 200; font-family: \"Helvetica Neue\", sans-serif; color: #444;" border=0><tr><td valign=top width=270>',
-          'Annotation Fields:<textarea style="margin-top: 3px;" name="lib_columns" rows=6 placeholder="Annotation Fields (one per line)">' + columns.join("\n") + '</textarea>',
+          'Annotation Fields:<textarea style="margin-top: 3px;" name="columns" rows=6 placeholder="Annotation Fields (one per line)">' + columns.join("\n") + '</textarea>',
           '</td><td valign=top width=270>',
-          'Fields to Display:<textarea style="margin-top: 3px;" name="lib_columns_display" rows=6 placeholder="Display in Table (one per line)">' + columns.join("\n") + '</textarea>',
+          'Fields to Display (show in experiments table):<textarea style="margin-top: 3px;" name="columns_display" rows=6 placeholder="Display in Table (one per line)">' + columns_display.join("\n") + '</textarea>',
           '</td></tr></table>',
           '<table style="font-size: inherit; font-weight: 200; font-family: \"Helvetica Neue\", sans-serif; color: #444;" border=0><tr><td valign=top width=270>',
-          'Allow access to:<textarea style="margin-top: 3px;" name="lib_access" rows=3 placeholder="Enter one e-mail per line">' + library_access.join("\n") + '</textarea>',
-          '<input type=checkbox ' + public_library + ' id="lib_public" name="lib_public"><label class=unselectable for="lib_public">Make Library Public (visible to everyone)</label>',
+          'Allow access to:<textarea style="margin-top: 3px;" name="access" rows=3 placeholder="Enter one e-mail per line">' + library_access.join("\n") + '</textarea>',
+          '<input type=checkbox ' + public_library + ' id="public" name="lib_public"><label class=unselectable for="lib_public">Make Library Public (visible to everyone)</label>',
           '</td><td valign=top width=270>',
-          'Owners (can edit):<textarea style="margin-top: 3px;" name="lib_owner" rows=3 placeholder="Enter one e-mail per line">' + library_owner.join("\n") + '</textarea>',
+          'Owners (can edit):<textarea style="margin-top: 3px;" name="owner" rows=3 placeholder="Enter one e-mail per line">' + library_owner.join("\n") + '</textarea>',
           '</td></tr></table>',
       ].join(''),
       buttons: [
@@ -38,31 +43,32 @@ function edit_library() {
       callback: function (data) {
           if (!data) {
           } else {
-            if (data.lib_name==undefined) {
-              data.lib_name = "";
-            }
-            if (data.lib_notes==undefined) {
-              data.lib_notes = "";
-            }
-            if (data.lib_access==undefined) {
-              data.lib_access = "";
-            }
-            data.lib_access = data.lib_access.split("\n");
-            if (data.lib_public) {
-              data.lib_access.push("public");
-            }
-            if (data.lib_owner==undefined) {
-              data.lib_owner = "";
-            }
-            data.lib_owner = data.lib_owner.split("\n");
-            save_library(library.lib_id, data);
+            library.name = data.name;
+            library.notes = data.notes;
+            library.access = data.access.split("\n");
+            if (data.public)
+              library.access.push("public");
+            library.owner = data.owner;
+            library.owner = data.owner.split("\n");
+            // take care of columns
+            library.columns = data.columns.split("\n");
+            for (var i=0; i<library.columns.length; i++)
+              library.columns[i] = [library.columns[i], library.columns[i].replace(" ", "_").toLowerCase()];
+            if (library.columns[library.columns.length-1]==",") // remove last element if empty
+              library.columns.pop();
+            library.columns_display = data.columns_display.split("\n");
+            for (var i=0; i<library.columns_display.length; i++)
+              library.columns_display[i] = [library.columns_display[i], library.columns_display[i].replace(" ", "_").toLowerCase()];
+            if (library.columns_display[library.columns_display.length-1]==",") // remove last element if empty
+              library.columns_display.pop();
+            save_library(library);
           }
       }
   })
 }
 
 function delete_library() {
-  html = "<b>Library Delete</b><br>";
+  html = "<b>Library Delete for " + library.lib_id+ "</b><br>";
   html += "Are you really sure you would like to delete this library and all it's experimental data? This is not reversible and you will have to re-upload the data in case you would still like to use the library." + "<br>";
   vex.dialog.open({
       unsafeMessage: html,
@@ -79,9 +85,30 @@ function delete_library() {
   })
 }
 
+function delete_experiment(exp_id) {
+  html = "<b>Library Experiment " + exp_id + " from " + library.lib_id+ "</b><br>";
+  html += "Are you really sure you would like to delete this experiment from your library?" + "<br>";
+  vex.dialog.open({
+      unsafeMessage: html,
+      buttons: [
+          $.extend({}, vex.dialog.buttons.YES, { text: 'Delete' }),
+          $.extend({}, vex.dialog.buttons.NO, { text: 'Cancel' })
+      ],
+      callback: function (data) {
+          if (!data) {
+          } else {
+            delete_experiment_do(exp_id);
+          }
+      }
+  })
+}
+
 var upload_request = null;
 
 function upload_experiment() {
+  if (google_user==undefined)
+    return;
+
   html = "<b>Experiment Upload</b><br>";
   html += "Here you can upload a gzipped FASTQ (.fastq.bz2) of your experiment sequence data. You can edit the experiment annotation after the upload.<br><br>"
   html += "<table border=0 style='font-size: inherit; color: #444;'>";
@@ -91,6 +118,7 @@ function upload_experiment() {
   html += "<label for='newfile' class='cfu'>Select FASTQ file</label>";
   html += "<input type='file' id='newfile' name='newfile' style='display: none;' accept='.gz,.bz2'>";
   html += "<input type='hidden' name='action' value='upload_file'>";
+  html += "<input type='hidden' name='email' value='" + google_user.getBasicProfile().getEmail() + "'>";
   html += "<input type='hidden' name='lib_id' value='" + library.lib_id + "'>";
   html += "</form>";
   html += "</td>";
@@ -206,7 +234,7 @@ function upload_experiment() {
                 $("#btn_library_upload").show();
                 $("#btn_library_delete").show();
                 html_library_genome += " | <a href=javascript:change_library_genome();>Change</a>";
-                html_library_method += " | <a href=javascript:change_method();>Change</a>";
+                html_library_method += " | <a href=javascript:change_library_method();>Change</a>";
               }
             $("#lbl_library_id").html("<b>Library ID</b>: " + library.lib_id);
             $("#lbl_library_name").html("<b>Name</b>: " + library.name);
@@ -238,19 +266,24 @@ function upload_experiment() {
     });
   }
 
-  function save_library(library_id, data) {
+  function save_library(data) {
     post_data = {};
     post_data["action"] = "save_library";
     if (google_user!=undefined)
       post_data["email"] = google_user.getBasicProfile().getEmail();
-    post_data["library_id"] = library_id;
-    post_data["lib_name"] = data.lib_name;
-    post_data["lib_notes"] = data.lib_notes;
-    post_data["lib_access"] = data.lib_access.join(",");
-    post_data["lib_owner"] = data.lib_owner.join(",");
+    post_data["lib_id"] = data.lib_id;
+    post_data["name"] = data.name;
+    post_data["notes"] = data.notes;
+    post_data["access"] = data.access.join(",");
+    post_data["owner"] = data.owner.join(",");
+    post_data["genome"] = data.genome;
+    post_data["method"] = data.method;
+    post_data["columns"] = JSON.stringify(data.columns)
+    post_data["columns_display"] = JSON.stringify(data.columns_display)
+    post_data["experiments"] = JSON.stringify(data.experiments)
     $.post('/expressrna_gw/index.py', post_data)
         .success(function(result) {
-          get_library(library_id); // read back data from updated library
+          get_library(data.lib_id); // read back data from updated library
         })
         .error(function(){
     });
@@ -270,6 +303,21 @@ function upload_experiment() {
     });
   }
 
+  function delete_experiment_do(exp_id) {
+    post_data = {};
+    post_data["action"] = "delete_experiment";
+    if (google_user!=undefined)
+      post_data["email"] = google_user.getBasicProfile().getEmail();
+    post_data["lib_id"] = library.lib_id;
+    post_data["exp_id"] = exp_id;
+    $.post('/expressrna_gw/index.py', post_data)
+        .success(function(result) {
+          get_library(library.lib_id);
+        })
+        .error(function(){
+    });
+  }
+
 function display_library_experiments(experiments) {
   html = "<center><br>";
   html += "List of all experiments in the library that you have access to.<br><br>"
@@ -283,39 +331,48 @@ function display_library_experiments(experiments) {
 
   html += "<td><font color=gray><b>Number</b></font><font class='btn' title='" + help_id + "'><img src=media/help.png style='height: 15px; margin-top:-2px;vertical-align:middle; padding-left: 3px;'></font></td>";
   //html += "<td><font color=gray><b>Identifier</b></font><font class='btn' title='" + help_identifier + "'><img src=media/help.png style='height: 15px; margin-top:-2px;vertical-align:middle; padding-left: 3px;'></font></td>";
-  for (var i=0; i<library.columns.length; i++) {
-    html += "<td><font color=gray><b>" + library.columns[i][0] + "</b></font></td>";
+  for (var i=0; i<library.columns_display.length; i++) {
+    html += "<td><font color=gray><b>" + library.columns_display[i][0] + "</b></font></td>";
   }
   html += "<td class=nowrap><font color=gray><b>Reads [M]</b></font></td>";
   html += "<td class=nowrap><font color=gray><b>Aligned [%]</b></font><font class='btn' title='" + help_aligned+ "'><img src=media/help.png style='height: 15px; margin-top:-2px;vertical-align:middle; padding-left: 3px;'></font></td>";
   html += "<td class=nowrap><font color=gray><b>Downloads</b></font></td>";
+  html += "<td class=nowrap align=center><font color=gray><b>Operations</b></font></td>";
   html += "</tr>";
 
-  for (var i=0; i<experiments.length; i++)
+  for (exp_id in experiments)
   {
     html += "<tr style='font-weight: 300;'>";
+    code_delete = "";
+    if (google_user!=undefined)
+      if (library.owner.indexOf(google_user.getBasicProfile().getEmail())!=-1)
+          code_delete = "<a href='javascript:delete_experiment(" + experiments[exp_id].exp_id + ");'>Delete<img src=media/delete.png style='padding-left: 5px; opacity: 0.5; height: 12px; margin-top:-2px;vertical-align:middle; padding-right: 3px;'></a>";
     code_edit = "";
     if (google_user!=undefined)
       if (library.owner.indexOf(google_user.getBasicProfile().getEmail())!=-1)
-          code_edit = "<a href='javascript:edit_experiment(" + experiments[i].exp_id + ");'><img src=media/edit.png style='height: 18px; margin-top:-2px;vertical-align:middle; padding-right: 3px;'></a>";
-    html += "<td class=nowrap align=center>" + code_edit + "e" + experiments[i].exp_id + "</td>";
+          code_edit = "<a href='javascript:edit_experiment(" + experiments[exp_id].exp_id + ");'>Edit<img src=media/edit.png style='padding-left: 5px; height: 18px; margin-top:-2px;vertical-align:middle; padding-right: 3px;'></a>";
+    html += "<td class=nowrap align=center>" + "e" + experiments[exp_id].exp_id + "</td>";
     //html += "<td class=notes>" + experiments[i].lib_id + "_e" + experiments[i].exp_id + "</td>";
 
-    for (var j=0; j<library.columns.length; j++) {
-      column_name = library.columns[j][1];
-      column_value = experiments[i][column_name];
+    for (var j=0; j<library.columns_display.length; j++) {
+      column_name = library.columns_display[j][1];
+      column_value = experiments[exp_id][column_name];
       if (column_name=="method") {
-        column_value = experiments[i]["method_desc"]
+        column_value = experiments[exp_id]["method_desc"]
       }
       html += "<td class=nowrap>" + column_value + "</td>";
     }
 
-    html += "<td class=nowrap align=center>" + experiments[i].stats[0] + " M</td><td class=nowrap align=center>" + experiments[i].stats[1] + "</td>";
-    lib_id = experiments[i].lib_id;
-    exp_id = experiments[i].exp_id;
+    if (experiments[exp_id].stats[0]!="")
+      html += "<td class=nowrap align=center>" + experiments[exp_id].stats[0] + " M</td><td class=nowrap align=center>" + experiments[exp_id].stats[1] + "</td>";
+    else
+      html += "<td class=nowrap align=center></td><td class=nowrap align=center></td>";
+    lib_id = experiments[exp_id].lib_id;
+    exp_id = experiments[exp_id].exp_id;
     fastq_link = "https://expressrna.org/share/data/" + lib_id + "/e" + exp_id + "/" + lib_id + "_e" + exp_id + ".fastq.bz2";
     bam_link = "https://expressrna.org/share/data/" + lib_id + "/e" + exp_id + "/m1/" + lib_id + "_e" + exp_id + "_m1.bam";
     html += "<td class=nowrap><a href=" + fastq_link + ">FastQ</a> | <a href=" + bam_link + ">BAM</a></td>";
+    html += "<td class=nowrap align=center>" + code_edit + " | " + code_delete + "</td>";
     html += "</tr>";
   }
   html += "</table>";
@@ -323,7 +380,127 @@ function display_library_experiments(experiments) {
   tippy('.btn', {theme: 'light', interactive: true});
 }
 
-  function edit_experiment(exp_id) {
+function edit_experiment(exp_id) {
+  library = db["library"]["query"];
+  html = "<b>Editing experiment " + exp_id + "</b> for library " + library.lib_id + "</b><br>";
+  html += "<div style='font-size: 12px; color: #444444;'>Annotating your experiment is super easy, simply enter (or copy/paste) values (one per line) for this experiment.</div>"
+  public_library = "";
+  columns = [];
+  columns_values = [];
+  for (var i=0; i<library.columns.length; i++) {
+    columns.push(library.columns[i][0]);
+    column_value = library.experiments[exp_id][library.columns[i][1]];
+    if (column_value=="")
+      column_value = "\n";
+    columns_values.push(column_value);
+  }
+  vex.dialog.open({
+      unsafeMessage: html,
+      input: [
+          '<table style="font-size: inherit; font-weight: 200; font-family: \"Helvetica Neue\", sans-serif; color: #444;" border=0><tr><td valign=top>',
+          '<b>Annotation Fields</b>&nbsp;&nbsp;&nbsp;<div align="right" style="min-width: 120px; padding-top: 7px; font-size: 12px !important; font-weight: 200; font-family: \"Helvetica Neue\", sans-serif; color: #444; align:right; background-color: #FFFFFF; user-select: none !important; margin-top: 3px;">' + columns.join(":<br>") + ':</div>',
+          '</td><td valign=top width=430 style="max-width: 400px">',
+          '<b>Values</b><br><textarea style="max-width: 400px; max-height: 400px; min-width: 200px; min-height: 100px; margin-top: 5px; font-size: 12px !important; font-weight: 200; font-family: \"Helvetica Neue\", sans-serif; color: #444;" name="columns_values" rows=8 placeholder="Annotation values">' + columns_values.join("\n") + '</textarea>',
+          '</td></tr></table>',
+      ].join(''),
+      buttons: [
+          $.extend({}, vex.dialog.buttons.YES, { text: 'Save' }),
+          $.extend({}, vex.dialog.buttons.NO, { text: 'Cancel' })
+      ],
+      callback: function (data) {
+          if (!data) {
+          } else {
+            // take care of column values
+            if (data.columns_values==undefined)
+              data.columns_values = "";
+            new_column_values = data.columns_values.split("\n");
+            for (var i=0; i<library.columns.length; i++) {
+              column_name = library.columns[i][1];
+              column_value = new_column_values[i];
+              library.experiments[exp_id][column_name] = column_value;
+            }
+            save_library(library);
+          }
+      }
+  })
+  }
+
+  function change_library_genome() {
+    library = db["library"]["query"];
+    html = "<b>Library Genome Selection</b>";
+    html += "<div style='font-size: 12px; color: #444444;'>Please select the genome assembly and annotation of your library.</div>"
+    html += "<div style='font-size: 12px; color: #FF4444;'>Please be aware that if you change the genome of the library, all experiments will be re-mapped to the newly selected genome (can take some time).</div>"
+    genomes = {};
+    genomes["mm10"] = ["mm10", "mm10, Mus musculus, assembly: mm10, annotation: Ensembl 90"]
+    genomes["hg19"] = ["hg19", "hg19, <i>Homo sapiens</i>, assembly: hg19, annotation: Ensembl 75"]
+    genomes["hg38"] = ["hg19", "hg38, <i>Homo sapiens</i>, assembly: hg38, annotation: Ensembl 90"]
+    genomes_html = "<select id='select_genome' name='select_genome' size=10 style='font-size: 12px; outline: none;'>";
+    for (var genome in genomes) {
+      if (library.genome==genome)
+        genomes_html += "<option selected value='" + genome + "'>" + genomes[genome][1] + "</option>";
+      else
+        genomes_html += "<option value='" + genome + "'>" + genomes[genome][1] + "</option>";
+    }
+    genomes_html += "</select>";
+    vex.dialog.open({
+        unsafeMessage: html,
+        input: [
+            '<table style="font-size: inherit; font-weight: 200; font-family: \"Helvetica Neue\", sans-serif; color: #444;" border=0><tr><td valign=top>',
+            '<b>Available Genomes</b>&nbsp;&nbsp;&nbsp;<div align="left" style="min-width: 120px; padding-top: 7px; font-size: 12px !important; font-weight: 200; font-family: \"Helvetica Neue\", sans-serif; color: #444; align:right; background-color: #FFFFFF; user-select: none !important; margin-top: 3px;">' + genomes_html + '</div>',
+            '</td></tr></table>',
+        ].join(''),
+        buttons: [
+            $.extend({}, vex.dialog.buttons.YES, { text: 'Select' }),
+            $.extend({}, vex.dialog.buttons.NO, { text: 'Cancel' })
+        ],
+        callback: function (data) {
+            if (!data) {
+            } else {
+              console.log($('#select_genome').find(":selected").val());
+              library.genome = $('#select_genome').find(":selected").val();
+              save_library(library);
+            }
+        }
+    })
+  }
+
+
+  function change_library_method() {
+    library = db["library"]["query"];
+    html = "<b>Library Method Selection</b>";
+    html += "<div style='font-size: 12px; color: #444444;'>Please select the sequencing method / protocol of your library.</div>"
+    methods = {};
+    methods["lexrev"] = ["lexrev", "Lexogen Quantseq Reverse"]
+    methods["lexfwd"] = ["lexrev", "Lexogen Quantseq Forward"]
+    methods["RNAseq"] = ["RNAseq", "RNA-seq"]
+    methods["scRNA"] = ["scRNA", "Single-cell 10x Genomics"]
+    methods_html = "<select id='select_method' name='select_method' size=10 style='font-size: 12px; outline: none;'>";
+    for (var method in methods) {
+      if (library.method==method)
+        methods_html += "<option selected value='" + method + "'>" + methods[method][1] + "</option>";
+      else
+        methods_html += "<option value='" + method + "'>" + methods[method][1] + "</option>";
+    }
+    methods_html += "</select>";
+    vex.dialog.open({
+        unsafeMessage: html,
+        input: [
+            '<table style="font-size: inherit; font-weight: 200; font-family: \"Helvetica Neue\", sans-serif; color: #444;" border=0><tr><td valign=top>',
+            '<b>Available Methods</b>&nbsp;&nbsp;&nbsp;<div align="left" style="min-width: 120px; padding-top: 7px; font-size: 12px !important; font-weight: 200; font-family: \"Helvetica Neue\", sans-serif; color: #444; align:right; background-color: #FFFFFF; user-select: none !important; margin-top: 3px;">' + methods_html + '</div>',
+            '</td></tr></table>',
+        ].join(''),
+        buttons: [
+            $.extend({}, vex.dialog.buttons.YES, { text: 'Select' }),
+            $.extend({}, vex.dialog.buttons.NO, { text: 'Cancel' })
+        ],
+        callback: function (data) {
+            if (!data) {
+            } else {
+              library.method = $('#select_method').find(":selected").val();
+              save_library(library);
+            }
+        }
+    })
   }
 
 tippy('.btn', {theme: 'light', interactive: true});

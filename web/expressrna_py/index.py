@@ -31,6 +31,14 @@ db["methods"]["lexfwd"] = {}
 db["methods"]["lexfwd"]["desc"] = "<a href='%s' target=_new>Lexogen Quantseq Forward<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>"
 db["methods"]["lexfwd"]["link"] = "http://www.lexogen.com"
 
+db["methods"]["scRNA"] = {}
+db["methods"]["scRNA"]["desc"] = "Single cell RNA seq%s"
+db["methods"]["scRNA"]["link"] = ""
+
+db["methods"]["RNAseq"] = {}
+db["methods"]["RNAseq"]["desc"] = "RNA-seq%s"
+db["methods"]["RNAseq"]["link"] = ""
+
 db["genomes"] = {}
 db["genomes"][""] = {"desc" : "not selected"}
 
@@ -120,15 +128,28 @@ class TableClass():
             file_data = self.formdata['newfile'].file.read()
             filename = self.formdata['newfile'].filename
             lib_id = self.pars.get("lib_id", None)
+            email = self.pars.get("email", None)
+            library = apa.annotation.libs[lib_id]
             if lib_id==None:
                 return
-            target = os.path.join(upload_folder, filename)
-            f = open(target, 'wb')
-            f.write(file_data)
-            f.close()
-            library = apa.annotation.libs[lib_id]
-            library.add_empty_experiment()
+            exp_id = library.add_empty_experiment()
+            exp_folder = os.path.join(apa.path.data_folder, lib_id, "e"+str(exp_id))
             library.save()
+            os.makedirs(exp_folder)
+            if filename.endswith(".bz2"):
+                target = os.path.join(exp_folder, "%s_e%s.fastq.bz2" % (lib_id, exp_id))
+                f = open(target, 'wb')
+                f.write(file_data)
+                f.close()
+            if filename.endswith(".gz"):
+                target = os.path.join(exp_folder, "%s_e%s.fastq.gz" % (lib_id, exp_id))
+                f = open(target, 'wb')
+                f.write(file_data)
+                f.close()
+                self.add_ticket(email, "gunzip "+target, "Gunzip uploaded file to convert it to bz2 format")
+                self.add_ticket(email, "bzip2 "+target[:-3], "Bzip2 uploaded file")
+                #os.system("gunzip "+target)
+                #os.system("bzip2 "+target[:-3])
         return "done"
 
     def send_email(self, address_to, subject, message):
@@ -339,7 +360,6 @@ class TableClass():
         r["polya_db"] = comps.polya_db
 
         r["genome_desc"] = db["genomes"][comps.genome]["desc"]
-        self.log(r["genome_desc"])
         if r["genome_desc"]!="not selected":
             r["genome_desc"] = db["genomes"][comps.genome]["desc"] % (db["genomes"][comps.genome]["link_assembly"], db["genomes"][comps.genome]["link_annotation"])
         r["method"] = comps.method
@@ -357,7 +377,6 @@ class TableClass():
                     if column[1] not in ["method", "map_to"]:
                         columns.append(column)
         r["columns"] = columns
-        self.log(r["columns"])
 
         go = {} # read GO files
         for aspect in ["P", "C"]:
@@ -474,7 +493,8 @@ class TableClass():
         r["lib_id"] = library_id
         r["name"] = library.name
         r["notes"] = library.notes
-        r["columns"] = [(e1, e2) for (e1, e2) in library.columns if e2 not in ["method", "map_to"]]
+        r["columns"] = [(e1, e2) for (e1, e2) in library.columns if e2 not in ["method", "map_to", "species", "method"]]
+        r["columns_display"] = [(e1, e2) for (e1, e2) in library.columns_display if e2 not in ["method", "map_to", "species", "method"]]
         r["owner"] = library.owner
         r["access"] = library.access
         r["genome"] = library.genome
@@ -485,29 +505,34 @@ class TableClass():
         r["method_desc"] = db["methods"][library.method]["desc"]
         if r["method_desc"]!="not selected":
             r["method_desc"] = db["methods"][library.method]["desc"] % db["methods"][library.method]["link"]
-        experiments = []
+        experiments = {}
         for exp_id, exp_data in library.experiments.items():
             exp_map_stats = stats.get(exp_id, ("", ""))
             exp_data["stats"] = [exp_map_stats[0], exp_map_stats[1]]
             exp_data["lib_id"] = library_id
-            experiments.append(exp_data)
+            experiments[int(exp_id)] = exp_data
         r["experiments"] = experiments
         return json.dumps(r, default=dthandler)
 
     def save_library(self):
         apa.annotation.init()
         r = {"status":"fail"}
-        lib_id = self.pars.get("library_id", None)
+        lib_id = self.pars.get("lib_id", None)
         library = apa.annotation.libs.get(lib_id, None)
         email = self.pars.get("email", "public")
         if (email=="public"):
             return json.dumps(r, default=dthandler)
         if (email not in library.owner):
             return json.dumps(r, default=dthandler)
-        library.name = self.pars.get("lib_name", "")
-        library.notes = self.pars.get("lib_notes", "")
-        library.access = self.pars.get("lib_access", "").split(",")
-        library.owner = self.pars.get("lib_owner", "").split(",")
+        library.name = self.pars.get("name", "")
+        library.notes = self.pars.get("notes", "")
+        library.method = self.pars.get("method", "")
+        library.genome = self.pars.get("genome", "")
+        library.access = self.pars.get("access", "").split(",")
+        library.owner = self.pars.get("owner", "").split(",")
+        library.columns = json.loads(self.pars["columns"])
+        library.columns_display = json.loads(self.pars["columns_display"])
+        library.experiments = json.loads(self.pars["experiments"])
         library.save()
         r = {"status":"success"}
         return json.dumps(r, default=dthandler)
@@ -562,7 +587,36 @@ class TableClass():
             return json.dumps(r, default=dthandler)
         lib_folder = os.path.join(apa.path.data_folder, lib_id)
         if lib_folder.startswith("/home/gregor/apa/data.apa/") and len(lib_folder)>(len("/home/gregor/apa/data.apa/")+6):
-            shutil.rmtree(lib_folder)
+            if os.path.exists(lib_folder):
+                shutil.rmtree(lib_folder)
+        r = {"status":"success", "lib_id":lib_id}
+        return json.dumps(r, default=dthandler)
+
+    def delete_experiment(self):
+        apa.annotation.init()
+        email = self.check_login(self.pars.get("email", "public"))
+        if email=="public":
+            r = {"status":"fail"}
+            return json.dumps(r, default=dthandler)
+        lib_id = self.pars.get("lib_id", None)
+        exp_id = self.pars.get("exp_id", None)
+        if lib_id==None:
+            r = {"status":"fail"}
+            return json.dumps(r, default=dthandler)
+        if len(lib_id)<=6 or exp_id==None:
+            r = {"status":"fail"}
+            return json.dumps(r, default=dthandler)
+        library = apa.annotation.libs[lib_id]
+        if (email not in library.owner):
+            r = {"status":"fail"}
+            return json.dumps(r, default=dthandler)
+        lib_folder = os.path.join(apa.path.data_folder, lib_id)
+        exp_folder = os.path.join(apa.path.data_folder, lib_id, "e"+exp_id)
+        if lib_folder.startswith("/home/gregor/apa/data.apa/") and len(lib_folder)>(len("/home/gregor/apa/data.apa/")+6):
+            if os.path.exists(exp_folder):
+                shutil.rmtree(exp_folder)
+        del library.experiments[int(exp_id)]
+        library.save()
         r = {"status":"success", "lib_id":lib_id}
         return json.dumps(r, default=dthandler)
 
@@ -639,6 +693,18 @@ class TableClass():
             result["email"] = q[0].email
             result["status"] = "ok"
         return json.dumps(result)
+
+    def add_ticket(self, email, command, desc):
+        conn = Session()
+        t = Tickets()
+        t.email = email
+        t.command = command
+        t.desc = desc
+        t.status = 0
+        t.date_added = datetime.datetime.now()
+        conn.add(t)
+        conn.commit()
+        conn.flush()
 
     def save_login(self):
         data = self.pars.get("data", None)

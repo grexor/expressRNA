@@ -21,7 +21,7 @@ polyadb_help_dic["hg19_polyasite"] = "To determine polyA site usage, polyAsite h
 var db = {};
 
 db["libraries"] = {};
-db["libraries"]["current_column_sort"] = "name:asc";
+db["libraries"]["current_column_sort"] = "lib_id:desc";
 db["libraries"]["display_pages"] = 3;
 db["libraries"]["records_per_page"] = 20;
 db["libraries"]["current_page"] = 0;
