@@ -92,7 +92,7 @@ function display_analyses(data) {
 
   html += "<div>" + make_analyses_pagination_html() + "</div>"
 
-  html += "<div style='font-size=11px; padding-top: 10px; padding-bottom: 5px;'>Displaying " + Math.min(temp.length, 100) + " of " + db["analyses"]["query"].count + " analyses</div>";
+  html += "<div style='font-size=11px; padding-top: 10px; padding-bottom: 5px;'>Displaying " + temp.length + " of " + db["analyses"]["query"].count + " analyses</div>";
 
   for (var i=0; i<Math.min(100, temp.length); i++) {
       analysis_id = temp[i].comps_id;

@@ -21,6 +21,54 @@ function save_user_data() {
   .success(function(result) {
   })
   .error(function(){
-})
+  })
+}
 
+function display_user_access() {
+  alevel = db["access_levels"][db["user"]["usertype"]];
+  if (db["user"]["usertype"]=="guest") {
+    html = "Guest user<br><br>Full access to published data and explorative analysis of results.";
+    $("#div_user_access").html(html);
+  } else {
+    html = "Basic user<br><br>Possibility to create <b>" + alevel["libraries"]+" libraries</b> and to upload up to <b>" + alevel["experiments"] + " experiments (maximum gzip FASTQ/FASTA file size " + alevel["diskspace"] + " MB)</b>. Possibility to run basic analysis (differential polyadenylation)."
+    $("#div_user_access").html(html);
+  }
+}
+
+function display_user_tickets(tickets) {
+  html = "<table class='es_table'>";
+  html += "<tr style='background-color: #dfdfdf;'>";
+  help1 = "Important only for expressRNA ticket tracking";
+  help2 = "If this is empty, the ticket did not start processing yet";
+  help3 = "";
+  html += "<td><font color=gray><b>Ticket ID</b></font><font class='btn' title='" + help1 + "'><img src=media/help.png style='height: 15px; margin-top:-2px;vertical-align:middle; padding-left: 3px;'></font></td>";
+  html += "<td class=nowrap><font color=gray><b>Date Added</b></font></td>";
+  html += "<td class=nowrap><font color=gray><b>Date Started</b></font><font class='btn' title='" + help2+ "'><img src=media/help.png style='height: 15px; margin-top:-2px;vertical-align:middle; padding-left: 3px;'></font></td>";
+  html += "<td class=nowrap><font color=gray><b>Date Finished</b></font></td>";
+  html += "<td class=nowrap><font color=gray><b>Processing Time</b></font></td>";
+  html += "<td class=nowrap><font color=gray><b>Description</b></font></td>";
+  html += "<td class=nowrap align=center><font color=gray><b>Status</b></font></td>";
+  html += "</tr>";
+  for (ticket in tickets) {
+    rec = tickets[ticket];
+    if (rec.date_started==null)
+      rec.date_started = "";
+    if (rec.date_finished==null)
+      rec.date_finished = "";
+    html += "<tr style='font-weight: 300;'>";
+    html += "<td class=nowrap align=center>" + rec.tid + "</td>";
+    html += "<td class=nowrap align=center>" + rec.date_added + "</td>";
+    html += "<td class=nowrap align=center>" + rec.date_started + "</td>";
+    html += "<td class=nowrap align=center>" + rec.date_finished + "</td>";
+    html += "<td class=nowrap align=center>" + rec.processing_time + " minutes</td>";
+    html += "<td class=nowrap>" + rec.desc + "</td>";
+    html += "<td class=nowrap align=center>" + {0:"queued", 1:"processing", 2:"finished"}[rec.status] + "</td>";
+    html += "</tr>";
+  }
+  html += "</table>";
+  if (Object.keys(tickets).length==0)
+    $("#div_user_tickets").html("Currently, there are no tickets being queued or processed.");
+  else
+    $("#div_user_tickets").html(html);
+  tippy('.btn', {theme: 'light', interactive: true});
 }

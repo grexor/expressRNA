@@ -14,13 +14,28 @@ label:hover {
 <link rel="stylesheet" href="profile.css">
 
 <div class="content_center">
+    <div class="div_header"><b>Your expressRNA profile information</b></div>
     <table border=0 class="content_center" style='padding-top: 0px;'>
       <tr><td colspan=2><div id="profile_note"></div></td></tr>
       <tr><td align=right style='padding-right: 5px;'><b>E-mail:</b></td><td><div id="profile_email"></div></td></tr>
       <tr><td align=right style='padding-right: 5px;'><b>News:</b></td><td><label><input id='chk_user_news' type=checkbox onclick='user_news_click()'>
       allow expressRNA to send me news</label></div></td></tr>
-      <tr><td><br><div id="profile_btn_signout"></div></td></tr>
+      <tr><td colspan=2><br><div id="profile_btn_signout"></div></td></tr>
     </table>
+
+    <br>
+    <div class="div_header"><b>Access Level and Disk Space</b></div>
+    <div style='padding-left: 10px'>
+      <div id="div_user_access"></div>
+    </div>
+
+    <br><br>
+    <div class="div_header"><b>Open Tickets</b></div>
+    <div style='padding-left: 10px'>
+      Tickets are tasks that were submitted to expressRNA servers and are still processing. Here you can see currently open tickets (either queued or processing).
+      <br><br>
+      <div id="div_user_tickets"></div>
+    </div>
 </div>
 
 <script src="profile.js"></script>

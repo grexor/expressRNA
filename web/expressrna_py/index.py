@@ -141,6 +141,8 @@ class TableClass():
                 f = open(target, 'wb')
                 f.write(file_data)
                 f.close()
+                self.add_ticket(email, "apa.map -lib_id %s -exp_id %s" % (lib_id, exp_id), "map uploaded experiment to reference genome")
+                self.add_ticket(email, "apa.map.stats -lib_id %s" % (lib_id), "library mapping statistics")
             if filename.endswith(".gz"):
                 target = os.path.join(exp_folder, "%s_e%s.fastq.gz" % (lib_id, exp_id))
                 f = open(target, 'wb')
@@ -148,8 +150,8 @@ class TableClass():
                 f.close()
                 self.add_ticket(email, "gunzip "+target, "Gunzip uploaded file to convert it to bz2 format")
                 self.add_ticket(email, "bzip2 "+target[:-3], "Bzip2 uploaded file")
-                #os.system("gunzip "+target)
-                #os.system("bzip2 "+target[:-3])
+                self.add_ticket(email, "apa.map -lib_id %s -exp_id %s" % (lib_id, exp_id), "map uploaded experiment to reference genome")
+                self.add_ticket(email, "apa.map.stats -lib_id %s" % (lib_id), "library mapping statistics")
         return "done"
 
     def send_email(self, address_to, subject, message):
@@ -274,8 +276,12 @@ class TableClass():
             r["notes_search"] = lib_data.notes
             r["method"] = lib_data.method
             r["method_search"] = db["methods"][lib_data.method]["desc"]
+            if (r["method_search"])!="not selected":
+                r["method_search"] = r["method_search"] % db["methods"][lib_data.method]["link"]
             r["genome"] = lib_data.genome
             r["genome_search"] = db["genomes"][lib_data.genome]["desc"]
+            if (r["genome_search"])!="not selected":
+                r["genome_search"] = r["genome_search"] % (db["genomes"][r["genome"]]["link_assembly"], db["genomes"][r["genome"]]["link_annotation"])
             include_library = True
             if len(search)>=2:
                 include_library = False
@@ -286,10 +292,8 @@ class TableClass():
                     r["notes_search"] = self.replace_ignorecase(search, "<div style='display: inline; font-weight: bold; color: #FF0000'>", "</div>", r["notes_search"])
                     if r["method_search"]!="not selected":
                         r["method_search"] = self.replace_ignorecase(search, "<div style='display: inline; font-weight: bold; color: #FF0000'>", "</div>", r["method_search"])
-                        r["method_search"] = r["method_search"] % (db["methods"][r["method"]]["link"])
                     if r["genome_search"]!="not selected":
                         r["genome_search"] = self.replace_ignorecase(search, "<div style='display: inline; font-weight: bold; color: #FF0000'>", "</div>", r["genome_search"])
-                        r["genome_search"] = r["genome_search"] % (db["genomes"][r["genome"]]["link_assembly"], db["genomes"][r["genome"]]["link_annotation"])
             if include_library:
                 result.append(r)
 
@@ -684,6 +688,8 @@ class TableClass():
             result["news"] = 1
             result["email"] = email
             result["status"] = "ok"
+            result["usertype"] = "guest"
+            result["tickets"] = "[]";
             if email!="gregor.rot@gmail.com":
                 self.send_email("gregor.rot@gmail.com", "expressRNA: user login", "Dear Gregor,\n\n%s is a new user with expressRNA!,\n\nBest,\nexpressRNA" % email)
         if len(q)==1:
@@ -692,7 +698,22 @@ class TableClass():
             result["news"] = q[0].news
             result["email"] = q[0].email
             result["status"] = "ok"
-        return json.dumps(result)
+            result["usertype"] = q[0].usertype
+            result["tickets"] = self.get_tickets(email)
+        return json.dumps(result, default=dthandler)
+
+    def get_tickets(self, email):
+        tickets = []
+        conn = Session()
+        q = conn.query(Tickets).filter(Tickets.date_finished==None).filter(Tickets.email==email).order_by(Tickets.tid).all()
+        for rec in q:
+            try:
+                processing_time = round((datetime.datetime.now() - rec.date_started).total_seconds() / 60.0)
+            except:
+                processing_time = ""
+            row = {"processing_time":processing_time, "tid":rec.tid, "date_added":rec.date_added, "date_started":rec.date_started, "date_finished":rec.date_finished, "desc":rec.desc, "status":rec.status, "minutes":rec.minutes}
+            tickets.append(row)
+        return tickets
 
     def add_ticket(self, email, command, desc):
         conn = Session()

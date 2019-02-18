@@ -9,7 +9,7 @@ function login_ok(googleUser) {
     $("#btn_signin").hide();
     $("#btn_signout").show();
     $("#btn_signout").html('<img src=media/icon_profile.png height=18 style="padding-right: 5px; margin-top:-4px;vertical-align:middle"><a href="javascript:open_profile();" id="link_profile">' + googleUser.getBasicProfile().getName() + '</a>');
-    $("#profile_note").html("<b>Your expressRNA profile information</b><br><br>");
+    $("#profile_note").html("");
     $("#profile_email").html(googleUser.getBasicProfile().getEmail());
     $("#profile_btn_signout").html('<img src=media/signout.png height=13 style="margin-top:-3px;vertical-align:middle; padding-right: 3px;"><a href="#" onclick="signOut();">Sign out</a>');
     // update last login
@@ -20,6 +20,8 @@ function login_ok(googleUser) {
     .success(function(result) {
         db["user"] = $.parseJSON(result);
         $("#chk_user_news").prop("checked", db["user"]["news"]);
+        display_user_tickets(db["user"]["tickets"]);
+        display_user_access();
     })
     .error(function(){
     })

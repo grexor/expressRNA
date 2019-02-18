@@ -37,3 +37,23 @@ db["library"] = {};
 db["analysis"] = {};
 
 db["user"] = {};
+
+db["access_levels"] = {}
+
+// guest
+db["access_levels"]["guest"] = {}
+db["access_levels"]["guest"]["experiments"] = 0
+db["access_levels"]["guest"]["libraries"] = 0
+db["access_levels"]["guest"]["diskspace"] = 0
+
+//level1
+db["access_levels"]["level1"] = {}
+db["access_levels"]["level1"]["experiments"] = 4
+db["access_levels"]["level1"]["libraries"] = 1
+db["access_levels"]["level1"]["diskspace"] = 100
+
+//level2
+db["access_levels"]["level2"] = {}
+db["access_levels"]["level2"]["experiments"] = 8
+db["access_levels"]["level2"]["libraries"] = 2
+db["access_levels"]["level2"]["diskspace"] = 500
