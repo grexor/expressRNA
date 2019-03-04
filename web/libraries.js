@@ -22,6 +22,7 @@ function new_library_do() {
   post_data["email"] = google_user.getBasicProfile().getEmail();
   $.post('/expressrna_gw/index.py', post_data)
       .success(function(result) {
+          search_libraries(); // refresh library list
           data = $.parseJSON(result);
           open_library(data.lib_id);
       })
@@ -92,6 +93,8 @@ function html_arrow_libraries(order_by, column_id) {
 function display_libraries() {
   temp = db["libraries"]["query"]["data"];
   $("#div_control_libraries").hide();
+  if (db["user"]["usertype"]=="level2")
+    $("#div_control_libraries").show();
   if (google_user!=undefined)
     if (google_user.getBasicProfile().getEmail()=="gregor.rot@gmail.com")
       $("#div_control_libraries").show();

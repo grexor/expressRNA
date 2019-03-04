@@ -17,3 +17,4 @@ done
 cp -r deploy/* /home/gregor/expressrna/web/
 
 cp /home/gregor/expressrna_dev/web/expressrna_py/index.py /home/gregor/expressrna/web/expressrna_py/index.py
+cp /home/gregor/expressrna_dev/web/expressrna_py/db/__init__.py /home/gregor/expressrna/web/expressrna_py/db/__init__.py

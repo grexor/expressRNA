@@ -1,5 +1,6 @@
 import json
 import cgi
+import psutil
 import os
 import sys
 import hashlib
@@ -39,6 +40,10 @@ db["methods"]["RNAseq"] = {}
 db["methods"]["RNAseq"]["desc"] = "RNA-seq%s"
 db["methods"]["RNAseq"]["link"] = ""
 
+db["methods"]["nano"] = {}
+db["methods"]["nano"]["desc"] = "Nanopore, long-read sequencing (direct RNA)%s"
+db["methods"]["nano"]["link"] = ""
+
 db["genomes"] = {}
 db["genomes"][""] = {"desc" : "not selected"}
 
@@ -66,6 +71,16 @@ db["genomes"]["rn6"] = {}
 db["genomes"]["rn6"]["desc"] = "<i>Rattus norvegicus</i>, Assembly: <a href='%s' target=_new'>rn6<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>, Annotation: <a href='%s' target=_new>GTF Ensembl 91<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>";
 db["genomes"]["rn6"]["link_assembly"] = "ftp://ftp.ensembl.org/pub/release-91/fasta/rattus_norvegicus/dna/Rattus_norvegicus.Rnor_6.0.dna.toplevel.fa.gz"
 db["genomes"]["rn6"]["link_annotation"] = "ftp://ftp.ensembl.org/pub/release-91/gtf/rattus_norvegicus/Rattus_norvegicus.Rnor_6.0.91.chr.gtf.gz"
+
+db["genomes"]["dm6"] = {}
+db["genomes"]["dm6"]["desc"] = "<i>Drosophila melanogaster</i>, Assembly: <a href='%s' target=_new'>dm6<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>, Annotation: <a href='%s' target=_new>GTF Ensembl 90<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>";
+db["genomes"]["dm6"]["link_assembly"] = "ftp://ftp.ensembl.org/pub/release-90/fasta/drosophila_melanogaster/dna/Drosophila_melanogaster.BDGP6.dna.toplevel.fa.gz"
+db["genomes"]["dm6"]["link_annotation"] = "ftp://ftp.ensembl.org/pub/release-90/gtf/drosophila_melanogaster/Drosophila_melanogaster.BDGP6.90.chr.gtf.gz"
+
+db["genomes"]["at"] = {}
+db["genomes"]["at"]["desc"] = "<i>Arabidopsis thaliana</i>, Assembly: <a href='%s' target=_new'>at<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>, Annotation: <a href='%s' target=_new>GTF Ensembl 39<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>";
+db["genomes"]["at"]["link_assembly"] = "ftp://ftp.ensemblgenomes.org/pub/plants/release-39/fasta/arabidopsis_thaliana/dna/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa.gz"
+db["genomes"]["at"]["link_annotation"] = "ftp://ftp.ensemblgenomes.org/pub/plants/release-39/gtf/arabidopsis_thaliana/Arabidopsis_thaliana.TAIR10.39.gtf.gz"
 
 class TableClass():
 
@@ -129,10 +144,11 @@ class TableClass():
             filename = self.formdata['newfile'].filename
             lib_id = self.pars.get("lib_id", None)
             email = self.pars.get("email", None)
+            chk_upload_email = self.pars.get("chk_upload_email", None)
             library = apa.annotation.libs[lib_id]
             if lib_id==None:
                 return
-            exp_id = library.add_empty_experiment()
+            exp_id = library.add_empty_experiment(filename=os.path.basename(filename))
             exp_folder = os.path.join(apa.path.data_folder, lib_id, "e"+str(exp_id))
             library.save()
             os.makedirs(exp_folder)
@@ -141,17 +157,19 @@ class TableClass():
                 f = open(target, 'wb')
                 f.write(file_data)
                 f.close()
-                self.add_ticket(email, "apa.map -lib_id %s -exp_id %s" % (lib_id, exp_id), "map uploaded experiment to reference genome")
-                self.add_ticket(email, "apa.map.stats -lib_id %s" % (lib_id), "library mapping statistics")
             if filename.endswith(".gz"):
                 target = os.path.join(exp_folder, "%s_e%s.fastq.gz" % (lib_id, exp_id))
                 f = open(target, 'wb')
                 f.write(file_data)
                 f.close()
-                self.add_ticket(email, "gunzip "+target, "Gunzip uploaded file to convert it to bz2 format")
-                self.add_ticket(email, "bzip2 "+target[:-3], "Bzip2 uploaded file")
-                self.add_ticket(email, "apa.map -lib_id %s -exp_id %s" % (lib_id, exp_id), "map uploaded experiment to reference genome")
-                self.add_ticket(email, "apa.map.stats -lib_id %s" % (lib_id), "library mapping statistics")
+                self.add_ticket(email, "gunzip "+target, "gunzip " + "%s_e%s.fastq.gz" % (lib_id, exp_id) + " to convert it to bz2 format")
+                self.add_ticket(email, "pbzip2 "+target[:-3], "pbzip2 " + "%s_e%s.fastq" % (lib_id, exp_id))
+            self.add_ticket(email, "apa.map -lib_id %s -exp_id %s -cpu 4" % (lib_id, exp_id), "map e%s (library %s) to reference genome %s" % (exp_id, lib_id, library.genome))
+            self.add_ticket(email, "apa.map.stats -lib_id %s -exp_id %s" % (lib_id, exp_id), "map statistics for e%s (library %s)" % (exp_id, lib_id))
+            self.add_ticket(email, "apa.fastqc /home/gregor/apa/data.apa/%s" % lib_id, "fastqc for library %s" % (lib_id))
+            self.add_ticket(email, "apa.bed.gene_expression -lib_id %s" % lib_id, "gene expression table for library %s" % lib_id)
+            if chk_upload_email=="on":
+                self.add_ticket(email, "/home/gregor/expressrna.sendemail %s '%s'" % (email, "Dear %s,\n\nyour experiment e%s (library %s) has been mapped and processed now, you can access it here:\n\nhttp://expressrna.org/index.html?action=library&library_id=%s\n\nThank you,\nexpressRNA" % (email, exp_id, lib_id, lib_id)), "email processing done for e%s (library %s)" % (exp_id, lib_id))
         return "done"
 
     def send_email(self, address_to, subject, message):
@@ -707,13 +725,22 @@ class TableClass():
         conn = Session()
         q = conn.query(Tickets).filter(Tickets.date_finished==None).filter(Tickets.email==email).order_by(Tickets.tid).all()
         for rec in q:
-            try:
-                processing_time = round((datetime.datetime.now() - rec.date_started).total_seconds() / 60.0)
-            except:
+            if rec.date_started!=None:
+                try:
+                    processing_time = round((datetime.datetime.now() - rec.date_started).total_seconds() / 60.0)
+                except:
+                    processing_time = "0"
+            else:
                 processing_time = ""
             row = {"processing_time":processing_time, "tid":rec.tid, "date_added":rec.date_added, "date_started":rec.date_started, "date_finished":rec.date_finished, "desc":rec.desc, "status":rec.status, "minutes":rec.minutes}
             tickets.append(row)
         return tickets
+
+    def refetch_tickets(self):
+        email = self.pars.get("email", None)
+        if email==None:
+            return "refetch_tickets fail"
+        return json.dumps(self.get_tickets(email), default=dthandler)
 
     def add_ticket(self, email, command, desc):
         conn = Session()
@@ -739,6 +766,11 @@ class TableClass():
             q[0].news = data["news"]
             conn.commit()
         return "saved"
+
+    def get_server_stats(self):
+        result = {}
+        result["cpu"] = psutil.cpu_percent(percpu=True)
+        return json.dumps(result, default=dthandler)
 
     def close(self):
         Session.remove()

@@ -27,6 +27,7 @@ function open_profile() {
   $("body").removeClass("waiting");
   menu_select("menu_profile");
   add_history("profile", "", "index.html?action=profile")
+  refetch_user_tickets();
   hide_all();
   $("#content_profile").show();
   add_history({"action":"profile"}, "index.html?action=profile");

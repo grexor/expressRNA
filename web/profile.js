@@ -6,6 +6,9 @@ if (email!="public") {
   $("#profile_btn_signout").html('<img src=media/signout.png height=13 style="margin-top:-3px;vertical-align:middle">&nbsp;<a href="#" onclick="signOut();">Sign out</a>');
 } else {
   $("#profile_note").html("Your are currently not signed in to expressRNA.");
+  $("#div_user_detail").hide();
+  $("#tr_user_news").hide();
+  $("#tr_user_email").hide();
 }
 
 function user_news_click() {
@@ -30,9 +33,25 @@ function display_user_access() {
     html = "Guest user<br><br>Full access to published data and explorative analysis of results.";
     $("#div_user_access").html(html);
   } else {
-    html = "Basic user<br><br>Possibility to create <b>" + alevel["libraries"]+" libraries</b> and to upload up to <b>" + alevel["experiments"] + " experiments (maximum gzip FASTQ/FASTA file size " + alevel["diskspace"] + " MB)</b>. Possibility to run basic analysis (differential polyadenylation)."
+    html = "Academic user<br><br>Possibility to create <b>" + alevel["libraries"]+" libraries</b> and to upload up to <b>" + alevel["experiments"] + " experiments (maximum gzip FASTQ/FASTA file size " + alevel["diskspace"] + " MB)</b> and run basic analysis (differential polyadenylation)."
     $("#div_user_access").html(html);
   }
+}
+
+// refresh user tickets
+function refetch_user_tickets() {
+  post_data = {};
+  if (google_user!=undefined)
+    post_data["email"] = google_user.getBasicProfile().getEmail();
+  else return;
+  post_data["action"] = "refetch_tickets";
+  $.post('/expressrna_gw/index.py', post_data)
+  .success(function(result) {
+    db["user"]["tickets"] = $.parseJSON(result);
+    display_user_tickets(db["user"]["tickets"]);
+  })
+  .error(function(){
+  })
 }
 
 function display_user_tickets(tickets) {
@@ -60,7 +79,12 @@ function display_user_tickets(tickets) {
     html += "<td class=nowrap align=center>" + rec.date_added + "</td>";
     html += "<td class=nowrap align=center>" + rec.date_started + "</td>";
     html += "<td class=nowrap align=center>" + rec.date_finished + "</td>";
-    html += "<td class=nowrap align=center>" + rec.processing_time + " minutes</td>";
+    if (String(rec.processing_time)!="")
+    {
+      html += "<td class=nowrap align=center>" + rec.processing_time + " minutes</td>";
+    } else {
+      html += "<td class=nowrap align=center></td>";
+    }
     html += "<td class=nowrap>" + rec.desc + "</td>";
     html += "<td class=nowrap align=center>" + {0:"queued", 1:"processing", 2:"finished"}[rec.status] + "</td>";
     html += "</tr>";

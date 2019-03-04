@@ -8,6 +8,9 @@ function login_ok(googleUser) {
     google_user = googleUser;
     $("#btn_signin").hide();
     $("#btn_signout").show();
+    $("#div_user_detail").show();
+    $("#tr_user_news").show();
+    $("#tr_user_email").show();
     $("#btn_signout").html('<img src=media/icon_profile.png height=18 style="padding-right: 5px; margin-top:-4px;vertical-align:middle"><a href="javascript:open_profile();" id="link_profile">' + googleUser.getBasicProfile().getName() + '</a>');
     $("#profile_note").html("");
     $("#profile_email").html(googleUser.getBasicProfile().getEmail());
@@ -22,26 +25,24 @@ function login_ok(googleUser) {
         $("#chk_user_news").prop("checked", db["user"]["news"]);
         display_user_tickets(db["user"]["tickets"]);
         display_user_access();
+
+        // refresh datasets that depend on login
+        search_analyses();
+        search_libraries();
+        // after login, we can not do it before, that's why it's here
+        if (pars["action"]=="libraries") {
+          open_libraries();
+        }
+        if (pars["action"]=="analyses") {
+          open_analyses();
+        }
+        if (pars["action"]=="library") {
+          open_library(pars["library_id"]);
+        }
+
     })
     .error(function(){
     })
-
-    // refresh datasets that depend on login
-    search_analyses();
-    search_libraries();
-    // after login, we can not do it before, that's why it's here
-    if (pars["action"]=="libraries") {
-      open_libraries();
-      return;
-    }
-    if (pars["action"]=="analyses") {
-      open_analyses();
-      return;
-    }
-    if (pars["action"]=="library") {
-      open_library(pars["library_id"]);
-      return;
-    }
 }
 function login_fail(error) {
   google_user = undefined;
