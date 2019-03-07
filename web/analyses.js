@@ -83,16 +83,21 @@ function display_analyses(data) {
   if (google_user!=undefined)
     if (google_user.getBasicProfile().getEmail()=="gregor.rot@gmail.com")
       $("#div_control_analyses").show();
-  html = "<div style='float:left;'>"
-  html += "<div onclick=\"sort_analyses_by('name')\" style='user-select: none; width: 60px; text-align: center; cursor: pointer; margin-right: 15px; float: left; display: inline-block; border-radius: 5px; padding-left: 6px; padding-right: 10px; padding-top: 2px; padding-bottom: 2px; background: #e1e1e1;'>Name <div class=arrow>" + html_arrow_analyses(db["analyses"]["current_column_sort"], "name") + "</div></div>";
-  html += "<div onclick=\"sort_analyses_by('notes')\" style='user-select: none; width: 60px; text-align: center; cursor: pointer; margin-right: 15px; display: inline-block; border-radius: 5px; padding-left: 6px; padding-right: 10px; padding-top: 2px; padding-bottom: 2px; background: #e1e1e1;'>Notes <div class=arrow>" + html_arrow_analyses(db["analyses"]["current_column_sort"], "notes") + "</div></div>";
-  html += "<div onclick=\"sort_analyses_by('analysis_id')\" style='user-select: none; width: 80px; text-align: center; cursor: pointer; margin-right: 15px; display: inline-block; border-radius: 5px; padding-left: 6px; padding-right: 10px; padding-top: 2px; padding-bottom: 2px; background: #e1e1e1;'>Analysis ID <div class=arrow>" + html_arrow_analyses(db["analyses"]["current_column_sort"], "analysis_id") + "</div></div>";
-  html += "<div onclick=\"sort_analyses_by('last_change')\" style='user-select: none; width: 90px; text-align: center; cursor: pointer; margin-right: 15px; display: inline-block; border-radius: 5px; padding-left: 6px; padding-right: 10px; padding-top: 2px; padding-bottom: 2px; background: #e1e1e1;'>Last Change <div class=arrow>" + html_arrow_analyses(db["analyses"]["current_column_sort"], "last_change") + "</div></div>";
-  html += "</div>";
 
-  html += "<div>" + make_analyses_pagination_html() + "</div>"
+  html_header = "<div style='float:left;'>"
+  html_header += "<div onclick=\"sort_analyses_by('name')\" style='user-select: none; width: 60px; text-align: center; cursor: pointer; margin-right: 15px; float: left; display: inline-block; border-radius: 5px; padding-left: 6px; padding-right: 10px; padding-top: 2px; padding-bottom: 2px; background: #e1e1e1;'>Name <div class=arrow>" + html_arrow_analyses(db["analyses"]["current_column_sort"], "name") + "</div></div>";
+  html_header += "<div onclick=\"sort_analyses_by('notes')\" style='user-select: none; width: 60px; text-align: center; cursor: pointer; margin-right: 15px; display: inline-block; border-radius: 5px; padding-left: 6px; padding-right: 10px; padding-top: 2px; padding-bottom: 2px; background: #e1e1e1;'>Notes <div class=arrow>" + html_arrow_analyses(db["analyses"]["current_column_sort"], "notes") + "</div></div>";
+  html_header += "<div onclick=\"sort_analyses_by('analysis_id')\" style='user-select: none; width: 80px; text-align: center; cursor: pointer; margin-right: 15px; display: inline-block; border-radius: 5px; padding-left: 6px; padding-right: 10px; padding-top: 2px; padding-bottom: 2px; background: #e1e1e1;'>Analysis ID <div class=arrow>" + html_arrow_analyses(db["analyses"]["current_column_sort"], "analysis_id") + "</div></div>";
+  html_header += "<div onclick=\"sort_analyses_by('last_change')\" style='user-select: none; width: 90px; text-align: center; cursor: pointer; margin-right: 15px; display: inline-block; border-radius: 5px; padding-left: 6px; padding-right: 10px; padding-top: 2px; padding-bottom: 2px; background: #e1e1e1;'>Last Change <div class=arrow>" + html_arrow_analyses(db["analyses"]["current_column_sort"], "last_change") + "</div></div>";
+  html_header += "</div>";
 
-  html += "<div style='font-size=11px; padding-top: 10px; padding-bottom: 5px;'>Displaying " + temp.length + " of " + db["analyses"]["query"].count + " analyses</div>";
+  html_header += "<div>" + make_analyses_pagination_html() + "</div>"
+
+  html_header += "<div style='font-size=11px; padding-top: 10px; padding-bottom: 5px;'>Displaying " + temp.length + " of " + db["analyses"]["query"].count + " analyses</div>";
+
+  $("#table_analyses_header").html(html_header);
+
+  html = "<div style='padding-top: 150px'>";
 
   for (var i=0; i<Math.min(100, temp.length); i++) {
       analysis_id = temp[i].comps_id;
@@ -114,6 +119,8 @@ function display_analyses(data) {
       html += "</div>";
       html += "</div>";
   }
+
+  html += "</div>";
 
   $("#table_analyses").html(html);
   $("#select_analyses_pages option[value="+db["analyses"]["records_per_page"]+"]").prop('selected', true);

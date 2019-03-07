@@ -422,17 +422,17 @@ function display_library_ge() {
   html = "<br>";
   html += "Links to <b>constructed polyA database</b> (from all experiments in library) and to data tables of gene expression.<br><br>"
   polya_bed_link = "https://expressrna.org/share/polya/" + library.lib_id + ".bed.gz";
-  html += "<div style='background-color: #e1e1e1; border-radius: 3px; float:left; padding-left: 3px; padding-right: 3px; margin-right: 5px;'>PolyA database</div><div class='div_column_value'><a href='" + polya_bed_link + "'>Download polyA database</a></div>";
+  html += "<div style='background-color: #e1e1e1; border-radius: 3px; float:left; padding-left: 3px; padding-right: 3px; margin-right: 5px;'>PolyA database</div><div class='div_column_value'><a target=_new href='" + polya_bed_link + "'>Download polyA database</a></div>";
   html += "<div style='font-size: 12px; color: #555555; padding-left: 3px;'>The polyA database is constructed from all experimental data in the library. Reads are grouped depending on library method (Quantseq Reverse, Quantseq Forward, Nanopore) and thresholds are applied to estimate RNA molecule ends. The results are reported in BED format. A detailed description is available in the <a href='javascript:open_help();'>Help section</a>.</div>";
   html += "<br><br>";
 
-  polya_expression_table_link = "";
-  html += "<div style='background-color: #e1e1e1; border-radius: 3px; float:left; padding-left: 3px; padding-right: 3px; margin-right: 5px;'>PolyA Expression</div><div class='div_column_value'><a href='" + polya_expression_table_link + "'>Download polyA expression table</a></div>";
+  polya_expression_table_link = "https://expressrna.org/share/data/" + library.lib_id + "/" + library.lib_id + "_polya_expression.tab?nocache="+nocache;
+  html += "<div style='background-color: #e1e1e1; border-radius: 3px; float:left; padding-left: 3px; padding-right: 3px; margin-right: 5px;'>PolyA Expression</div><div class='div_column_value'><a target=_new href='" + polya_expression_table_link + "'>Download polyA expression table</a></div>";
   html += "<div style='font-size: 12px; color: #555555; padding-left: 3px;'>The polyA expression table provides information on individual polyA site 'expression' (read count) for each of the library experiments separately.</div>";
   html += "<br><br>";
 
   gene_expression_table_link = "https://expressrna.org/share/data/" + library.lib_id + "/" + library.lib_id + "_gene_expression.tab?nocache="+nocache;
-  html += "<div style='background-color: #e1e1e1; border-radius: 3px; float:left; padding-left: 3px; padding-right: 3px; margin-right: 5px;'>Gene Expression</div><div class='div_column_value'><a href='" + gene_expression_table_link + "'>Download gene expression table</a></div>";
+  html += "<div style='background-color: #e1e1e1; border-radius: 3px; float:left; padding-left: 3px; padding-right: 3px; margin-right: 5px;'>Gene Expression</div><div class='div_column_value'><a target=_new href='" + gene_expression_table_link + "'>Download gene expression table</a></div>";
   html += "<div style='font-size: 12px; color: #555555; padding-left: 3px;'>The gene expression table provides information on global gene expression levels. Computed with htseq-count and aligned (.bam) files from each experiment in the library.</div>";
 
   /*

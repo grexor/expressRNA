@@ -168,6 +168,10 @@ class TableClass():
             self.add_ticket(email, "apa.map.stats -lib_id %s -exp_id %s" % (lib_id, exp_id), "map statistics for e%s (library %s)" % (exp_id, lib_id))
             self.add_ticket(email, "apa.fastqc /home/gregor/apa/data.apa/%s" % lib_id, "fastqc for library %s" % (lib_id))
             self.add_ticket(email, "apa.bed.gene_expression -lib_id %s" % lib_id, "gene expression table for library %s" % lib_id)
+            self.add_ticket(email, "apa.bed.multi -lib_id %s" % (lib_id), "bed files for library %s" % lib_id)
+            self.add_ticket(email, "apa.polya.makeconfig -lib_id %s" % (lib_id), "polya make config database for library %s" % lib_id)
+            self.add_ticket(email, "apa.polya -poly_id %s" % (lib_id), "polya database for library %s" % lib_id)
+            self.add_ticket(email, "apa.bed.polya_expression -lib_id %s -poly_id %s" % (lib_id, lib_id), "polya expression table for library %s" % lib_id)
             if chk_upload_email=="on":
                 self.add_ticket(email, "/home/gregor/expressrna.sendemail %s '%s'" % (email, "Dear %s,\n\nyour experiment e%s (library %s) has been mapped and processed now, you can access it here:\n\nhttp://expressrna.org/index.html?action=library&library_id=%s\n\nThank you,\nexpressRNA" % (email, exp_id, lib_id, lib_id)), "email processing done for e%s (library %s)" % (exp_id, lib_id))
         return "done"
@@ -723,7 +727,10 @@ class TableClass():
     def get_tickets(self, email):
         tickets = []
         conn = Session()
-        q = conn.query(Tickets).filter(Tickets.date_finished==None).filter(Tickets.email==email).order_by(Tickets.tid).all()
+        if email=="gregor.rot@gmail.com":
+            q = conn.query(Tickets).filter(Tickets.date_finished==None).order_by(Tickets.tid).all()
+        else:
+            q = conn.query(Tickets).filter(Tickets.date_finished==None).filter(Tickets.email==email).order_by(Tickets.tid).all()
         for rec in q:
             if rec.date_started!=None:
                 try:
