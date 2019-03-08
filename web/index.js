@@ -34,33 +34,28 @@ function all_documents_loaded() {
   if (loaded_documents<9) {
     return;
   }
-  if (pars["action"]=="profile")
+    process_login_parameters(pars["action"], pars)
+}
+
+function process_login_parameters(action, data) {
+  if (action=="profile")
       open_profile();
-  else if (pars["action"]=="about")
+  else if (action=="about")
       open_about();
-  else if (pars["action"]=="info")
+  else if (action=="info")
       open_info();
-  else if (pars["action"]=="help")
+  else if (action=="help")
       open_help();
-  else if (pars["action"]=="libraries")
+  else if (action=="libraries")
       open_libraries();
-  else if (pars["action"]=="analyses")
+  else if (action=="analyses")
       open_analyses();
-  else if (pars["action"]=="licence")
+  else if (action=="licence")
       open_licence();
-  else if (pars["action"]=="analysis")
-      open_analysis(pars["analysis_id"]);
-  else if (pars["action"]=="library")
-      open_library(pars["library_id"]);
+  else if (action=="analysis")
+      open_analysis(data["analysis_id"], data["module"], data["pair_type"]);
+  else if (action=="library")
+      open_library(data["library_id"], data["module"]);
   else
     open_about(); // default
-}
-
-function window_resize() {
-resize_samples_tree();
-resize_taxa_tree();
-}
-
-function window_scroll() {
-scroll_samples_adjust();
 }

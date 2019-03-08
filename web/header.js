@@ -4,6 +4,7 @@ window.location.search
     pars[key] = value.replace(/%20/g, " ").replace(/\+/g, "#")
   }
 );
+
 function login_ok(googleUser) {
     google_user = googleUser;
     $("#btn_signin").hide();
@@ -30,16 +31,7 @@ function login_ok(googleUser) {
         search_analyses();
         search_libraries();
         // after login, we can not do it before, that's why it's here
-        if (pars["action"]=="libraries") {
-          open_libraries();
-        }
-        if (pars["action"]=="analyses") {
-          open_analyses();
-        }
-        if (pars["action"]=="library") {
-          open_library(pars["library_id"]);
-        }
-
+        process_login_parameters(pars["action"], pars)
     })
     .error(function(){
     })
@@ -84,8 +76,13 @@ function menu_select(name) {
   $("#" + name).attr('style', 'border-bottom: 2px solid #c1c1c1;');
 }
 function add_history(data, url) {
-  if (pop_state==false)
-    window.history.pushState(data, '', url);
+  if (pop_state==false) {
+    if (last_url!=url) {
+        window.history.pushState(data, '', url);
+      }
+    last_url = url;
+  }
+  pop_state = false;
 }
 window.addEventListener('popstate', function(e) {
   pop_state = true;
@@ -94,19 +91,5 @@ window.addEventListener('popstate', function(e) {
     pop_state = false;
     return;
   }
-  if (e.state["action"]=="about")
-      open_about();
-  if (e.state["action"]=="info")
-      open_info();
-  if (e.state["action"]=="help")
-      open_help();
-  if (e.state["action"]=="libraries")
-      open_libraries();
-  if (e.state["action"]=="analyses")
-      open_analyses();
-  if (e.state["action"]=="analysis")
-      open_analysis(db["analysis"]["analysis_id"]);
-  if (e.state["action"]=="library")
-      open_library(db["library"]["library_id"]);
-  pop_state = false;
+  process_login_parameters(e.state["action"], e.state)
 });

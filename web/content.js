@@ -70,26 +70,23 @@ function hide_all() {
   $("#content_licence").hide();
 }
 
-function open_library(library_id) {
-  db["library"]["library_module"] = "ex";
+function open_library(library_id, library_module) {
+  db["library"]["library_module"] = library_module;
   $("body").removeClass("waiting");
   hide_all();
   menu_select("menu_libraries");
   $("#content_library").show();
   get_library(library_id);
-  add_history({"action":"library", "library_id":library_id}, "index.html?action=library&library_id="+library_id);
 }
 
-function open_analysis(analysis_id) {
-  db["analysis"]["analysis_module"] = "es";
-  db["analysis"]["pair_type"] = "same";
+function open_analysis(analysis_id, analysis_module, pair_type) {
+  db["analysis"]["analysis_module"] = analysis_module;
+  db["analysis"]["pair_type"] = pair_type;
   db["analysis"]["clip_index"] = "0";
   db["analysis"]["go_aspect"] = "P";
   $("body").removeClass("waiting");
   hide_all();
   menu_select("menu_analyses");
   $("#content_analysis").show();
-  get_analysis(analysis_id);
-  open_analysis_pair_type("same");
-  add_history({"action":"analysis", "analysis_id":analysis_id}, "index.html?action=analysis&analysis_id="+analysis_id);
+  get_analysis(analysis_id, pair_type);
 }

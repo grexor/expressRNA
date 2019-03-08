@@ -244,6 +244,7 @@ function upload_experiment() {
     hide_library_all();
     $("#div_library_" + library_module).show();
     $("#btn_library_" + library_module).css("background-color", "#c1c1c1");
+    add_history({"action":"library", "library_id":library.lib_id, "module":library_module}, "index.html?action=library&library_id=" + library.lib_id + "&module="+library_module);
   }
 
   function get_library(library_id) {
@@ -310,6 +311,8 @@ function upload_experiment() {
               $("body").removeClass("waiting");
             });
             // final open library steps
+            if (db["library"]["library_module"]==undefined) // default library module
+              db["library"]["library_module"] = "ex";
             open_library_div(db["library"]["library_module"]);
         })
         .error(function(){

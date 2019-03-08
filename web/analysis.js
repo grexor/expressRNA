@@ -350,6 +350,8 @@ function display_analysis_apamap(div_name, pair_type) {
     hide_analysis_div_all();
     $("#div_analysis_" + analysis_module).show();
     $("#btn_analysis_" + analysis_module).css("background-color", "#c1c1c1");
+    add_history({"action":"analysis", "analysis_id":db["analysis"]["analysis_id"], "module":analysis_module, "pair_type":db["analysis"]["pair_type"]}, "index.html?action=analysis&analysis_id=" + db["analysis"]["analysis_id"] + "&module="+analysis_module+"&pair_type="+db["analysis"]["pair_type"]);
+
   }
 
   function open_analysis_pair_type(t_pair_type) {
@@ -359,7 +361,7 @@ function display_analysis_apamap(div_name, pair_type) {
     $("#btn_combined").removeClass("selected");
     $("#btn_"+t_pair_type).addClass("selected");
     db["analysis"]["pair_type"] = t_pair_type;
-    get_analysis(db["analysis"]["analysis_id"]);
+    get_analysis(db["analysis"]["analysis_id"], db["analysis"]["pair_type"]);
   }
 
   function change_analysis_go(aspect) {
@@ -373,7 +375,8 @@ function display_analysis_apamap(div_name, pair_type) {
     get_analysis(db["analysis"]["analysis_id"]);
   }
 
-  function get_analysis(analysis_id) {
+  function get_analysis(analysis_id, pair_type) {
+    db["analysis"]["pair_type"] = pair_type;
     db["analysis"]["analysis_id"] = analysis_id;
     pair_type = db["analysis"]["pair_type"];
     clip_index = db["analysis"]["clip_index"];
@@ -388,6 +391,18 @@ function display_analysis_apamap(div_name, pair_type) {
         .success(function(result) {
             data = $.parseJSON(result);
             db["analysis"]["query"] = data;
+
+            if (db["analysis"]["analysis_module"]==undefined)
+              db["analysis"]["analysis_module"] = "es";
+            if (db["analysis"]["pair_type"]==undefined)
+              db["analysis"]["pair_type"] = "same";
+
+            $("#btn_same").removeClass("selected");
+            $("#btn_skipped").removeClass("selected");
+            $("#btn_composite").removeClass("selected");
+            $("#btn_combined").removeClass("selected");
+            $("#btn_"+db["analysis"]["pair_type"]).addClass("selected");
+
             open_analysis_div(db["analysis"]["analysis_module"]);
 
             $("#lbl_analysis_comps").html("<b>" + data.comps_name + "</b><br><b>Analysis ID</b>: " + data.comps_id);

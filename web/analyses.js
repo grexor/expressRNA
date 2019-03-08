@@ -108,7 +108,7 @@ function display_analyses(data) {
       analysis_name_search = temp[i].comps_name_search;
       analysis_notes_search = temp[i].notes_search;
       html += "<div class=div_analyses_result>";
-      html += "<div><img src='media/analysis4.png' style='height:14px; padding-right: 3px; vertical-align:middle;'><b><a href=\"javascript:open_analysis('" + analysis_id + "');\">" + analysis_id + "</b></a></div>"
+      html += "<div><img src='media/analysis4.png' style='height:14px; padding-right: 3px; vertical-align:middle;'><b><a href=\"javascript:open_analysis('" + analysis_id + "', 'es', 'same');\">" + analysis_id + "</b></a></div>"
       html += "<div style='padding-left: 15px;'>";
       html += "<div><b>Name</b>: " + analysis_name_search + "</div>"
       html += "<div><b>Genome</b>: " + temp[i].genome_search + "</div>"

@@ -128,7 +128,7 @@ function display_libraries() {
       last_change = format_date_time(new Date(temp[i].last_change));
       library_id_descriptive = lib_id;
       html += "<div class=div_library_result>";
-      html += "<div style='color: #009900;'><img src='media/icon_data.png' style='height:12px; padding-right: 3px;'><a href=\"javascript:open_library('" + lib_id + "');\">" + library_id_descriptive + "</a></div>"
+      html += "<div style='color: #009900;'><img src='media/icon_data.png' style='height:12px; padding-right: 3px;'><a href=\"javascript:open_library('" + lib_id + "', 'ex');\">" + library_id_descriptive + "</a></div>"
       html += "<div style='padding-left: 15px;'>";
       html += "<div><b>Name</b>: " + name_search + "</div>"
       html += "<div><b>Notes</b>: " + notes_search + "</div>";

@@ -9,6 +9,7 @@ var help_url = "";
 var tab_to_load = "";
 var pop_state = false;
 var push_latest = -1;
+var last_url = "";
 
 var apa_software_dic = {}
 apa_software_dic["DEX"] = "<a href='http://bioconductor.org/packages/release/bioc/html/DEXSeq.html' target=_new>DEXSeq</a>";
