@@ -459,8 +459,10 @@ function display_analysis_apamap(div_name, pair_type) {
 
             $.get("/rnamotifs2/" + db["analysis"]["analysis_id"] + "_proximal_" + db["analysis"]["pair_type"] +"/rnamap/index.html?nocache="+nocache).done(function () {
               $("#btn_analysis_rna").show();
-              $("#iframe_analysis_proximal").attr("src", "/rnamotifs2/" + db["analysis"]["analysis_id"] + "_proximal_" + db["analysis"]["pair_type"] +"/rnamap/index.html?nocache="+nocache);
-              $("#iframe_analysis_distal").attr("src", "/rnamotifs2/" + db["analysis"]["analysis_id"] + "_distal"+ "_" + db["analysis"]["pair_type"] +"/rnamap/index.html?nocache="+nocache);
+              //$("#iframe_analysis_proximal").attr("src", "/rnamotifs2/" + db["analysis"]["analysis_id"] + "_proximal_" + db["analysis"]["pair_type"] +"/rnamap/index.html?nocache="+nocache);
+              $("#iframe_analysis_proximal").load("/rnamotifs2/" + db["analysis"]["analysis_id"] + "_proximal_" + db["analysis"]["pair_type"] +"/rnamap/index.html?nocache="+nocache);
+              //$("#iframe_analysis_distal").attr("src", "/rnamotifs2/" + db["analysis"]["analysis_id"] + "_distal"+ "_" + db["analysis"]["pair_type"] +"/rnamap/index.html?nocache="+nocache);
+              $("#iframe_analysis_distal").load("/rnamotifs2/" + db["analysis"]["analysis_id"] + "_distal_" + db["analysis"]["pair_type"] +"/rnamap/index.html?nocache="+nocache);
             }).fail(function () {
               $("#div_analysis_rna").hide();
               $("#btn_analysis_rna").hide();

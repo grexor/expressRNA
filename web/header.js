@@ -79,6 +79,7 @@ function add_history(data, url) {
   if (pop_state==false) {
     if (last_url!=url) {
         window.history.pushState(data, '', url);
+        console.log("add history:"+url+":"+data);
       }
     last_url = url;
   }
@@ -91,5 +92,6 @@ window.addEventListener('popstate', function(e) {
     pop_state = false;
     return;
   }
+  console.log("popstate");
   process_login_parameters(e.state["action"], e.state)
 });

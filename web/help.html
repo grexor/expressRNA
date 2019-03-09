@@ -1,7 +1,50 @@
-<script>
-  menu_select("link_help");
-</script>
+<link rel="stylesheet" href="help.css">
 
-<div class="content_center">
-  Help
+<div class="content_center narrow">
+
+      <div style="text-align: right; position: fixed; left: calc(50% - 520px); padding-top: 0px; font-family: 'Roboto', sans-serif; font-weight: 300; font-size: 13px;">
+        <div id='btn_news' class='btn_info' onclick='show_help("computational");'><b>Computational</b></div><br>
+      </div>
+
+      <div id='div_computational'>
+      <a id="computational"></a>
+      <div class="div_header"><b>Computational Analysis</b></div>
+      We provide pipelines for protocol-specific computational analysis of short and long reads. Currently, expressRNA supports Lexogen QuantSeq Reverse and Forward protocols, standard RNA-seq and Nanopore direct RNA. Please see below details of how we process reads from these protocols to compute a polyA database and count table.
+
+      <br><br>
+      <div class="div_header"><b><a href='https://www.lexogen.com/quantseq-3mrna-sequencing-rev/' target=_new>Lexogen 3' QuantSeq Reverse for Illumina</a></b></div>
+
+      <div>We map (align) the reads to the reference genome with <a href="https://github.com/alexdobin/STAR" target=_new>STAR</a>. To <b>build the genome index</b>, we include GTF annotation files:
+        <br><br>
+        <div style='padding-left: 5px; padding-right: 5px; border-radius: 5px; background-color: #ceffc3; display: inline-block'>STAR --runMode genomeGenerate --genomeDir output_folder --genomeFastaFiles genome.fasta --sjdbGTFfile genome.gtf</div>
+        <br><br>
+      </div>
+
+      After we align raw reads to the reference genome (default STAR settings) allowing soft clipping of bases and only reporting unique/best alignments are inclusive of at least 2/3 of the read:
+
+      <br><br>
+      <div style='padding-left: 5px; padding-right: 5px; border-radius: 5px; background-color: #ceffc3; display: inline-block'>--outFilterMultimapNmax 1 --outFilterMatchNminOverLread 0.66 --outFilterScoreMinOverLread 0.66</div>
+
+      <br>
+      <br><img src='media/help/help_lexrev1.png' style='border-radius: 3%; padding: 2px; border:1px solid #e1e1e1; width:400px'><br>
+      <div style='font-size: 12px'>The reads align in the opposite direction of genes (in the figure gene SMC1A on - strand and reads aligning to + strand, hg19).<br>The cleavage site is noted as the 5' of the aligned read.</div>
+      <br>
+
+      <div style='text-align:justify'>
+      We then iterate over each alignment taking the first (5') nucleotide as a potential polyA cleavage site. We check the surrounding genomic sequence (-30..10) for A-rich regions. If this region contains either AAAAAAA or #A > 8, the alignment is filtered out. However, if we find a <font color=green class="btn" title="AATAAA<br>ATTAAA<br>TATAAA<br>AGTAAA<br>AATACA<br>CATAAA<br>AATATA<br>GATAAA<br>AATGAA<br>AAGAAA<br>ACTAAA<br>AATAGA<br>AATAAT<br>AACAAA<br>ATTACA<br>ATTATA<br>AACAAG<br>AATAAG">PAS signal / hexamer</font> in the region [-30..0] then the alignment is kept.
+      <br><br>
+      We then combine the remaining alignments and construct the <b>library polyA database</b>. Since cleavage and polyadenylation is not nucleotide exact, we sort all positional values (genome wide) from highest to lowest and perform a clustering of values in the range [-25..25]. We produce a table (bed graph) of the genomic loci and <b>annotate polyA sites</b> to genes with <b>5KB downstream extension</b> (or up to max half-distance to downstream gene).
+      <br><br>
+      To compute the polyA count table, we <b>take each genomic loci</b> in the library polyA database and <b>count the number of alignments</b> (5' nucleotide) from each experiment separately in the vicinity of the polyA site (<b>-5..5 nt</b>). Counting considers all alignments from each experiment in the library. Filtering is only applyed in the steps of constructing the library polyA database to account for <b>internal priming events</b>.
+
+      </div>
+
+      <br>
+      <div class="div_header"><b><a href='https://www.lexogen.com/quantseq-3mrna-sequencing/' target=_new>Lexogen 3' QuantSeq Forward for Illumina</a></b></div>
+
+      </div>
+
+
 </div>
+
+<script src="help.js"></script>
