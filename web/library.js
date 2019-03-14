@@ -241,6 +241,7 @@ function upload_experiment() {
   }
 
   function open_library_div(library_module) {
+    db["library"]["library_module"] = library_module;
     hide_library_all();
     $("#div_library_" + library_module).show();
     $("#btn_library_" + library_module).css("background-color", "#c1c1c1");
@@ -426,7 +427,7 @@ function display_library_ge() {
   html += "Links to <b>constructed polyA database</b> (from all experiments in library) and to data tables of gene expression.<br><br>"
   polya_bed_link = "https://expressrna.org/share/polya/" + library.lib_id + ".bed.gz";
   html += "<div style='background-color: #e1e1e1; border-radius: 3px; float:left; padding-left: 3px; padding-right: 3px; margin-right: 5px;'>PolyA database</div><div class='div_column_value'><a target=_new href='" + polya_bed_link + "'>Download polyA database</a></div>";
-  html += "<div style='font-size: 12px; color: #555555; padding-left: 3px;'>The polyA database is constructed from all experimental data in the library. Reads are grouped depending on library method (Quantseq Reverse, Quantseq Forward, Nanopore) and thresholds are applied to estimate RNA molecule ends. The results are reported in BED format. A detailed description is available in the <a href='javascript:open_help();'>Help section</a>.</div>";
+  html += "<div style='font-size: 12px; color: #555555; padding-left: 3px;'>The polyA database is constructed from all experimental data in the library. Reads are grouped depending on library method (Quantseq Reverse, Quantseq Forward, Nanopore) and thresholds are applied to estimate RNA molecule ends. The results are reported in BED format. A detailed description is available in the <a href='javascript:open_help();'>Docs section</a>.</div>"; 
   html += "<br><br>";
 
   polya_expression_table_link = "https://expressrna.org/share/data/" + library.lib_id + "/" + library.lib_id + "_polya_expression.tab?nocache="+nocache;

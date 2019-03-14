@@ -5,6 +5,7 @@
 
 <div class="content_center">
 
+    <div style='position: -webkit-sticky; position: sticky; padding-top: 50px; margin-top: -50px; top: 0px; background-color: #ffffff; z-index: 100; border-bottom: 1px solid #f1f1f1; padding-bottom: 5px;'>
       <div id="btn_library_delete" style="display: none; float: right;"><a href="javascript:delete_library();"><img src="media/delete.png" height=18 style="height: 16px; margin-top:-3px;vertical-align:middle; padding-right: 3px; opacity: 0.7">Delete Library</a></div>
       <div id="btn_library_upload" style="padding-right: 10px; display:none; float: right;"><a href="javascript:upload_experiment();"><img src="media/upload.png" height=18 style="height: 16px; margin-top:-3px;vertical-align:middle; padding-right: 3px; opacity: 0.7">Upload Experiment</a></div>
       <div id="btn_library_edit" style="padding-right: 10px; display:none; float: right;"><a href="javascript:edit_library();"><img src="media/edit.png" height=18 style="height: 16px; margin-top:-3px;vertical-align:middle; padding-right: 3px; opacity: 0.7">Edit Library</a></div>
@@ -34,46 +35,48 @@
           <td style="padding-left: 0px; padding-right: 0px; width:15px; background-color: transparent !important; cursor:default;"></td>
         </tr>
       </table>
+    </div>
 
-      <div id="div_library_ex" style='display:none'>
-      </div>
+    <div>
+        <div id="div_library_ex" style='display:none'>
+        </div>
 
-      <div id="div_library_ge" style='display:none'>
-        gene_expression
-      </div>
+        <div id="div_library_ge" style='display:none'>
+          gene_expression
+        </div>
 
-      <div id="div_library_q" style='display:none'>
-        <center>
-        <br>
-        <div id="lbl_quality"></div><br>
-        <table border=0>
-          <tr>
-            <td><img id="plot1" width=800></td>
-          </tr>
-          <tr>
-            <td><img id="plot2" width=800></td>
-          </tr>
-          <tr>
-            <td><img id="plot3" width=800></td>
-          </tr>
-          <tr>
-            <td><img id="plot4" width=800></td>
-          </tr>
-          <tr>
-            <td><img id="plot5" width=800></td>
-          </tr>
-          <tr>
-            <td><img id="plot6" width=800></td>
-          </tr>
-          <tr>
-            <td><img id="plot7" width=800></td>
-          </tr>
-          <tr>
-            <td><img id="plot8" width=800></td>
-          </tr>
-        </table>
+        <div id="div_library_q" style='display:none'>
+          <center>
+          <br>
+          <div id="lbl_quality"></div><br>
+          <table border=0>
+            <tr>
+              <td><img id="plot1" width=800></td>
+            </tr>
+            <tr>
+              <td><img id="plot2" width=800></td>
+            </tr>
+            <tr>
+              <td><img id="plot3" width=800></td>
+            </tr>
+            <tr>
+              <td><img id="plot4" width=800></td>
+            </tr>
+            <tr>
+              <td><img id="plot5" width=800></td>
+            </tr>
+            <tr>
+              <td><img id="plot6" width=800></td>
+            </tr>
+            <tr>
+              <td><img id="plot7" width=800></td>
+            </tr>
+            <tr>
+              <td><img id="plot8" width=800></td>
+            </tr>
+          </table>
+        </div>
       </div>
-  </div>
-</div>
+    </div>
 
 <script src="library.js"></script>

@@ -3,7 +3,7 @@
 <div class="content_center narrow">
 
       <div style="text-align: right; position: fixed; left: calc(50% - 520px); padding-top: 0px; font-family: 'Roboto', sans-serif; font-weight: 300; font-size: 13px;">
-        <div id='btn_news' class='btn_info' onclick='show_help("computational");'><b>Computational</b></div><br>
+        <div id='btn_computational' class='btn_info' onclick='show_help("computational");'><b>Computational</b></div><br>
       </div>
 
       <div id='div_computational'>
@@ -31,7 +31,7 @@
       <br>
 
       <div style='text-align:justify'>
-      We then iterate over each alignment taking the first (5') nucleotide as a potential polyA cleavage site. We check the surrounding genomic sequence (-30..10) for A-rich regions. If this region contains either AAAAAAA or #A > 8, the alignment is filtered out. However, if we find a <font color=green class="btn" title="AATAAA<br>ATTAAA<br>TATAAA<br>AGTAAA<br>AATACA<br>CATAAA<br>AATATA<br>GATAAA<br>AATGAA<br>AAGAAA<br>ACTAAA<br>AATAGA<br>AATAAT<br>AACAAA<br>ATTACA<br>ATTATA<br>AACAAG<br>AATAAG">PAS signal / hexamer</font> in the region [-30..0] then the alignment is kept.
+      We then iterate over each alignment taking the first (5') nucleotide as a potential polyA cleavage site. We check the surrounding genomic sequence [-30..10] for A-rich regions. If this region contains either AAAAAAA or #A > 8, the alignment is filtered out. However, if we find a <font color=green class="btn" title="<div style='font-size:12px; font-family: Courier'>AATAAA<br>ATTAAA<br>TATAAA<br>AGTAAA<br>AATACA<br>CATAAA<br>AATATA<br>GATAAA<br>AATGAA<br>AAGAAA<br>ACTAAA<br>AATAGA<br>AATAAT<br>AACAAA<br>ATTACA<br>ATTATA<br>AACAAG<br>AATAAG</div>">polyA signal (PAS) / hexamer</font> in the region [-30..0] then the alignment is kept.
       <br><br>
       We then combine the remaining alignments and construct the <b>library polyA database</b>. Since cleavage and polyadenylation is not nucleotide exact, we sort all positional values (genome wide) from highest to lowest and perform a clustering of values in the range [-25..25]. We produce a table (bed graph) of the genomic loci and <b>annotate polyA sites</b> to genes with <b>5KB downstream extension</b> (or up to max half-distance to downstream gene).
       <br><br>
