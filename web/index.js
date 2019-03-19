@@ -38,7 +38,6 @@ function all_documents_loaded() {
 }
 
 function process_login_parameters(action, data) {
-  console.log("PLP:"+action+":"+data);
   if (action=="profile")
       open_profile();
   else if (action=="about")
