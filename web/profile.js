@@ -33,8 +33,24 @@ function display_user_access() {
     html = "Guest user<br><br>Full access to published data and explorative analysis of results.";
     $("#div_user_access").html(html);
   } else {
-    html = "Academic user<br><br>Possibility to create <b>" + alevel["libraries"]+" libraries</b> and to upload up to <b>" + alevel["experiments"] + " experiments (maximum gzip FASTQ/FASTA file size " + alevel["diskspace"] + " MB)</b> and run basic analysis (differential polyadenylation)."
+    html = "<b>Academic user</b><br><br>";
+
+    html += '<table border=0 width=100 style="color: #666666;">';
+    html += '<tr><td style="padding-top: 5px;">';
+
+    html += "<div style='position: relative;'><div id='div_user_libs_text' style='border: 1px solid #eeeeee; width: 200px; text-align: center; margin-bottom: 2px; padding-left: 3px; padding-right: 3px; border-radius: 3px; font-size: 11px;'>Libraries: 0 / 0</div><div id='div_user_libs_width' style='width: 100%; text-align: center; height: 100%; border-radius: 3px; background-color: #ffdddd; font-size: 10px; position: absolute; top: 0px; left: 0px; z-index: -100;'>&nbsp;</div></div>";
+    html += "<div style='position: relative;'><div id='div_user_exps_text' style='border: 1px solid #eeeeee; width: 200px; text-align: center; margin-bottom: 2px; padding-left: 3px; padding-right: 3px; border-radius: 3px; font-size: 11px;'>Libraries: 0 / 0</div><div id='div_user_exps_width' style='width: 100%; text-align: center; height: 100%; border-radius: 3px; background-color: #ffdddd; font-size: 10px; position: absolute; top: 0px; left: 0px; z-index: -100;'>&nbsp;</div></div>";
+
+    html += "</td></tr></table>";
+
+    html += "<br>Note: maximum gzip FASTQ/FASTA file size (per experiment) = " + alevel["diskspace"] + " MB";
     $("#div_user_access").html(html);
+
+    $("#div_user_libs_text").html(db["user"]["libs"]+" out of " + alevel["libraries"] +" libraries");
+    $("#div_user_libs_width").css("width", Math.min(100, 100*Number(db["user"]["libs"])/Number(alevel["libraries"])).toFixed(0)+"%");
+
+    $("#div_user_exps_text").html(db["user"]["experiments"]+" out of " + alevel["experiments"] +" experiments");
+    $("#div_user_exps_width").css("width", Math.min(100, 100*Number(db["user"]["experiments"])/Number(alevel["experiments"])).toFixed(0)+"%");
   }
 }
 

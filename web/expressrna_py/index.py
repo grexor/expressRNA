@@ -712,6 +712,7 @@ class TableClass():
             result["status"] = "ok"
             result["usertype"] = "guest"
             result["tickets"] = "[]";
+            result["libs"], result["experiments"] = 0, 0
             if email!="gregor.rot@gmail.com":
                 self.send_email("gregor.rot@gmail.com", "expressRNA: user login", "Dear Gregor,\n\n%s is a new user with expressRNA!,\n\nBest,\nexpressRNA" % email)
         if len(q)==1:
@@ -721,6 +722,7 @@ class TableClass():
             result["email"] = q[0].email
             result["status"] = "ok"
             result["usertype"] = q[0].usertype
+            result["libs"], result["experiments"] = self.count_ownership(q[0].email)
             result["tickets"] = self.get_tickets(email)
         return json.dumps(result, default=dthandler)
 
@@ -773,6 +775,15 @@ class TableClass():
             q[0].news = data["news"]
             conn.commit()
         return "saved"
+
+    def count_ownership(self, email):
+        num_libs = 0
+        num_experiments = 0
+        for exp_id, data in apa.annotation.libs.items():
+            if email in data.owner:
+                num_libs += 1
+                num_experiments += len(data.experiments)
+        return num_libs, num_experiments
 
     def get_server_stats(self):
         result = {}
