@@ -3,3 +3,8 @@ web/comps
 web/fingerprintjs2/
 web/rnamotifs2
 web/share/
+web/deploy/
+web/archive/
+web/node_modules/
+web/package-lock.json
+web/uploads/
