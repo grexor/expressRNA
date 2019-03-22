@@ -19,6 +19,22 @@ apa_software_dic["DEXSEQ"] = "<a href='http://bioconductor.org/packages/release/
 var polyadb_help_dic = {}
 polyadb_help_dic["hg19_polyasite"] = "To determine polyA site usage, polyAsite hg19 atlas was used and the aligned reads from the experiments were assigned to the given polyA site loci. Explore more at <a href=http://polyasite.unibas.ch/#download target=_new>http://polyasite.unibas.ch</a>."
 
+genomes = {};
+genomes["hg38"] = ["hg19", "hg38, <i>Homo sapiens</i>, assembly: hg38, annotation: Ensembl 90"]
+genomes["mm10"] = ["mm10", "mm10, Mus musculus, assembly: mm10, annotation: Ensembl 90"]
+genomes["hg19"] = ["hg19", "hg19, <i>Homo sapiens</i>, assembly: hg19, annotation: Ensembl 75"]
+genomes["dm6"] = ["dm6", "dm6, <i>Drosophila melanogaster</i>, assembly: dm6, annotation: Ensembl 90"]
+genomes["at"] = ["at", "at, <i>Arabidopsis thaliana</i>, assembly: at, annotation: Ensembl 39"]
+genomes["mar3"] = ["mar3", "mar3, <i>Marchantia polymorpha</i>, assembly: mar3, annotation: mar3"]
+
+methods = {};
+methods["RNAseq"] = ["RNAseq", "RNA-seq, classic whole transcriptome RNA-seq"]
+methods["lexrev"] = ["lexrev", "Lexrev, Lexogen Quantseq Reverse, 3'-end targeted"]
+methods["lexfwd"] = ["lexrev", "Lexfwd, Lexogen Quantseq Forward, 3'-end targeted"]
+methods["scRNA"] = ["scRNA", "scRNA, Single-cell 10x Genomics"]
+methods["nano"] = ["nano", "Nanopore, long-read sequencing (direct RNA)"]
+methods["bs"] = ["bs", "Bisulfite sequencing"]
+
 var db = {};
 
 db["libraries"] = {};

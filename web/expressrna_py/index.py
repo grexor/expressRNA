@@ -44,6 +44,10 @@ db["methods"]["nano"] = {}
 db["methods"]["nano"]["desc"] = "Nanopore, long-read sequencing (direct RNA)%s"
 db["methods"]["nano"]["link"] = ""
 
+db["methods"]["bs"] = {}
+db["methods"]["bs"]["desc"] = "Bisulfite sequencing%s"
+db["methods"]["bs"]["link"] = ""
+
 db["genomes"] = {}
 db["genomes"][""] = {"desc" : "not selected"}
 
@@ -81,6 +85,11 @@ db["genomes"]["at"] = {}
 db["genomes"]["at"]["desc"] = "<i>Arabidopsis thaliana</i>, Assembly: <a href='%s' target=_new'>at<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>, Annotation: <a href='%s' target=_new>GTF Ensembl 39<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>";
 db["genomes"]["at"]["link_assembly"] = "ftp://ftp.ensemblgenomes.org/pub/plants/release-39/fasta/arabidopsis_thaliana/dna/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa.gz"
 db["genomes"]["at"]["link_annotation"] = "ftp://ftp.ensemblgenomes.org/pub/plants/release-39/gtf/arabidopsis_thaliana/Arabidopsis_thaliana.TAIR10.39.gtf.gz"
+
+db["genomes"]["mar3"] = {}
+db["genomes"]["mar3"]["desc"] = "<i>Marchantia polymorpha</i>, Assembly: <a href='%s' target=_new'>mar3<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>, Annotation: <a href='%s' target=_new>GFF<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>";
+db["genomes"]["mar3"]["link_assembly"] = "http://marchantia.info/download/download/JGI_3.1.fasta.gz"
+db["genomes"]["mar3"]["link_annotation"] = "http://marchantia.info/download/download/Mpolymorphav3.1.allTrs.gff3.gz"
 
 class TableClass():
 
@@ -139,7 +148,14 @@ class TableClass():
         return new_string
 
     def upload_file(self):
-        if 'newfile' in self.formdata and self.formdata['newfile'].filename != '':
+        if 'newfile' in self.formdata and self.formdata['newfile'].filename!='' and 'newfile2' in self.formdata and self.formdata['newfile2'].filename!='':
+            seq_type = "paired"
+        elif 'newfile' in self.formdata and self.formdata['newfile'].filename!='':
+            seq_type = "single"
+        else:
+            seq_type = "none"
+
+        if seq_type=="single":
             file_data = self.formdata['newfile'].file.read()
             filename = self.formdata['newfile'].filename
             lib_id = self.pars.get("lib_id", None)
@@ -148,7 +164,7 @@ class TableClass():
             library = apa.annotation.libs[lib_id]
             if lib_id==None:
                 return
-            exp_id = library.add_empty_experiment(filename=os.path.basename(filename))
+            exp_id = library.add_empty_experiment(filename_R1=os.path.basename(filename))
             exp_folder = os.path.join(apa.path.data_folder, lib_id, "e"+str(exp_id))
             library.save()
             os.makedirs(exp_folder)
@@ -174,6 +190,57 @@ class TableClass():
             self.add_ticket(email, "apa.bed.polya_expression -lib_id %s -poly_id %s" % (lib_id, lib_id), "polya expression table for library %s" % lib_id)
             if chk_upload_email=="on":
                 self.add_ticket(email, "/home/gregor/expressrna.sendemail %s '%s'" % (email, "Dear %s,\n\nyour experiment e%s (library %s) has been mapped and processed now, you can access it here:\n\nhttp://expressrna.org/index.html?action=library&library_id=%s\n\nThank you,\nexpressRNA" % (email, exp_id, lib_id, lib_id)), "email processing done for e%s (library %s)" % (exp_id, lib_id))
+        if seq_type=="paired":
+            file_data_R1 = self.formdata['newfile'].file.read()
+            filename_R1 = self.formdata['newfile'].filename
+            file_data_R2 = self.formdata['newfile2'].file.read()
+            filename_R2 = self.formdata['newfile2'].filename
+            lib_id = self.pars.get("lib_id", None)
+            email = self.pars.get("email", None)
+            chk_upload_email = self.pars.get("chk_upload_email", None)
+            library = apa.annotation.libs[lib_id]
+            if lib_id==None:
+                return
+            exp_id = library.add_empty_experiment(filename_R1=os.path.basename(filename_R1), filename_R2=os.path.basename(filename_R2))
+            exp_folder = os.path.join(apa.path.data_folder, lib_id, "e"+str(exp_id))
+            library.save()
+            os.makedirs(exp_folder)
+            if filename_R1.endswith(".bz2"):
+                target = os.path.join(exp_folder, "%s_e%s_R1.fastq.bz2" % (lib_id, exp_id))
+                f = open(target, 'wb')
+                f.write(file_data_R1)
+                f.close()
+            if filename_R1.endswith(".gz"):
+                target = os.path.join(exp_folder, "%s_e%s_R1.fastq.gz" % (lib_id, exp_id))
+                f = open(target, 'wb')
+                f.write(file_data_R1)
+                f.close()
+                self.add_ticket(email, "gunzip "+target, "gunzip " + "%s_e%s_R1.fastq.gz" % (lib_id, exp_id) + " to convert it to bz2 format")
+                self.add_ticket(email, "pbzip2 "+target[:-3], "pbzip2 " + "%s_e%s_R1.fastq" % (lib_id, exp_id))
+            if filename_R2.endswith(".bz2"):
+                target = os.path.join(exp_folder, "%s_e%s_R2.fastq.bz2" % (lib_id, exp_id))
+                f = open(target, 'wb')
+                f.write(file_data_R2)
+                f.close()
+            if filename_R2.endswith(".gz"):
+                target = os.path.join(exp_folder, "%s_e%s_R2.fastq.gz" % (lib_id, exp_id))
+                f = open(target, 'wb')
+                f.write(file_data_R2)
+                f.close()
+                self.add_ticket(email, "gunzip "+target, "gunzip " + "%s_e%s_R2.fastq.gz" % (lib_id, exp_id) + " to convert it to bz2 format")
+                self.add_ticket(email, "pbzip2 "+target[:-3], "pbzip2 " + "%s_e%s_R2.fastq" % (lib_id, exp_id))
+            """
+            self.add_ticket(email, "apa.map -lib_id %s -exp_id %s -cpu 4" % (lib_id, exp_id), "map e%s (library %s) to reference genome %s" % (exp_id, lib_id, library.genome))
+            self.add_ticket(email, "apa.map.stats -lib_id %s -exp_id %s" % (lib_id, exp_id), "map statistics for e%s (library %s)" % (exp_id, lib_id))
+            self.add_ticket(email, "apa.fastqc /home/gregor/apa/data.apa/%s" % lib_id, "fastqc for library %s" % (lib_id))
+            self.add_ticket(email, "apa.bed.gene_expression -lib_id %s" % lib_id, "gene expression table for library %s" % lib_id)
+            self.add_ticket(email, "apa.bed.multi -lib_id %s" % (lib_id), "bed files for library %s" % lib_id)
+            self.add_ticket(email, "apa.polya.makeconfig -lib_id %s" % (lib_id), "polya make config database for library %s" % lib_id)
+            self.add_ticket(email, "apa.polya -poly_id %s" % (lib_id), "polya database for library %s" % lib_id)
+            self.add_ticket(email, "apa.bed.polya_expression -lib_id %s -poly_id %s" % (lib_id, lib_id), "polya expression table for library %s" % lib_id)
+            if chk_upload_email=="on":
+                self.add_ticket(email, "/home/gregor/expressrna.sendemail %s '%s'" % (email, "Dear %s,\n\nyour experiment e%s (library %s) has been mapped and processed now, you can access it here:\n\nhttp://expressrna.org/index.html?action=library&library_id=%s\n\nThank you,\nexpressRNA" % (email, exp_id, lib_id, lib_id)), "email processing done for e%s (library %s)" % (exp_id, lib_id))
+            """
         return "done"
 
     def send_email(self, address_to, subject, message):
@@ -524,6 +591,7 @@ class TableClass():
         r["owner"] = library.owner
         r["access"] = library.access
         r["genome"] = library.genome
+        r["seq_type"] = library.seq_type
         r["genome_desc"] = db["genomes"][library.genome]["desc"]
         if r["genome_desc"]!="not selected":
             r["genome_desc"] = db["genomes"][library.genome]["desc"] % (db["genomes"][library.genome]["link_assembly"], db["genomes"][library.genome]["link_annotation"])
@@ -581,6 +649,9 @@ class TableClass():
             return lib_id
 
         email = self.check_login(self.pars.get("email", "public"))
+        genome = self.pars.get("genome", "")
+        method = self.pars.get("method", "")
+        seq_type = self.pars.get("seq_type", "")
         if email=="public":
             r = {"status":"fail"}
             return json.dumps(r, default=dthandler)
@@ -588,6 +659,9 @@ class TableClass():
         lib_folder = os.path.join(apa.path.data_folder, lib_id)
         os.makedirs(lib_folder)
         library = apa.annotation.Library(lib_id)
+        library.method = method
+        library.genome = genome
+        library.seq_type = seq_type
         library.owner = [email]
         library.access = [email]
         library.save()

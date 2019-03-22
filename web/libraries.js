@@ -1,25 +1,76 @@
 function new_library() {
   html = "<b>New Library</b><br>";
   html += "Would you like to create a new library, a place where you can upload your experiments?" + "<br>";
+
+  genomes_html = "<select onchange='adjust_library_cbutton();' id='select_genome' name='select_genome' size=7 style='margin-left: 2px; width: 400px; font-size: 12px; outline: none;'>";
+  for (var genome in genomes)
+      genomes_html += "<option value='" + genome + "'>" + genomes[genome][1] + "</option>";
+  genomes_html += "</select>";
+
+  methods_html = "<select onchange='adjust_library_cbutton();' id='select_method' name='select_method' size=10 style='margin-left: 2px; font-size: 12px; outline: none; width:400px'>";
+  for (var method in methods)
+      methods_html += "<option value='" + method + "'>" + methods[method][1] + "</option>";
+  methods_html += "</select>";
+
+  seq_type_html = "";
+  seq_type_html += "<label><input type='radio' name='seq_type' value='single' checked>Single-end</label> &nbsp;&nbsp;&nbsp;";
+  seq_type_html += "<label><input type='radio' name='seq_type' value='paired'>Paired-end</label><br>";
+
+  html += "<div style='padding-top: 3px; padding-left: 3px; font-size: 12px;'><b>Select reference genome</b></div>" + genomes_html + "<br>";
+  html += "<br><div style='padding-top: 3px; padding-left: 3px; font-size: 12px;'><b>Select library method</b></div>" + methods_html + "<br>";
+  html += "<br><div style='padding-top: 3px; padding-left: 3px; font-size: 12px;'><b>Select sequencing type</b></div>" + seq_type_html;
+
   vex.dialog.open({
       unsafeMessage: html,
       buttons: [
-          $.extend({}, vex.dialog.buttons.YES, { text: 'Create' }),
-          $.extend({}, vex.dialog.buttons.NO, { text: 'Cancel' })
+          $.extend({}, vex.dialog.buttons.YES, { text: 'Create', id:'btn_library_create' }),
+          $.extend({}, vex.dialog.buttons.NO, { text: 'Cancel',  id:'btn_library_cancel' })
       ],
+      afterOpen: function(event) {
+        setTimeout(adjust_library_cbutton, 1); // this trick somehow works, otherwise the buttons are not yet in DOM
+      },
       callback: function (data) {
           if (!data) {
           } else {
-            new_library_do();
+            method = $('#select_method').find(":selected").val();
+            genome = $('#select_genome').find(":selected").val();
+            seq_type = $('input[name=seq_type]:checked').val();
+            //new_library_do();
+            new_library_do(genome, method, seq_type);
           }
       }
   })
 }
 
-function new_library_do() {
+function adjust_library_cbutton() {
+  $('#btn_library_create').css("display", "none");
+  var buttons = document.getElementsByTagName('button');
+  var buttons = document.getElementsByTagName('button');
+  for (var i = 0; i < buttons.length; i++) {
+      var button = buttons[i];
+      if ($(button).html()=="Create") {
+        if ( ($('#select_method').find(":selected").val()==undefined) || ($('#select_genome').find(":selected").val()==undefined))
+        {
+          button.disabled = true;
+          $(button).css("opacity", 0.1);
+          $(button).css("cursor", "default");
+        } else {
+          button.disabled = false;
+          $(button).css("opacity", 1);
+          $(button).css("cursor", "pointer");
+        }
+      }
+  }
+}
+
+function new_library_do(genome, method, seq_type) {
   post_data = {};
   post_data["action"] = "new_library";
   post_data["email"] = google_user.getBasicProfile().getEmail();
+  post_data["genome"] = genome;
+  post_data["method"] = method;
+  post_data["seq_type"] = seq_type;
+  console.log(seq_type);
   $.post('/expressrna_gw/index.py', post_data)
       .success(function(result) {
           search_libraries(); // refresh library list

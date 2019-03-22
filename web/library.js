@@ -142,20 +142,31 @@ function upload_experiment() {
   html += "<form id='form_eu' style='outline: none !important; margin-left: -8px;' name='form_eu' method='post' action='/expressrna_gw/index.py' enctype='multipart/form-data'>";
   html += "<table border=0 style='font-size: inherit; color: #444;'>";
   html += "<tr>";
-  html += "<td valign=top>";
-  html += "<label for='newfile' class='cfu'>Select FASTQ file</label>";
+  html += "<td valign=top style='padding-bottom: 5px'>";
+  html += "<label for='newfile' class='cfu'>Select FASTQ file (R1)</label>";
   html += "<input type='file' id='newfile' name='newfile' style='display: none;' accept='.gz,.bz2'>";
   html += "<input type='hidden' name='action' value='upload_file'>";
   html += "<input type='hidden' name='email' value='" + google_user.getBasicProfile().getEmail() + "'>";
   html += "<input type='hidden' name='lib_id' value='" + library.lib_id + "'>";
-  html += "<input type='hidden' name='gregor' value='gregor'>";
   html += "</td>";
   html += "<td valign=top>";
   html += "<div id='newfile_name' style=''>No file currently selected for upload</div>";
   html += "</td>";
-  html += "</tr></table>";
+  html += "</tr>";
+  if (library.seq_type=="paired") {
+    html += "<tr>";
+    html += "<td valign=top>";
+    html += "<input type='file' id='newfile2' name='newfile2' style='display: none;' accept='.gz,.bz2'>";
+    html += "<label for='newfile2' class='cfu'>Select FASTQ file (R2)</label>";
+    html += "</td>";
+    html += "<td valign=top>";
+    html += "<div id='newfile2_name' style=''>Leave blank if single-end sequencing</div>";
+    html += "</td>";
+    html += "</tr>";
+  }
+  html += "</table>";
   html += "<div id='div_library_progress' style='display:none; padding-left: 20px;'>";
-  html += "Uploading file, please do not close this dialog until upload completes.<br>";
+  html += "Uploading file(s), please do not close this dialog until upload completes.<br>";
   html += "<div style='border-radius: 5px; border: 1px solid #999999; width: 500; color: #111111; text-align: center'><div id='div_library_perc' style='float: left; position: absolute; z-index: -1; width: 0; background-color: #779ecb;'>&nbsp;</div><div id='div_library_perc_text'>100%</div></div>";
   html += "</div>";
   html += "<br><label class=unselectable><input type=checkbox name='chk_upload_email' id='chk_upload_email'>Send me an e-mail when processing (mapping) of experiment is done</label>";
@@ -171,6 +182,13 @@ function upload_experiment() {
             filename = filename.replace(/.*[\/\\]/, '');
             $("#newfile_name").html(filename + " (" + Math.round(this.files[0].size/1e6) + " MB)");
           });
+          if (library.seq_type=="paired") {
+            $('input[name=newfile2]').change(function(event) {
+              filename = this.value;
+              filename = filename.replace(/.*[\/\\]/, '');
+              $("#newfile2_name").html(filename + " (" + Math.round(this.files[0].size/1e6) + " MB)");
+            });
+          } // paired
         },
         onSubmit: function(event) {
             // prevent submit to close the dialog
@@ -263,6 +281,7 @@ function upload_experiment() {
             db["library"]["query"] = library;
             html_library_genome = "<b>Genome</b>: " + library.genome_desc;
             html_library_method = "<b>Method</b>: " + library.method_desc;
+            html_library_seq_type = "<b>Sequencing</b>: " + library.seq_type;
             if (google_user!=undefined)
             if (library.owner.indexOf(google_user.getBasicProfile().getEmail())!=-1) {
                 $("#btn_library_edit").show();
@@ -276,6 +295,7 @@ function upload_experiment() {
             $("#lbl_library_notes").html("<b>Notes</b>: " + library.notes);
             $("#lbl_library_genome").html(html_library_genome);
             $("#lbl_library_method").html(html_library_method);
+            $("#lbl_library_seq_type").html(html_library_seq_type);
             display_library_experiments(library.experiments)
             display_library_ge();
             multiq_link = "https://expressrna.org/share/data/" + library_id + "/multiqc_report.html"+ "?nocache="+nocache;
@@ -427,7 +447,7 @@ function display_library_ge() {
   html += "Links to <b>constructed polyA database</b> (from all experiments in library) and to data tables of gene expression.<br><br>"
   polya_bed_link = "https://expressrna.org/share/polya/" + library.lib_id + ".bed.gz";
   html += "<div style='background-color: #e1e1e1; border-radius: 3px; float:left; padding-left: 3px; padding-right: 3px; margin-right: 5px;'>PolyA database</div><div class='div_column_value'><a target=_new href='" + polya_bed_link + "'>Download polyA database</a></div>";
-  html += "<div style='font-size: 12px; color: #555555; padding-left: 3px;'>The polyA database is constructed from all experimental data in the library. Reads are grouped depending on library method (Quantseq Reverse, Quantseq Forward, Nanopore) and thresholds are applied to estimate RNA molecule ends. The results are reported in BED format. A detailed description is available in the <a href='javascript:open_help();'>Docs section</a>.</div>"; 
+  html += "<div style='font-size: 12px; color: #555555; padding-left: 3px;'>The polyA database is constructed from all experimental data in the library. Reads are grouped depending on library method (Quantseq Reverse, Quantseq Forward, Nanopore) and thresholds are applied to estimate RNA molecule ends. The results are reported in BED format. A detailed description is available in the <a href='javascript:open_help();'>Docs section</a>.</div>";
   html += "<br><br>";
 
   polya_expression_table_link = "https://expressrna.org/share/data/" + library.lib_id + "/" + library.lib_id + "_polya_expression.tab?nocache="+nocache;
@@ -438,43 +458,6 @@ function display_library_ge() {
   gene_expression_table_link = "https://expressrna.org/share/data/" + library.lib_id + "/" + library.lib_id + "_gene_expression.tab?nocache="+nocache;
   html += "<div style='background-color: #e1e1e1; border-radius: 3px; float:left; padding-left: 3px; padding-right: 3px; margin-right: 5px;'>Gene Counts</div><div class='div_column_value'><a target=_new href='" + gene_expression_table_link + "'>Download gene expression table</a></div>";
   html += "<div style='font-size: 12px; color: #555555; padding-left: 3px;'>The gene expression table provides information on global gene expression levels. Computed with htseq-count and aligned (.bam) files from each experiment in the library.</div>";
-
-  /*
-    html += "<table border=0 class='table_experiments'>"
-    code_delete = "";
-    code_edit = "";
-    code_editable = "</div></td></tr>";
-    if (google_user!=undefined)
-      if (library.owner.indexOf(google_user.getBasicProfile().getEmail())!=-1) {
-          code_delete = "<a href='javascript:delete_experiment(" + experiments[exp_id].exp_id + ");'><img src=media/delete.png style='padding-left: 5px; opacity: 0.5; height: 12px; margin-top:-2px;vertical-align:middle; padding-right: 3px;'>Delete</a>";
-          code_edit = "<a href='javascript:edit_experiment(" + experiments[exp_id].exp_id + ");'><img src=media/edit.png style='padding-left: 2px; height: 18px; margin-top:-2px;vertical-align:middle; padding-right: 3px;'>Edit</a>";
-          code_editable = " | " + code_edit + " | " + code_delete + "</div></td></tr>";
-      }
-    html += "<tr><td align='right'><div class='div_column'>Experiment identifier</div></td><td><div class='div_column_value'>" + "experiment <b>e" + experiments[exp_id].exp_id + "</b>" + code_editable;
-    fastq_link = "https://expressrna.org/share/data/" + experiments[exp_id].lib_id + "/e" + experiments[exp_id].exp_id + "/" + experiments[exp_id].lib_id + "_e" + experiments[exp_id].exp_id + ".fastq.bz2";
-    bam_link = "https://expressrna.org/share/data/" + experiments[exp_id].lib_id + "/e" + experiments[exp_id].exp_id + "/m1/" + experiments[exp_id].lib_id + "_e" + experiments[exp_id].exp_id + "_m1.bam";
-    html += "<tr><td align='right'><div class='div_column_light'>Download links</div></td><td><div class='div_column_value'><a href=" + fastq_link + ">FastQ</a> | <a href=" + bam_link + ">BAM</a></div></td></tr>";
-
-    for (var j=0; j<library.columns_display.length; j++) {
-      column_name = library.columns_display[j][1];
-      column_name_human = library.columns_display[j][0];
-      column_value = experiments[exp_id][column_name];
-      if (column_name=="method") {
-        column_value = experiments[exp_id]["method_desc"]
-      }
-      if (column_value=="")
-        column_value = "&nbsp;";
-      html += "<tr><td align='right'><div class='div_column_light'>" + column_name_human + "</div></td><td><div class='div_column_value'>" + column_value + "</div></td></tr>";
-    }
-
-    if (experiments[exp_id].stats[0]!="")
-      html += "<tr><td><div class='div_column_light'>Mapping statistics</div></td><td><div class='div_column_value'>" + experiments[exp_id].stats[0] + " M reads; " + experiments[exp_id].stats[1] + " % mapped</div></td></tr>";
-    lib_id = experiments[exp_id].lib_id;
-    exp_id = experiments[exp_id].exp_id;
-    html += "</table>";
-    html += "<hr style='border: 1px solid #f1f1f1; color: #f1f1f1; width: 300px; margin-top: 15px; margin-bottom: 15px;' align='left'>";
-  }
-  */
   $("#div_library_ge").html(html);
 }
 
@@ -528,12 +511,6 @@ function edit_experiment(exp_id) {
     html += "<div style='font-size: 12px; color: #444444;'>Please select the genome assembly and annotation of your library.</div>"
     if (library.genome!="")
       html += "<div style='font-size: 12px; color: #942020;'>Please be aware that if you change the genome of the library, all experiments will be re-mapped to the newly selected genome (can take some time).</div>"
-    genomes = {};
-    genomes["hg38"] = ["hg19", "hg38, <i>Homo sapiens</i>, assembly: hg38, annotation: Ensembl 90"]
-    genomes["mm10"] = ["mm10", "mm10, Mus musculus, assembly: mm10, annotation: Ensembl 90"]
-    genomes["hg19"] = ["hg19", "hg19, <i>Homo sapiens</i>, assembly: hg19, annotation: Ensembl 75"]
-    genomes["dm6"] = ["dm6", "dm6, <i>Drosophila melanogaster</i>, assembly: dm6, annotation: Ensembl 90"]
-    genomes["at"] = ["at", "at, <i>Arabidopsis thaliana</i>, assembly: at, annotation: Ensembl 39"]
     genomes_html = "<select id='select_genome' name='select_genome' size=10 style='margin-left: 2px; width: 400px; font-size: 12px; outline: none;'>";
     for (var genome in genomes) {
       if (library.genome==genome)
@@ -571,12 +548,6 @@ function edit_experiment(exp_id) {
     html += "<div style='font-size: 12px; color: #444444;'>Please select the sequencing method / protocol of your library.</div>"
     if (library.method!="")
       html += "<div style='font-size: 12px; color: #942020;'>Please be aware that if you change the method of the library, the experiments (in some cases, like Nanopore) will be re-mapped to the reference genome, which can take some time.</div>"
-    methods = {};
-    methods["RNAseq"] = ["RNAseq", "RNA-seq, classic whole transcriptome RNA-seq"]
-    methods["lexrev"] = ["lexrev", "Lexrev, Lexogen Quantseq Reverse, 3'-end targeted"]
-    methods["lexfwd"] = ["lexrev", "Lexfwd, Lexogen Quantseq Forward, 3'-end targeted"]
-    methods["scRNA"] = ["scRNA", "scRNA, Single-cell 10x Genomics"]
-    methods["nano"] = ["nano", "Nanopore, long-read sequencing (direct RNA)"]
     methods_html = "<select id='select_method' name='select_method' size=10 style='margin-left: 2px; font-size: 12px; outline: none; width:400px'>";
     for (var method in methods) {
       if (library.method==method)
