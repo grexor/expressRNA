@@ -1,6 +1,6 @@
-mysql_username = "root"
+mysql_username = ""
 mysql_password = ""
 mysql_host = "127.0.0.1"
-mysql_database = "apadb"
+mysql_database = "expressrna"
 mysql_pool_size = 20
-
+upload_folder = ""
