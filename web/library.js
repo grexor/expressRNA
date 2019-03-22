@@ -359,6 +359,7 @@ function upload_experiment() {
     $.post('/expressrna_gw/index.py', post_data)
         .success(function(result) {
           get_library(data.lib_id); // read back data from updated library
+          search_libraries(); // refresh library list
         })
         .error(function(){
     });

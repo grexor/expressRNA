@@ -18,8 +18,6 @@ import re
 import shutil
 from operator import itemgetter
 
-upload_folder = '/home/gregor/expressrna_dev/web/uploads'
-
 db = {}
 db["methods"] = {}
 db["methods"][""] = {"desc": "not selected"}
