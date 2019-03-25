@@ -106,8 +106,23 @@ function delete_experiment(exp_id) {
 var upload_request = null;
 
 function upload_experiment() {
-  if (google_user==undefined)
-    return;
+    if (google_user==undefined)
+      return;
+
+    alevel = db["access_levels"][db["user"]["usertype"]];
+    if (Number(db["user"]["experiments"])>=Number(alevel["experiments"])) {
+      html = "<b>Upload Experiment</b><br>";
+      html += "Unfortunatelly, you reached the maximum number of experiments you can create with your account type. Please <a href='mailto:gregor.rot@gmail.com?subject=expressRNA account upgrade'>contact us</a> for upgrading your account." + "<br>";
+      vex.dialog.open({
+          unsafeMessage: html,
+          buttons: [
+              $.extend({}, vex.dialog.buttons.NO, { text: 'Close' })
+          ],
+          callback: function (data) {
+          }
+      })
+      return;
+    }
 
     if (library.genome=="") {
       html = "<b>Reference genome not selected</b><br>";
@@ -177,6 +192,7 @@ function upload_experiment() {
             $.extend({}, vex.dialog.buttons.NO, { text: 'Cancel', id:'btn_library_cancel' })
         ],
         afterOpen: function(event) {
+          // TODO: update and add size limit
           $('input[name=newfile]').change(function(event) {
             filename = this.value;
             filename = filename.replace(/.*[\/\\]/, '');

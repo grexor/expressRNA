@@ -1,4 +1,20 @@
 function new_library() {
+
+  alevel = db["access_levels"][db["user"]["usertype"]];
+  if (Number(db["user"]["libs"])>=Number(alevel["libraries"])) {
+    html = "<b>New Library</b><br>";
+    html += "Unfortunatelly, you reached the maximum number of libraries you can create with your account type. Please <a href='mailto:gregor.rot@gmail.com?subject=expressRNA account upgrade'>contact us</a> for upgrading your account." + "<br>";
+    vex.dialog.open({
+        unsafeMessage: html,
+        buttons: [
+            $.extend({}, vex.dialog.buttons.NO, { text: 'Close' })
+        ],
+        callback: function (data) {
+        }
+    })
+    return;
+  }
+
   html = "<b>New Library</b><br>";
   html += "Would you like to create a new library, a place where you can upload your experiments?" + "<br>";
 
