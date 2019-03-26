@@ -86,12 +86,12 @@ function new_library_do(genome, method, seq_type) {
   post_data["genome"] = genome;
   post_data["method"] = method;
   post_data["seq_type"] = seq_type;
-  console.log(seq_type);
   $.post('/expressrna_gw/index.py', post_data)
       .success(function(result) {
           search_libraries(); // refresh library list
           data = $.parseJSON(result);
           open_library(data.lib_id);
+          update_user_usage();
       })
       .error(function(){
   })

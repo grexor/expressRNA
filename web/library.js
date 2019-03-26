@@ -1,5 +1,8 @@
 menu_select("link_search");
 
+var file1ok = false;
+var file2ok = false;
+
 function edit_library() {
   html = "<b>Library Edit</b> (" + library.lib_id + ")<br>";
   html += "<div style='font-size: 12px; color: #444444;'>Annotating your experiments is super easy, simply provide annotation fields (one per line), and also provide which fields you would like to show in the table of the experiment (some fields can remain hidden).</div>"
@@ -165,7 +168,7 @@ function upload_experiment() {
   html += "<input type='hidden' name='lib_id' value='" + library.lib_id + "'>";
   html += "</td>";
   html += "<td valign=top>";
-  html += "<div id='newfile_name' style=''>No file currently selected for upload</div>";
+  html += "<div id='newfile_name' style=''>Select FASTQ file (R1)</div>";
   html += "</td>";
   html += "</tr>";
   if (library.seq_type=="paired") {
@@ -175,7 +178,7 @@ function upload_experiment() {
     html += "<label for='newfile2' class='cfu'>Select FASTQ file (R2)</label>";
     html += "</td>";
     html += "<td valign=top>";
-    html += "<div id='newfile2_name' style=''>Leave blank if single-end sequencing</div>";
+    html += "<div id='newfile2_name' style=''>Select FASTQ file (R2)</div>";
     html += "</td>";
     html += "</tr>";
   }
@@ -192,14 +195,35 @@ function upload_experiment() {
             $.extend({}, vex.dialog.buttons.NO, { text: 'Cancel', id:'btn_library_cancel' })
         ],
         afterOpen: function(event) {
+          setTimeout(adjust_library_ubutton, 1, true);
           // TODO: update and add size limit
           $('input[name=newfile]').change(function(event) {
+            alevel = db["access_levels"][db["user"]["usertype"]];
+            if (Math.round(this.files[0].size/1e6)>Number(alevel["diskspace"])) {
+              setTimeout(adjust_library_ubutton, 1, true); // disable upload button
+              $("#newfile_name").html("File size too large for your account (max " + Number(alevel["diskspace"]) + " MB)");
+              return;
+            }
+            if (library.seq_type=="single")
+              setTimeout(adjust_library_ubutton, 1, false); // enable upload button
+            if ((library.seq_type=="paired")&&(file2ok==true))
+              setTimeout(adjust_library_ubutton, 1, false); // enable upload button
+            file1ok = true;
             filename = this.value;
             filename = filename.replace(/.*[\/\\]/, '');
             $("#newfile_name").html(filename + " (" + Math.round(this.files[0].size/1e6) + " MB)");
           });
           if (library.seq_type=="paired") {
             $('input[name=newfile2]').change(function(event) {
+              alevel = db["access_levels"][db["user"]["usertype"]];
+              if (Math.round(this.files[0].size/1e6)>Number(alevel["diskspace"])) {
+                setTimeout(adjust_library_ubutton, 1, true); // disable upload button
+                $("#newfile2_name").html("File size too large for your account (max " + Number(alevel["diskspace"]) + " MB)");
+                return;
+              }
+              if (file1ok==true)
+                setTimeout(adjust_library_ubutton, 1, false); // enable upload button
+              file2ok = true;
               filename = this.value;
               filename = filename.replace(/.*[\/\\]/, '');
               $("#newfile2_name").html(filename + " (" + Math.round(this.files[0].size/1e6) + " MB)");
@@ -212,16 +236,7 @@ function upload_experiment() {
             event.stopPropagation();
             $("#div_library_progress").show();
             // data = vex_upload.data; // not needed here, but could be used to get additional form data
-            var buttons = document.getElementsByTagName('button');
-            for (var i = 0; i < buttons.length; i++) {
-                var button = buttons[i];
-                // disable Upload button
-                if ($(button).html()=="Upload") {
-                  button.disabled = true;
-                  $(button).css("opacity", 0.1);
-                  $(button).css("cursor", "default");
-                }
-            }
+            setTimeout(adjust_library_ubutton, 1, true); // disable upload button
             upload_request = $.ajax({
                     url:'/expressrna_gw/index.py',
                     type:'post',
@@ -246,6 +261,7 @@ function upload_experiment() {
                     success:function(){
                         vex.close(vex_upload); // close dialog
                         get_library(library.lib_id); // refresh library experiments
+                        update_user_usage();
                     }
                 });
 
@@ -261,6 +277,25 @@ function upload_experiment() {
         }
       }
     );
+}
+
+function adjust_library_ubutton(sw) {
+  var buttons = document.getElementsByTagName('button');
+  for (var i = 0; i < buttons.length; i++) {
+      var button = buttons[i];
+      // disable Upload button
+      if ($(button).html()=="Upload") {
+        if (sw) {
+          button.disabled = true;
+          $(button).css("opacity", 0.1);
+          $(button).css("cursor", "default");
+        } else {
+          button.disabled = false;
+          $(button).css("opacity", 1);
+          $(button).css("cursor", "pointer");
+        }
+      }
+  }
 }
 
   hide_library_all();
@@ -391,6 +426,7 @@ function upload_experiment() {
         .success(function(result) {
           search_libraries();
           open_libraries();
+          update_user_usage();
         })
         .error(function(){
     });
@@ -406,6 +442,7 @@ function upload_experiment() {
     $.post('/expressrna_gw/index.py', post_data)
         .success(function(result) {
           get_library(library.lib_id);
+          update_user_usage();
         })
         .error(function(){
     });
@@ -550,7 +587,6 @@ function edit_experiment(exp_id) {
         callback: function (data) {
             if (!data) {
             } else {
-              console.log($('#select_genome').find(":selected").val());
               library.genome = $('#select_genome').find(":selected").val();
               save_library(library);
             }

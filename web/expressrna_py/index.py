@@ -798,6 +798,14 @@ class TableClass():
             result["tickets"] = self.get_tickets(email)
         return json.dumps(result, default=dthandler)
 
+    def update_user_usage(self):
+        result = {}
+        email = self.pars.get("email", None)
+        if email==None:
+            return
+        result["libs"], result["experiments"] = self.count_ownership(email)
+        return json.dumps(result, default=dthandler)
+
     def get_tickets(self, email):
         tickets = []
         conn = Session()
@@ -849,6 +857,7 @@ class TableClass():
         return "saved"
 
     def count_ownership(self, email):
+        apa.annotation.init()
         num_libs = 0
         num_experiments = 0
         for exp_id, data in apa.annotation.libs.items():

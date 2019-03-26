@@ -36,6 +36,22 @@ function login_ok(googleUser) {
     .error(function(){
     })
 }
+
+function update_user_usage() {
+  post_data = {};
+  post_data["action"] = "update_user_usage";
+  post_data["email"] = google_user.getBasicProfile().getEmail();
+  $.post('/expressrna_gw/index.py', post_data)
+  .success(function(result) {
+      data = $.parseJSON(result);
+      db["user"]["libs"] = data["libs"];
+      db["user"]["experiments"] = data["experiments"];
+      display_user_access();
+  })
+  .error(function(){
+  })
+}
+
 function login_fail(error) {
   google_user = undefined;
   $("#btn_signin").show();
