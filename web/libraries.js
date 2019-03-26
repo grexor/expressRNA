@@ -163,7 +163,6 @@ function display_libraries() {
   if (db["user"]["usertype"]=="level2")
     $("#div_control_libraries").show();
   if (google_user!=undefined)
-    if (google_user.getBasicProfile().getEmail()=="gregor.rot@gmail.com")
       $("#div_control_libraries").show();
   help_last_change = "Date of last update.";
   help_identifier = "The unique library identifier (ID), usually simply a date_name identifier which uniquelly locates the data in expressRNA. You can explore (view) the library contents by clicking on this link."
