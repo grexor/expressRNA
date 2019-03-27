@@ -347,7 +347,7 @@ function adjust_library_ubutton(sw) {
             $("#lbl_library_genome").html(html_library_genome);
             $("#lbl_library_method").html(html_library_method);
             $("#lbl_library_seq_type").html(html_library_seq_type);
-            display_library_experiments(library.experiments)
+            display_library_experiments2(library.experiments)
             display_library_ge();
             multiq_link = "https://expressrna.org/share/data/" + library_id + "/multiqc_report.html"+ "?nocache="+nocache;
             $.get(multiq_link).done(function () {
@@ -450,8 +450,6 @@ function adjust_library_ubutton(sw) {
 
 function display_library_experiments(experiments) {
   html = "<br>";
-  html += "List of all experiments in the library that you have access to.<br><br>"
-
   help_id = "Number of the experiment in the library, starting with 1 (e1).";
   help_aligned = "Percentage of uniquely aligned reads to the reference genome.";
   help_identifier = "The identifier links the experiment to the library. The identification is composed of: library_id (e.g. 20171212_data) + experiment_id (e.g. e1). This ID uniquely identifies the experiment data in expressRNA.";
@@ -492,6 +490,56 @@ function display_library_experiments(experiments) {
     html += "</table>";
     html += "<hr style='border: 1px solid #f1f1f1; color: #f1f1f1; width: 300px; margin-top: 15px; margin-bottom: 15px;' align='left'>";
   }
+  $("#div_library_ex").html(html);
+  tippy('.btn', {theme: 'light', interactive: true});
+}
+
+function display_library_experiments2(experiments) {
+  html = "<br>";
+  help_id = "Number of the experiment in the library, starting with 1 (e1).";
+  help_aligned = "Percentage of uniquely aligned reads to the reference genome.";
+  help_identifier = "The identifier links the experiment to the library. The identification is composed of: library_id (e.g. 20171212_data) + experiment_id (e.g. e1). This ID uniquely identifies the experiment data in expressRNA.";
+
+  html += "<center><b>Table of Experiments, double click row to edit annotation</b><br><br><table border=0 class='table_experiments'>"
+
+  for (exp_id in experiments)
+  {
+    html += "<tr style='border-bottom: 1px solid #f1f1f1;' ondblclick='edit_experiment(" + experiments[exp_id].exp_id + ");'>";
+    code_delete = "";
+    code_edit = "";
+    code_editable = "<td>";
+    if (google_user!=undefined)
+      if (library.owner.indexOf(google_user.getBasicProfile().getEmail())!=-1) {
+          code_delete = "<a href='javascript:delete_experiment(" + experiments[exp_id].exp_id + ");'><img src=media/delete.png style='padding-left: 5px; opacity: 0.5; height: 12px; margin-top:-2px;vertical-align:middle; padding-right: 3px;'>Delete</a>";
+          code_edit = "<a href='javascript:edit_experiment(" + experiments[exp_id].exp_id + ");'><img src=media/edit.png style='padding-left: 2px; height: 18px; margin-top:-2px;vertical-align:middle; padding-right: 3px;'>Edit</a>";
+          code_editable = "<td>" + code_edit + "</td><td>" + code_delete + "</td>";
+      }
+    fastq_link = "https://expressrna.org/share/data/" + experiments[exp_id].lib_id + "/e" + experiments[exp_id].exp_id + "/" + experiments[exp_id].lib_id + "_e" + experiments[exp_id].exp_id + ".fastq.bz2";
+    bam_link = "https://expressrna.org/share/data/" + experiments[exp_id].lib_id + "/e" + experiments[exp_id].exp_id + "/m1/" + experiments[exp_id].lib_id + "_e" + experiments[exp_id].exp_id + "_m1.bam";
+    html += "<td class='exp_row' style='text-align:right'><div class='div_column_value'>" + "<b>e" + experiments[exp_id].exp_id + "</b></td>";
+    for (var j=0; j<library.columns_display.length; j++) {
+      column_name = library.columns_display[j][1];
+      column_name_human = library.columns_display[j][0];
+      column_value = experiments[exp_id][column_name];
+      if (column_name=="method")
+        column_value = experiments[exp_id]["method_desc"]
+      if (column_value=="")
+        column_value = "&nbsp;";
+      html += "<td class='exp_row'><div class='div_column_value'>" + column_value + "</div></td>";
+    }
+    if (experiments[exp_id].stats[0]!="") {
+      map_text = experiments[exp_id].stats[0] + "M reads; " + experiments[exp_id].stats[1] + "%";
+      map_width = Math.min(100, Number(experiments[exp_id].stats[1]).toFixed(0)) + "%";
+      html += "<td class='exp_row' style='z-index: -2;'><div style='position: relative;'><div style='z-index: 2000; border: 1px solid #eeeeee; width: 130px; text-align: center; margin-bottom: 2px; padding-left: 3px; padding-right: 3px; border-radius: 3px; font-size: 11px;'>" + map_text + "</div><div style='width: " + map_width + "; text-align: center; height: 100%; border-radius: 3px; background-color: #e1e1e1; font-size: 10px; position: absolute; top: 0px; left: 0px; z-index: -5;'>&nbsp;</div></div></td>";
+    }
+
+    lib_id = experiments[exp_id].lib_id;
+    exp_id = experiments[exp_id].exp_id;
+    html += "<td class='exp_row'><div class='div_column_value'><a href=" + fastq_link + ">FastQ</a> , <a href=" + bam_link + ">BAM</a></div></td>";
+    html += "<td>" + code_editable + "</td>";
+    html += "</tr>";
+  }
+  html += "</table>";
   $("#div_library_ex").html(html);
   tippy('.btn', {theme: 'light', interactive: true});
 }
@@ -593,7 +641,6 @@ function edit_experiment(exp_id) {
         }
     })
   }
-
 
   function change_library_method() {
     library = db["library"]["query"];
