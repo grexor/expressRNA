@@ -2,6 +2,7 @@ menu_select("link_search");
 
 var file1ok = false;
 var file2ok = false;
+var experiment_display_function = "display_library_experiments2";
 
 function edit_library() {
   html = "<b>Library Edit</b> (" + library.lib_id + ")<br>";
@@ -347,7 +348,8 @@ function adjust_library_ubutton(sw) {
             $("#lbl_library_genome").html(html_library_genome);
             $("#lbl_library_method").html(html_library_method);
             $("#lbl_library_seq_type").html(html_library_seq_type);
-            display_library_experiments2(library.experiments)
+            //display_library_experiments2(library.experiments)
+            window[experiment_display_function](library.experiments);
             display_library_ge();
             multiq_link = "https://expressrna.org/share/data/" + library_id + "/multiqc_report.html"+ "?nocache="+nocache;
             $.get(multiq_link).done(function () {
@@ -450,6 +452,8 @@ function adjust_library_ubutton(sw) {
 
 function display_library_experiments(experiments) {
   html = "<br>";
+  html += "<center><a href='javascript:library_display_function(0);'><img src=media/list.svg style='opacity: 0.5; padding-left: 2px; height: 18px; margin-top:-2px;vertical-align:middle; padding-right: 0px;'></a><a href='javascript:library_display_function(1);'><img src=media/table.svg style='padding-left: 2px; height: 18px; margin-top:-2px;vertical-align:middle; padding-right: 3px;'></a>";
+  html += "<b>Table/List of Experiments (switch between views, double click row to edit annotation)</b><br><br>";
   help_id = "Number of the experiment in the library, starting with 1 (e1).";
   help_aligned = "Percentage of uniquely aligned reads to the reference genome.";
   help_identifier = "The identifier links the experiment to the library. The identification is composed of: library_id (e.g. 20171212_data) + experiment_id (e.g. e1). This ID uniquely identifies the experiment data in expressRNA.";
@@ -488,10 +492,20 @@ function display_library_experiments(experiments) {
     lib_id = experiments[exp_id].lib_id;
     exp_id = experiments[exp_id].exp_id;
     html += "</table>";
-    html += "<hr style='border: 1px solid #f1f1f1; color: #f1f1f1; width: 300px; margin-top: 15px; margin-bottom: 15px;' align='left'>";
+    html += "<hr style='border: 1px solid #f1f1f1; color: #f1f1f1; width: 300px; margin-top: 15px; margin-bottom: 15px;'>";
   }
   $("#div_library_ex").html(html);
   tippy('.btn', {theme: 'light', interactive: true});
+}
+
+function library_display_function(f) {
+  if (f==0) {
+    experiment_display_function = "display_library_experiments2";
+  }
+  if (f==1) {
+    experiment_display_function = "display_library_experiments";
+  }
+  window[experiment_display_function](library.experiments);
 }
 
 function display_library_experiments2(experiments) {
@@ -500,8 +514,10 @@ function display_library_experiments2(experiments) {
   help_aligned = "Percentage of uniquely aligned reads to the reference genome.";
   help_identifier = "The identifier links the experiment to the library. The identification is composed of: library_id (e.g. 20171212_data) + experiment_id (e.g. e1). This ID uniquely identifies the experiment data in expressRNA.";
 
-  html += "<center><b>Table of Experiments, double click row to edit annotation</b><br><br><table border=0 class='table_experiments'>"
+  html += "<center><a href='javascript:library_display_function(0);'><img src=media/list.svg style='padding-left: 2px; height: 18px; margin-top:-2px;vertical-align:middle; padding-right: 0px;'></a><a href='javascript:library_display_function(1);'><img src=media/table.svg style='opacity: 0.5; padding-left: 2px; height: 18px; margin-top:-2px;vertical-align:middle; padding-right: 3px;'></a>";
+  html += "<b>Table/List of Experiments (switch between views, double click row to edit annotation)</b><br><br>";
 
+  html += "<table border=0 class='table_experiments'>";
   for (exp_id in experiments)
   {
     html += "<tr style='border-bottom: 1px solid #f1f1f1;' ondblclick='edit_experiment(" + experiments[exp_id].exp_id + ");'>";
