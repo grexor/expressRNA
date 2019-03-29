@@ -10,7 +10,6 @@ function new_analysis() {
       ],
       callback: function (data) {
           if (!data) {
-            console.log("analysi_create cancel");
           } else {
           }
       }
@@ -20,7 +19,11 @@ function new_analysis() {
 function search_analyses() {
   $("body").addClass("waiting");
   $("#label_search_analyses").show();
-  lbl_search = $("#label_search_analyses").val();
+  try {
+    lbl_search = String($('#area_analyses_search').tagEditor('getTags')[0].tags.join("|||"));
+  } catch (err) {
+    lbl_search = "";
+  }
   $("#icon_analyses").attr("src", "media/comparisons.png");
   $("#div_analyses").attr("class", "title_font_selected");
   post_data = {};
@@ -168,3 +171,41 @@ function analyses_change_page_items(element) {
 }
 
 tippy('.btn', {theme: 'light', interactive: true});
+
+function analyses_tags_reinit() {
+  $('#area_analyses_search').tagEditor('destroy');
+  $('#area_analyses_search').val("");
+  //$('#area_analyses_search').tagEditor({initialTags: [], forceLowercase: false, delimiter: "||", placeholder: 'Enter keywords ...', autocomplete: {delay: 250, minLength:2}});
+  $('#area_analyses_search').tagEditor({initialTags: [], beforeTagSave: area_analyses_search_beforesave, beforeTagDelete: area_analyses_search_tagdelete, forceLowercase: false, delimiter: "||", placeholder: 'Enter keywords ...', onChange: area_analyses_search_changed});
+}
+
+function area_analyses_search_beforesave() {
+
+}
+
+function area_analyses_search_changed(field, editor, tags) {
+  search_analyses();
+}
+
+function area_analyses_search_tagdelete(field, editor, tags, val) {
+  var new_tags = tags;
+  var index = new_tags.indexOf(val);
+  if (index > -1)
+    new_tags.splice(index, 1);
+  search_analyses_with(new_tags.join("|||"));
+}
+
+function search_analyses_with(tags) {
+  analyses_tags_reinit();
+  tags = tags.split("|||");
+  for (var i=0; i<tags.length; i++) {
+    $('#area_analyses_search').tagEditor('addTag', tags[i]);
+  }
+  search_analyses();
+}
+
+function add_analyses_filter(filter) {
+  $('#area_analyses_search').tagEditor('addTag', filter);
+}
+
+analyses_tags_reinit();

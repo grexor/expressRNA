@@ -100,7 +100,13 @@ function new_library_do(genome, method, seq_type) {
 function search_libraries() {
   $("body").addClass("waiting");
   $("#label_search_libraries").show();
-  lbl_search = $("#label_search_libraries").val();
+
+  try {
+    lbl_search = String($('#area_libraries_search').tagEditor('getTags')[0].tags.join("|||"));
+  } catch (err) {
+    lbl_search = "";
+  }
+
   clear_selection();
   $("#icon_library").attr("src", "media/library.png");
   $("#div_libraries").attr("class", "title_font_selected");
@@ -258,3 +264,40 @@ function libraries_change_page_items(element) {
 }
 
 tippy('.btn', {theme: 'light', interactive: true});
+
+function libraries_tags_reinit() {
+  $('#area_libraries_search').tagEditor('destroy');
+  $('#area_libraries_search').val("");
+  $('#area_libraries_search').tagEditor({initialTags: [], beforeTagSave: area_libraries_search_beforesave, beforeTagDelete: area_libraries_search_tagdelete, forceLowercase: false, delimiter: "||", placeholder: 'Enter keywords ...', onChange: area_libraries_search_changed});
+}
+
+function area_libraries_search_beforesave() {
+
+}
+
+function area_libraries_search_changed(field, editor, tags) {
+  search_libraries();
+}
+
+function area_libraries_search_tagdelete(field, editor, tags, val) {
+  var new_tags = tags;
+  var index = new_tags.indexOf(val);
+  if (index > -1)
+    new_tags.splice(index, 1);
+  search_libraries_with(new_tags.join("|||"));
+}
+
+function search_libraries_with(tags) {
+  libraries_tags_reinit();
+  tags = tags.split("|||");
+  for (var i=0; i<tags.length; i++) {
+    $('#area_libraries_search').tagEditor('addTag', tags[i]);
+  }
+  search_libraries();
+}
+
+function add_libraries_filter(filter) {
+  $('#area_libraries_search').tagEditor('addTag', filter);
+}
+
+libraries_tags_reinit();

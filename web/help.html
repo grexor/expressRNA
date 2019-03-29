@@ -8,6 +8,7 @@
 
       <div id='div_computational'>
       <a id="computational"></a>
+
       <div class="div_header"><b>Computational Analysis</b></div>
       We provide pipelines for protocol-specific computational analysis of short and long reads. Currently, expressRNA supports Lexogen QuantSeq Reverse and Forward protocols, standard RNA-seq and Nanopore direct RNA. Please see below details of how we process reads from these protocols to compute a polyA database and count table.
 
@@ -41,6 +42,34 @@
 
       <br>
       <div class="div_header"><b><a href='https://www.lexogen.com/quantseq-3mrna-sequencing/' target=_new>Lexogen 3' QuantSeq Forward for Illumina</a></b></div>
+
+      <br><br>
+      <div class="div_header"><b>Alternative Polyadenylation (APA) Computational Analysis</b></div>
+
+      expressRNA implements <b>alternative polyAdenylation (APA)</b> analysis from 3'-end short-read targeted sequence data and long-read Nanopore / PacBio data. In general the analysis is flexible to accomodate diverse sequence data, for example <a href="https://www.lexogen.com/quantseq-3mrna-sequencing/?gclid=CjwKCAjwhOvPBRBxEiwAx2nhLqPMeeMzqnWVmvDLAR3uSNW-YITTbG0UHBWCkiZk1w3wVdzd2ThL_BoCYCMQAvD_BwE" target=_lexogen>Lexogen Quantseq Forward and Reverse</a> protocols are well supported.
+
+      The following steps are crucial for APA analysis:
+
+      <div style="padding-left: 15px; padding-top: 10px;">
+        <li> map / align the reads to the reference with STAR short read aligner
+        <li> construct a polyA atlas / database by clustering alignment ends (or beginnings, depending on the protocol)
+        <li> filter out alignments from A-rich genomic regions (to avoid internal priming events in the atlas construction step)
+        <li> recover the signal by computing the "expression" of polyA sites by clustering
+        <li> define comparative analysis (set of control experiments vs. set of test experiments)
+        <li> run DEXSeq analysis on the polyA sites
+        <li> select two sites per gene to classify polyA events (shortening, lenghtening of genes)
+        <li> perform motif analysis around regulated sites with RNAmotifs2
+        <li> Gene Ontology Enrichment Analysis on APA regulated genes
+      </div>
+
+      <img src="media/analysis_steps.png" width=700px>
+
+      <br>
+      The above list is just a set of automated analysis that can be performed on a set of experiments. Of course several alternatives can be implemented, such as using a pre-existing polyA atlas (database) for the analysis and computing the polyA site usage (counts) on the provided polyA site atlas.
+      <br><br>
+      Part of an APA report is a graphical representation of gene shortening and lenghtening. Our case study was an experiment of HEK-293 control vs. <font color=green class="btn" title="TDP-43 is a DNA and RNA-binding protein.<br><br><a target=_tdp43 href=https://en.wikipedia.org/wiki/TARDBP>Open wiki page</a> on TDP-43 to start exploring more.">TDP-43</font> KD. Repressed genes are blue (proximal polyA site is less used compared to the distal), and vice-versa for the enhanced genes. <a href="javascript:open_analysis('paper_final_all');">Open the analysis here</a>.
+      <br><br>
+      expressRNA provides the basic analysis in a completelly automatized fashion, however for research projects a lot of custom work still needs to be performed in terms of data quality control and pre-processing. Currently we are working to automatize all steps of analysis.
 
       </div>
 

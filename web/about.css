@@ -76,12 +76,12 @@ a:hover {
 
 .div_content a {
   color: #885555;
-  font-weight: 400;
+  font-weight: 300;
 }
 
 .div_content a:hover {
   color: #ff5555;
-  font-weight: 400;
+  font-weight: 300;
 }
 
 .div_git {

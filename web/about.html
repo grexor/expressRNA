@@ -7,7 +7,20 @@
     <table border=0>
       <tr>
         <td class="content_table" valign=top>
-          <div class="div_content"><b>expressRNA</b> is an umbrella term for the web application and platform to study post-transcriptional modifications. expressRNA builds upon several novel open-source bioinformatics packages (<a href=https://github.com/meringlab/apa target=_apa>apa</a>, <a href=https://github.com/grexor/rnamotifs2 target=_rna2>RNAmotifs2</a> and <a href=https://github.com/grexor/pybio target=_pybio>pybio</a>) to perform <b>alternative polyadenylation</b> and <b>alternative splicing</b> analysis. The platform also inter-connects several state-of-the-art tools like the short-read STAR aligner, DEXSeq for differential usage estimates and minimap2 for long-read alignment.</div>
+          <div class="div_content"><b>expressRNA</b>, web research platform to study post-transcriptional modifications by analyzing data from diverse RNA sequencing protocols (RNA-seq, long-read or 3'-end targeted sequencing) and estimating <font color=green class="btn" title="Polyadenylation is the addition of a poly(A) tail to a messenger RNA, canonically at 3'-UTR end. <a target=_new href=https://en.wikipedia.org/wiki/Polyadenylation#Alternative_polyadenylation>Alternative polyadenylation</a> is the process of adding the polyA tail at an alternative locus of the RNA molecule.">alternative polyadenylation (APA)</font> and <font color=green class="btn" title="<a href=https://en.wikipedia.org/wiki/Alternative_splicing target=_new>Alternative splicing</a>, or differential splicing, is a regulated process during gene expression that results in a single gene coding for multiple proteins. In the process, exons can be included or excluded from the final transcript.">alternative splicing</font> regulation. This regulatory information is then combined with RNA-protein binding <font color=green class="btn" title="<a href=https://en.wikipedia.org/wiki/CLIP target=_new>CLIP</a> (cross-linking immunoprecipitation) is a method used in molecular biology that combines UV cross-linking with immunoprecipitation in order to analyse protein interactions with RNA">CLIP</font> to study regulatory principles via RNA maps.
+
+          <br><br>
+          expressRNA builds upon 3 novel open-source bioinformatics packages (see GitHub repositories) to perform alternative polyadenylation sequence data processing and inter-connecting several existing state-of-the-art tools (STAR aligner, DEXSeq, minimap2) to compute <a href="javascript:open_help()">various steps of the analysis</a>.
+
+          <br><br>
+
+          <a href="javascript:open_analysis('paper_final_all');"><img src="media/rnamaps.png" width=60 align="left" style='padding-right: 5px; padding-top: 5px;'></a>After regulated (<font color=red>enhanced in red</font>, <font color="blue">repressed in blue</font>) polyA sites and exons are determined in the experiment, the analysis integrates CLIP data to generate RNA maps. These maps display the level of binding of a protein of interest around regulated features (polyA sites or exons) in a cummulative way across several genes.
+
+          <br><br>
+
+          <img src="media/rnamotifs.png" width=60 align="left" style='padding-right: 5px; padding-top: 5px;'>Additionally, we run motif analysis software RNAmotifs2, originally published in Cereda et al. 2014 and extended with cluster motif analysis in Rot et al., 2017. Detected motifs and their positional significance is evaluated and plotted against the same detected regulated features (polyA sites and exons) as with the CLIP <a href="javascript:open_analysis('paper_final_all');">RNA maps</a>.
+
+          </div>
 
           <br>
 
@@ -35,60 +48,18 @@
 
           <div class="div_header"><b>Alternative Polyadenylation (APA) Computational Analysis</b></div>
           <div class="div_content">
-            expressRNA implements <b>alternative polyAdenylation (APA)</b> analysis from 3'-end short-read targeted sequence data and long-read Nanopore / PacBio data. In general the analysis is flexible to accomodate diverse sequence data, for example <a href="https://www.lexogen.com/quantseq-3mrna-sequencing/?gclid=CjwKCAjwhOvPBRBxEiwAx2nhLqPMeeMzqnWVmvDLAR3uSNW-YITTbG0UHBWCkiZk1w3wVdzd2ThL_BoCYCMQAvD_BwE" target=_lexogen>Lexogen Quantseq Forward and Reverse</a> protocols are well supported.
+            expressRNA focus is on sequence data analysis and alternative polyadenylation (see more in <a href='javascript:open_help();'>Docs</a>). Main analysis workflow for APA is displayed in the figure below:<br>
 
-            The following steps are crucial for APA analysis:
+            <center><img src="media/analysis_steps.png" width=650px></center>
 
-            <div style="padding-left: 15px; padding-top: 10px;">
-              <li> map / align the reads to the reference with STAR short read aligner
-              <li> construct a polyA atlas / database by clustering alignment ends (or beginnings, depending on the protocol)
-              <li> filter out alignments from A-rich genomic regions (to avoid internal priming events in the atlas construction step)
-              <li> recover the signal by computing the "expression" of polyA sites by clustering
-              <li> define comparative analysis (set of control experiments vs. set of test experiments)
-              <li> run DEXSeq analysis on the polyA sites
-              <li> select two sites per gene to classify polyA events (shortening, lenghtening of genes)
-              <li> perform motif analysis around regulated sites with RNAmotifs2
-              <li> Gene Ontology Enrichment Analysis on APA regulated genes
-            </div>
-
-            <img src="media/analysis_steps.png" width=700px>
-
-            The above list is just a set of automated analysis that can be performed on a set of experiments. Of course several alternatives can be implemented, such as using a pre-existing polyA atlas (database) for the analysis and computing the polyA site usage (counts) on the provided polyA site atlas.
-            <br><br>
-            Part of an APA report is a graphical representation of gene shortening and lenghtening. Our case study was an experiment of HEK-293 control vs. <font color=green class="btn" title="TDP-43 is a DNA and RNA-binding protein.<br><br><a target=_tdp43 href=https://en.wikipedia.org/wiki/TARDBP>Open wiki page</a> on TDP-43 to start exploring more.">TDP-43</font> KD. Repressed genes are blue (proximal polyA site is less used compared to the distal), and vice-versa for the enhanced genes. <a href="javascript:open_analysis('paper_final_all');">Open the analysis here</a>.
-            <br><br>
-            expressRNA provides the basic analysis in a completelly automatized fashion, however for research projects a lot of custom work still needs to be performed in terms of data quality control and pre-processing. Currently we are working to automatize all steps of analysis.
-
-          </div>
-
-          <br>
-
-          <div class="div_header"><b>Alternative Splicing Computational Analysis</b></div>
-          <div class="div_content">
-            expressRNA also implements computational analysis of alternative splicing in terms of calling DEXSeq to identify regulated exons and then calling RNAmotifs2 on the sets of regulated exons for detecting regulatory short-motifs. Additionally, RNAmotifs2 is a completelly independent package which can be also called separatelly.
-          </div>
-
-          <br>
-
-          <div class="div_header"><b>expressRNA is free?</b></div>
-          <div class="div_content">
-            The software packages that expressRNA builds upon are <b>free for non-commercial use</b>.
-
-            <br><br>
-
-            <b>Academic setting:</b> If you are part of a research group and would like to run APA analysis on our server, please <a href="mailto:expressRNA@gmail.com">contact us</a> to establish a research collaboration. We can then either help you (time permitting) to setup expressRNA on your server or suggest performing APA analysis on expressRNA.org directly. We are excited about new datasets and potential novel solutions developed during research collaborations. We are all scientist at expressRNA and are constantly improving the platform so new research collaborations are always welcome.
-
-            <br><br>
-
-            <b>Commercial setting:</b> If you would like the team at expressRNA to help you with data analysis on expressRNA.org in a commercial setting, please <a href="mailto:expressRNA@gmail.com">contact us</a> for an offer. Your contribution will cover time and infrastructure (disk space, CPU). There is also a possibility for you to apply expressRNA in a commercial setting on your own, for that you would need a <a href="javascript:open_licence()">commercial licence</a> for the entire platform.
-
+            Part of an APA report is a graphical representation of gene shortening and lenghtening. Our case study was an experiment of HEK-293 control vs. <font color=green class="btn" title="TDP-43 is a DNA and RNA-binding protein.<br><br><a target=_tdp43 href=https://en.wikipedia.org/wiki/TARDBP>Open wiki page</a> on TDP-43 to start exploring more.">TDP-43</font> KD. <a href="javascript:open_analysis('paper_final_all');">Check out the analysis results</a> and the <a href="http://www.cell.com/cell-reports/abstract/S2211-1247(17)30522-3" target="_paper">publication</a>.
           </div>
 
           <br>
 
           <div class="div_header"><b>Architecture</b></div>
           <div class="div_content">
-          <b>expressRNA</b> combines and integrates several existing software tools and proposes data integrative approaches
+          expressRNA combines and integrates several existing software tools and proposes data integrative approaches
           for better understanding the underlying processes of post-transcriptioanl modifications. The web exploratory interface facilitates the browsing and interpretation of results.
           <br><br>
           <center>
@@ -110,7 +81,7 @@
 
           <div class="div_header"><b>Contact</b></div>
           <div class="div_content">
-          Collaborations, be it reseach or commercial, ideas and suggestions are always welcome: please see <a href="http://www.expressrna.org/index.html?action=info&section=contact">Contacts</a>.
+          Automatic pipelines provide a basic overview of novel data, however research work usually requires additional steps and analysis. Please don't hesitate to <a href='mailto:gregor.rot@gmail.com?subject=collaboration'>contact us</a> in case you would like to start a collaboration. If you have a suggestion or discovered a problem in the analysis, you can use directly the <a href='https://github.com/grexor/expressRNA/issues' target=_new>expressRNA GitHub Issues</a>.
         </td>
         <td width=260px class="menu_table" valign=top>
           <table border=0>

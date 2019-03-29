@@ -580,6 +580,10 @@ function display_library_ge() {
 }
 
 function edit_experiment(exp_id) {
+  if (google_user==undefined)
+    return;
+  if (library.owner.indexOf(google_user.getBasicProfile().getEmail())==-1)
+    return;
   library = db["library"]["query"];
   html = "<b>Editing experiment " + exp_id + "</b> for library " + library.lib_id + "</b><br>";
   html += "<div style='font-size: 12px; color: #444444;'>Annotating your experiment is super easy, simply enter (or copy/paste) values (one per line) for this experiment.</div>"

@@ -5,6 +5,7 @@ function scroll_to(name) {
 }
 
 function show_info(name) {
+  open_info();
   buttons = ["news", "contributors", "server", "contact"];
   for (var i=0; i<buttons.length; i++) {
     $("#div_"+buttons[i]).hide();
@@ -13,6 +14,7 @@ function show_info(name) {
 
   $("#div_"+name).show();
   $("#btn_"+name).css("background-color", "#FFA07A");
+  $(window).scrollTop(0);
 }
 
 show_info("news");
