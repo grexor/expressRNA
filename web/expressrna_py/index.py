@@ -877,6 +877,11 @@ class TableClass():
         result["cpu"] = psutil.cpu_percent(percpu=True)
         return json.dumps(result, default=dthandler)
 
+    def get_server_data_stats(self):
+        result = {}
+        result["data"] = json.load(open(os.path.join(apa.path.data_folder, "stats.json")))
+        return json.dumps(result, default=dthandler)
+
     def close(self):
         Session.remove()
 

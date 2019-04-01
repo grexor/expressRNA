@@ -453,7 +453,7 @@ function adjust_library_ubutton(sw) {
 function display_library_experiments(experiments) {
   html = "<br>";
   html += "<center><a href='javascript:library_display_function(0);'><img src=media/list.svg style='opacity: 0.5; padding-left: 2px; height: 18px; margin-top:-2px;vertical-align:middle; padding-right: 0px;'></a><a href='javascript:library_display_function(1);'><img src=media/table.svg style='padding-left: 2px; height: 18px; margin-top:-2px;vertical-align:middle; padding-right: 3px;'></a>";
-  html += "<b>Table/List of Experiments (switch between views, double click row to edit annotation)</b><br><br>";
+  html += "<b>Table of Experiments (switch between views, double click row to edit annotation)</b><br><br>";
   help_id = "Number of the experiment in the library, starting with 1 (e1).";
   help_aligned = "Percentage of uniquely aligned reads to the reference genome.";
   help_identifier = "The identifier links the experiment to the library. The identification is composed of: library_id (e.g. 20171212_data) + experiment_id (e.g. e1). This ID uniquely identifies the experiment data in expressRNA.";
@@ -515,7 +515,7 @@ function display_library_experiments2(experiments) {
   help_identifier = "The identifier links the experiment to the library. The identification is composed of: library_id (e.g. 20171212_data) + experiment_id (e.g. e1). This ID uniquely identifies the experiment data in expressRNA.";
 
   html += "<center><a href='javascript:library_display_function(0);'><img src=media/list.svg style='padding-left: 2px; height: 18px; margin-top:-2px;vertical-align:middle; padding-right: 0px;'></a><a href='javascript:library_display_function(1);'><img src=media/table.svg style='opacity: 0.5; padding-left: 2px; height: 18px; margin-top:-2px;vertical-align:middle; padding-right: 3px;'></a>";
-  html += "<b>Table/List of Experiments (switch between views, double click row to edit annotation)</b><br><br>";
+  html += "<b>Table of Experiments (switch between views, double click row to edit annotation)</b><br><br>";
 
   html += "<table border=0 class='table_experiments'>";
   for (exp_id in experiments)

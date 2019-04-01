@@ -33,7 +33,7 @@ function display_user_access() {
     html = "Guest user<br><br>Full access to published data and explorative analysis of results.";
     $("#div_user_access").html(html);
   } else {
-    html = "<b>Academic user</b><br><br>";
+    html = "<b>Academic</b><br><br>";
 
     html += '<table border=0 width=100 style="color: #666666;">';
     html += '<tr><td style="padding-top: 5px;">';
@@ -47,10 +47,10 @@ function display_user_access() {
     $("#div_user_access").html(html);
 
     $("#div_user_libs_text").html(db["user"]["libs"]+" out of " + alevel["libraries"] +" libraries");
-    $("#div_user_libs_width").css("width", Math.min(100, 100*Number(db["user"]["libs"])/Number(alevel["libraries"])).toFixed(0)+"%");
+    $("#div_user_libs_width").css("width", Math.min(100, 100 * Number(db["user"]["libs"])/Number(alevel["libraries"])).toFixed(0)+"%");
 
     $("#div_user_exps_text").html(db["user"]["experiments"]+" out of " + alevel["experiments"] +" experiments");
-    $("#div_user_exps_width").css("width", Math.min(100, 100*Number(db["user"]["experiments"])/Number(alevel["experiments"])).toFixed(0)+"%");
+    $("#div_user_exps_width").css("width", Math.min(100, 100 * Number(db["user"]["experiments"])/Number(alevel["experiments"])).toFixed(0) + "%");
   }
 }
 

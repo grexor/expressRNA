@@ -57,7 +57,7 @@ function open_contacts()
                 return a>b ? -1 : a<b ? 1 : 0;
               });
 
-            for (i=0;i<=30;i++)
+            for (i=0;i<=25;i++)
             {
               var message = combined[i].commit.message;
               var date = combined[i].date;

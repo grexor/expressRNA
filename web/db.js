@@ -21,16 +21,16 @@ polyadb_help_dic["hg19_polyasite"] = "To determine polyA site usage, polyAsite h
 
 genomes = {};
 genomes["hg38"] = ["hg19", "hg38, <i>Homo sapiens</i>, assembly: hg38, annotation: Ensembl 90"]
-genomes["mm10"] = ["mm10", "mm10, Mus musculus, assembly: mm10, annotation: Ensembl 90"]
 genomes["hg19"] = ["hg19", "hg19, <i>Homo sapiens</i>, assembly: hg19, annotation: Ensembl 75"]
+genomes["mm10"] = ["mm10", "mm10, Mus musculus, assembly: mm10, annotation: Ensembl 90"]
 genomes["dm6"] = ["dm6", "dm6, <i>Drosophila melanogaster</i>, assembly: dm6, annotation: Ensembl 90"]
 genomes["at"] = ["at", "at, <i>Arabidopsis thaliana</i>, assembly: at, annotation: Ensembl 39"]
 genomes["mar3"] = ["mar3", "mar3, <i>Marchantia polymorpha</i>, assembly: mar3, annotation: mar3"]
 
 methods = {};
-methods["RNAseq"] = ["RNAseq", "RNA-seq, classic whole transcriptome RNA-seq"]
 methods["lexrev"] = ["lexrev", "Lexrev, Lexogen Quantseq Reverse, 3'-end targeted"]
 methods["lexfwd"] = ["lexrev", "Lexfwd, Lexogen Quantseq Forward, 3'-end targeted"]
+methods["RNAseq"] = ["RNAseq", "RNA-seq, classic whole transcriptome RNA-seq"]
 methods["scRNA"] = ["scRNA", "scRNA, Single-cell 10x Genomics"]
 methods["nano"] = ["nano", "Nanopore, long-read sequencing (direct RNA)"]
 methods["bs"] = ["bs", "Bisulfite sequencing"]
