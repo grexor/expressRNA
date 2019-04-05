@@ -177,7 +177,7 @@ class TableClass():
                 f.write(file_data)
                 f.close()
                 self.add_ticket(email, "gunzip "+target, "gunzip " + "%s_e%s.fastq.gz" % (lib_id, exp_id) + " to convert it to bz2 format")
-                self.add_ticket(email, "pbzip2 "+target[:-3], "pbzip2 " + "%s_e%s.fastq" % (lib_id, exp_id))
+                self.add_ticket(email, "bzip2 "+target[:-3], "bzip2 " + "%s_e%s.fastq" % (lib_id, exp_id))
             self.add_ticket(email, "apa.map -lib_id %s -exp_id %s -cpu 4" % (lib_id, exp_id), "map e%s (library %s) to reference genome %s" % (exp_id, lib_id, library.genome))
             self.add_ticket(email, "apa.map.stats -lib_id %s -exp_id %s" % (lib_id, exp_id), "map statistics for e%s (library %s)" % (exp_id, lib_id))
             self.add_ticket(email, "apa.fastqc /home/gregor/apa/data.apa/%s" % lib_id, "fastqc for library %s" % (lib_id))
@@ -214,7 +214,7 @@ class TableClass():
                 f.write(file_data_R1)
                 f.close()
                 self.add_ticket(email, "gunzip "+target, "gunzip " + "%s_e%s_R1.fastq.gz" % (lib_id, exp_id) + " to convert it to bz2 format")
-                self.add_ticket(email, "pbzip2 "+target[:-3], "pbzip2 " + "%s_e%s_R1.fastq" % (lib_id, exp_id))
+                self.add_ticket(email, "bzip2 "+target[:-3], "bzip2 " + "%s_e%s_R1.fastq" % (lib_id, exp_id))
             if filename_R2.endswith(".bz2"):
                 target = os.path.join(exp_folder, "%s_e%s_R2.fastq.bz2" % (lib_id, exp_id))
                 f = open(target, 'wb')
@@ -226,7 +226,7 @@ class TableClass():
                 f.write(file_data_R2)
                 f.close()
                 self.add_ticket(email, "gunzip "+target, "gunzip " + "%s_e%s_R2.fastq.gz" % (lib_id, exp_id) + " to convert it to bz2 format")
-                self.add_ticket(email, "pbzip2 "+target[:-3], "pbzip2 " + "%s_e%s_R2.fastq" % (lib_id, exp_id))
+                self.add_ticket(email, "bzip2 "+target[:-3], "bzip2 " + "%s_e%s_R2.fastq" % (lib_id, exp_id))
             """
             self.add_ticket(email, "apa.map -lib_id %s -exp_id %s -cpu 4" % (lib_id, exp_id), "map e%s (library %s) to reference genome %s" % (exp_id, lib_id, library.genome))
             self.add_ticket(email, "apa.map.stats -lib_id %s -exp_id %s" % (lib_id, exp_id), "map statistics for e%s (library %s)" % (exp_id, lib_id))
@@ -356,7 +356,7 @@ class TableClass():
         result = []
         libs = apa.annotation.libs
         for lib_id, lib_data in libs.items():
-            if (not "public" in lib_data.access) and (not email in lib_data.access):
+            if (not "public" in lib_data.access) and (not email in lib_data.access) and (email!="gregor.rot@gmail.com"):
                 continue
             r = {}
             r["lib_id"] = lib_id
@@ -620,7 +620,7 @@ class TableClass():
         email = self.pars.get("email", "public")
         if (email=="public"):
             return json.dumps(r, default=dthandler)
-        if (email not in library.owner):
+        if (email not in library.owner) and email!="gregor.rot@gmail.com":
             return json.dumps(r, default=dthandler)
         library.name = self.pars.get("name", "")
         library.notes = self.pars.get("notes", "")

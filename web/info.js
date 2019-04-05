@@ -31,25 +31,31 @@ function show_stats_experiments() {
         data = $.parseJSON(result);
 
         $("#div_stats_experiments").html("");
+        var table_stats_experiments = "<table border=0 style='font-size: 12px; color: #555555;'>";
         var pie_data = [];
         var sum_all = 0;
         exp = data["data"]["experiments"];
+        var temp = [];
         for (var el in exp) {
           sum_all += Number(exp[el]);
+          temp.push([Number(exp[el]), el]);
         }
-        for (var el in exp) {
+        temp.sort(function(a,b) { return - (a[0] - b[0]); } );
+        for (var el in temp) {
+          num = Number(temp[el][0]);
+          item = temp[el][1];
           var element_inner = {};
-          element_inner.value = Number(exp[el]);
+          element_inner.value = num;
           element_inner.fraction = element_inner.value / sum_all;
           element_inner.display_value = element_inner.value
           element_inner.display_value1 = element_inner.value
           element_inner.display_value2 = element_inner.value
-          element_inner.label = el + ", " + element_inner.value + " exps"
-          element_inner.display_label = el + "<br>" + element_inner.value + " experiments"
+          element_inner.label = item + ", " + element_inner.value + " exps"
+          element_inner.display_label = item + "<br>" + element_inner.value + " experiments"
           element_inner.color = "#f1f1f1";
           pie_data.push(element_inner);
+          table_stats_experiments += "<tr><td align=right style='border-right: 1px solid #cacaca; padding-right: 5px;'>" + item.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "</td><td align=right>" + element_inner.value + " experiments</td></tr>";
         }
-
         var stats_experiments_config = {
             containerId: "div_stats_experiments",
             highlightColor: "#FFB347",
@@ -69,27 +75,34 @@ function show_stats_experiments() {
           height: 200,
         };
         var pie_stats_experiments = new psd3.Pie(stats_experiments_config);
-
-
+        table_stats_experiments += "</table>";
+        $("#table_stats_experiments").html(table_stats_experiments);
 
         $("#div_stats_reads").html("");
+        var table_stats_reads = "<table border=0 style='font-size: 12px; color: #555555;'>";
         var pie_data = [];
         var sum_all = 0;
         exp = data["data"]["reads"];
+        var temp = [];
         for (var el in exp) {
           sum_all += Number(exp[el]);
+          temp.push([Number(exp[el]), el]);
         }
-        for (var el in exp) {
+        temp.sort(function(a,b) { return - (a[0] - b[0]); } );
+        for (var el in temp) {
+          num = Number(temp[el][0]);
+          item = temp[el][1];
           var element_inner = {};
-          element_inner.value = Number(exp[el]).toFixed(2);
+          element_inner.value = num.toFixed(0);
           element_inner.fraction = element_inner.value / sum_all;
           element_inner.display_value = element_inner.value
           element_inner.display_value1 = element_inner.value
           element_inner.display_value2 = element_inner.value
-          element_inner.label = el + ", " + element_inner.value + "M";
-          element_inner.display_label = el + "<br>" + element_inner.value + " million reads<br>"+Number(100*element_inner.fraction).toFixed(0)+"% of all reads";
+          element_inner.label = item + ", " + element_inner.value + "M";
+          element_inner.display_label = item + "<br>" + element_inner.value + " million reads<br>"+Number(100*element_inner.fraction).toFixed(0)+"% of all reads";
           element_inner.color = "#f1f1f1";
           pie_data.push(element_inner);
+          table_stats_reads += "<tr><td align=right style='border-right: 1px solid #cacaca; padding-right: 5px;'>" + item + "</td><td align=right>" + element_inner.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " million reads (" + Number(100*element_inner.fraction).toFixed(0)+"% of all reads)</td></tr>";
         }
         var stats_reads_config = {
             containerId: "div_stats_reads",
@@ -110,6 +123,8 @@ function show_stats_experiments() {
           height: 200,
         };
         var pie_stats_reads = new psd3.Pie(stats_reads_config);
+        table_stats_reads += "</table>";
+        $("#table_stats_reads").html(table_stats_reads);
 
       })
       .error(function(){

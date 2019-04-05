@@ -335,7 +335,7 @@ function adjust_library_ubutton(sw) {
             html_library_method = "<b>Method</b>: " + library.method_desc;
             html_library_seq_type = "<b>Sequencing</b>: " + library.seq_type;
             if (google_user!=undefined)
-            if (library.owner.indexOf(google_user.getBasicProfile().getEmail())!=-1) {
+            if ((library.owner.indexOf(google_user.getBasicProfile().getEmail())!=-1) || (google_user.getBasicProfile().getEmail()=="gregor.rot@gmail.com")) {
                 $("#btn_library_edit").show();
                 $("#btn_library_upload").show();
                 $("#btn_library_delete").show();
@@ -465,7 +465,7 @@ function display_library_experiments(experiments) {
     code_edit = "";
     code_editable = "</div></td></tr>";
     if (google_user!=undefined)
-      if (library.owner.indexOf(google_user.getBasicProfile().getEmail())!=-1) {
+      if ((library.owner.indexOf(google_user.getBasicProfile().getEmail())!=-1) || (google_user.getBasicProfile().getEmail()=="gregor.rot@gmail.com")) {
           code_delete = "<a href='javascript:delete_experiment(" + experiments[exp_id].exp_id + ");'><img src=media/delete.png style='padding-left: 5px; opacity: 0.5; height: 12px; margin-top:-2px;vertical-align:middle; padding-right: 3px;'>Delete</a>";
           code_edit = "<a href='javascript:edit_experiment(" + experiments[exp_id].exp_id + ");'><img src=media/edit.png style='padding-left: 2px; height: 18px; margin-top:-2px;vertical-align:middle; padding-right: 3px;'>Edit</a>";
           code_editable = " | " + code_edit + " | " + code_delete + "</div></td></tr>";
@@ -525,7 +525,7 @@ function display_library_experiments2(experiments) {
     code_edit = "";
     code_editable = "<td>";
     if (google_user!=undefined)
-      if (library.owner.indexOf(google_user.getBasicProfile().getEmail())!=-1) {
+      if ((library.owner.indexOf(google_user.getBasicProfile().getEmail())!=-1) || (google_user.getBasicProfile().getEmail()=="gregor.rot@gmail.com")) {
           code_delete = "<a href='javascript:delete_experiment(" + experiments[exp_id].exp_id + ");'><img src=media/delete.png style='padding-left: 5px; opacity: 0.5; height: 12px; margin-top:-2px;vertical-align:middle; padding-right: 3px;'>Delete</a>";
           code_edit = "<a href='javascript:edit_experiment(" + experiments[exp_id].exp_id + ");'><img src=media/edit.png style='padding-left: 2px; height: 18px; margin-top:-2px;vertical-align:middle; padding-right: 3px;'>Edit</a>";
           code_editable = "<td>" + code_edit + "</td><td>" + code_delete + "</td>";
@@ -582,7 +582,7 @@ function display_library_ge() {
 function edit_experiment(exp_id) {
   if (google_user==undefined)
     return;
-  if (library.owner.indexOf(google_user.getBasicProfile().getEmail())==-1)
+  if ((library.owner.indexOf(google_user.getBasicProfile().getEmail())!=-1) && (google_user.getBasicProfile().getEmail()!="gregor.rot@gmail.com"))
     return;
   library = db["library"]["query"];
   html = "<b>Editing experiment " + exp_id + "</b> for library " + library.lib_id + "</b><br>";

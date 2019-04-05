@@ -75,8 +75,14 @@ db["access_levels"]["level2"]["experiments"] = 8
 db["access_levels"]["level2"]["libraries"] = 2
 db["access_levels"]["level2"]["diskspace"] = 500
 
+//level3
+db["access_levels"]["level3"] = {}
+db["access_levels"]["level3"]["experiments"] = 40
+db["access_levels"]["level3"]["libraries"] = 2
+db["access_levels"]["level3"]["diskspace"] = 2000
+
 //level5
 db["access_levels"]["level5"] = {}
 db["access_levels"]["level5"]["experiments"] = 2000
 db["access_levels"]["level5"]["libraries"] = 100
-db["access_levels"]["level5"]["diskspace"] = 1000
+db["access_levels"]["level5"]["diskspace"] = 3000
