@@ -54,7 +54,6 @@ function open_info() {
   hide_all();
   menu_select("menu_info");
   $("#content_info").show();
-  add_history({"action":"info"}, "index.html?action=info");
 }
 
 function hide_all() {

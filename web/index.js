@@ -42,9 +42,9 @@ function process_login_parameters(action, data) {
       open_profile();
   else if (action=="about")
       open_about();
-  else if (action=="info")
-      open_info();
-  else if (action=="help")
+  else if (action=="info") {
+      show_info(data["section"]);
+  } else if (action=="help")
       open_help();
   else if (action=="libraries")
       open_libraries();

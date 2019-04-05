@@ -5,13 +5,15 @@ function scroll_to(name) {
 }
 
 function show_info(name) {
-  open_info();
+  hide_all();
+  $("#content_info").show();
+  menu_select("menu_info");
+  add_history({"action":"info", "section":name}, "index.html?action=info&section="+name);
   buttons = ["news", "contributors", "server", "contact"];
   for (var i=0; i<buttons.length; i++) {
     $("#div_"+buttons[i]).hide();
     $("#btn_"+buttons[i]).css("background-color", "#f1f1f1");
   }
-
   $("#div_"+name).show();
   $("#btn_"+name).css("background-color", "#FFA07A");
   $(window).scrollTop(0);
