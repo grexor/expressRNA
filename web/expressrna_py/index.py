@@ -837,7 +837,8 @@ class TableClass():
             return "refetch_tickets fail"
         return json.dumps(self.get_tickets(email), default=dthandler)
 
-    def add_ticket(self, email, command, desc):
+    # todo: parameter once=True/False
+    def add_ticket(self, email, command, desc, once=True):
         conn = Session()
         t = Tickets()
         t.email = email
