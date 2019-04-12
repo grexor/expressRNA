@@ -623,6 +623,9 @@ function edit_experiment(exp_id) {
           $.extend({}, vex.dialog.buttons.YES, { text: 'Save' }),
           $.extend({}, vex.dialog.buttons.NO, { text: 'Cancel' })
       ],
+      afterOpen: function(event) {
+        setTimeout(disable_paste_format, 1, $("#divtest"));
+      },
       callback: function (data) {
           if (!data) {
           } else {
@@ -708,5 +711,13 @@ function edit_experiment(exp_id) {
         }
     })
   }
+
+function disable_paste_format(object) {
+  object.on("paste", function(e) {
+    e.preventDefault();
+    var text = (e.originalEvent || e).clipboardData.getData('text/plain');
+    document.execCommand("insertHTML", false, text);
+  });
+}
 
 tippy('.btn', {theme: 'light', interactive: true});
