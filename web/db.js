@@ -32,6 +32,7 @@ methods["lexrev"] = ["lexrev", "Lexrev, Lexogen Quantseq Reverse, 3'-end targete
 methods["lexfwd"] = ["lexrev", "Lexfwd, Lexogen Quantseq Forward, 3'-end targeted"]
 methods["RNAseq"] = ["RNAseq", "RNA-seq, classic whole transcriptome RNA-seq"]
 methods["scRNA"] = ["scRNA", "scRNA, Single-cell 10x Genomics"]
+methods["paseq"] = ["paseq", "PA-seq 3'-end targeted sequencing"]
 methods["nano"] = ["nano", "Nanopore, long-read sequencing (direct RNA)"]
 methods["bs"] = ["bs", "Bisulfite sequencing"]
 

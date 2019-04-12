@@ -46,6 +46,10 @@ db["methods"]["bs"] = {}
 db["methods"]["bs"]["desc"] = "Bisulfite sequencing%s"
 db["methods"]["bs"]["link"] = ""
 
+db["methods"]["paseq"] = {}
+db["methods"]["paseq"]["desc"] = "PA-seq 3'-end targeted sequencing%s"
+db["methods"]["paseq"]["link"] = ""
+
 db["genomes"] = {}
 db["genomes"][""] = {"desc" : "not selected"}
 

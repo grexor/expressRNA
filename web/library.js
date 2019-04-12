@@ -406,6 +406,18 @@ function adjust_library_ubutton(sw) {
     post_data["owner"] = data.owner.join(",");
     post_data["genome"] = data.genome;
     post_data["method"] = data.method;
+    // add column if user added it to columns_display but not to columns
+    for (var item in data.columns_display) {
+      element = data.columns_display[item];
+      present = false;
+      for (var item2 in data.columns) {
+        element2 = data.columns[item2];
+        if (element[1]==element2[1])
+          present = true;
+      }
+      if (!present)
+        data.columns.push(element);
+    }
     post_data["columns"] = JSON.stringify(data.columns)
     post_data["columns_display"] = JSON.stringify(data.columns_display)
     post_data["experiments"] = JSON.stringify(data.experiments)
