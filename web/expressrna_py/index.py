@@ -324,15 +324,15 @@ class TableClass():
                 if term=="":
                     continue
                 include_analysis = False
-                if comps.name.lower().find(term)!=-1 or comps.notes.lower().find(term)!=-1 or comps.authors.lower().find(term)!=-1 or comps.comps_id.lower().find(term)!=-1:
+                if comps.name.lower().find(term)!=-1 or comps.notes.lower().find(term)!=-1 or comps.authors.lower().find(term)!=-1 or comps.comps_id.lower().find(term)!=-1 or r["method_search"].lower().find(term)!=-1 or r["genome_search"].lower().find(term)!=-1 or r["authors_search"].lower().find(term)!=-1:
                     include_analysis = True
-                    r["comps_name_search"] = self.replace_ignorecase(term, "<div style='display: inline; font-weight: bold; color: #FF0000'>", "</div>", r["comps_name_search"])
-                    r["notes_search"] = self.replace_ignorecase(term, "<div style='display: inline; font-weight: bold; color: #FF0000'>", "</div>", r["notes_search"])
-                    r["authors_search"] = self.replace_ignorecase(term, "<div style='display: inline; font-weight: bold; color: #FF0000'>", "</div>", r["authors_search"])
+                    r["comps_name_search"] = self.replace_ignorecase(term, "<div style='display: inline; font-weight: bold; color: #FF0000'>", "</div>", self.remove_links(r["comps_name_search"]))
+                    r["notes_search"] = self.replace_ignorecase(term, "<div style='display: inline; font-weight: bold; color: #FF0000'>", "</div>", self.remove_links(r["notes_search"]))
+                    r["authors_search"] = self.replace_ignorecase(term, "<div style='display: inline; font-weight: bold; color: #FF0000'>", "</div>", self.remove_links(r["authors_search"]))
                     if r["method_search"]!="not selected":
-                        r["method_search"] = self.replace_ignorecase(term, "<div style='display: inline; font-weight: bold; color: #FF0000'>", "</div>", r["method_search"])
+                        r["method_search"] = self.replace_ignorecase(term, "<div style='display: inline; font-weight: bold; color: #FF0000'>", "</div>", self.remove_links(r["method_search"]))
                     if r["genome_search"]!="not selected":
-                        r["genome_search"] = self.replace_ignorecase(term, "<div style='display: inline; font-weight: bold; color: #FF0000'>", "</div>", r["genome_search"])
+                        r["genome_search"] = self.replace_ignorecase(term, "<div style='display: inline; font-weight: bold; color: #FF0000'>", "</div>", self.remove_links(r["genome_search"]))
             if (email in comps.access) or ("public" in comps.access):
                 if include_analysis:
                     result.append(r)
@@ -385,12 +385,12 @@ class TableClass():
                 if r["lib_id"].lower().find(term)!=-1 or r["name"].lower().find(term)!=-1 or r["notes"].lower().find(term)!=-1 or r["method_search"].lower().find(term)!=-1 or r["genome_search"].lower().find(term)!=-1:
                     include_library = True
                     r["lib_id_search"] = self.replace_ignorecase(term, "<div style='display: inline; font-weight: bold; color: #FF0000'>", "</div>", r["lib_id_search"])
-                    r["name_search"] = self.replace_ignorecase(term, "<div style='display: inline; font-weight: bold; color: #FF0000'>", "</div>", r["name_search"])
-                    r["notes_search"] = self.replace_ignorecase(term, "<div style='display: inline; font-weight: bold; color: #FF0000'>", "</div>", r["notes_search"])
+                    r["name_search"] = self.replace_ignorecase(term, "<div style='display: inline; font-weight: bold; color: #FF0000'>", "</div>", self.remove_links(r["name_search"]))
+                    r["notes_search"] = self.replace_ignorecase(term, "<div style='display: inline; font-weight: bold; color: #FF0000'>", "</div>", self.remove_links(r["notes_search"]))
                     if r["method_search"]!="not selected":
-                        r["method_search"] = self.replace_ignorecase(term, "<div style='display: inline; font-weight: bold; color: #FF0000'>", "</div>", r["method_search"])
+                        r["method_search"] = self.replace_ignorecase(term, "<div style='display: inline; font-weight: bold; color: #FF0000'>", "</div>", self.remove_links(r["method_search"]))
                     if r["genome_search"]!="not selected":
-                        r["genome_search"] = self.replace_ignorecase(term, "<div style='display: inline; font-weight: bold; color: #FF0000'>", "</div>", r["genome_search"])
+                        r["genome_search"] = self.replace_ignorecase(term, "<div style='display: inline; font-weight: bold; color: #FF0000'>", "</div>", self.remove_links(r["genome_search"]))
             if include_library:
                 result.append(r)
 
@@ -400,6 +400,10 @@ class TableClass():
             result.reverse()
         result = result[current_page * records_per_page: current_page * records_per_page + records_per_page]
         return json.dumps({"data":result, "count":count}, default=dthandler)
+
+    def remove_links(self, text):
+        pattern =r'<(a|/a).*?>'
+        return re.sub(pattern , "", text)
 
     def get_analysis(self):
         apa.annotation.init()
