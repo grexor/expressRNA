@@ -1,8 +1,9 @@
 import os
 import time
 import sys
+import config
 sys.path
-sys.path.append('/home/gregor/expressrna_dev/web')
+sys.path.append(config.expressrna_folder)
 import expressrna_py
 from expressrna_py.db import *
 
