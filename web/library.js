@@ -351,34 +351,34 @@ function adjust_library_ubutton(sw) {
             //display_library_experiments2(library.experiments)
             window[experiment_display_function](library.experiments);
             display_library_ge();
-            multiq_link = "https://expressrna.org/share/data/" + library_id + "/multiqc_report.html"+ "?nocache="+nocache;
+            multiq_link = config["data_url"] + library_id + "/multiqc_report.html"+ "?nocache="+nocache;
             $.get(multiq_link).done(function () {
               $("#lbl_quality").html("Quality control of the data with MultiQC and Fastqc. You can also open the <a href=" + multiq_link +" target=_new>MultiQC report in a separate window</a>.");
 
               // no adapter contamination? no image, check
-              $.get('https://expressrna.org/share/data/' + library_id + '/multiqc_plots/png/mqc_fastqc_adapter_content_plot_1.png?nocache='+nocache).done(function () {
+              $.get(config["data_url"] + library_id + '/multiqc_plots/png/mqc_fastqc_adapter_content_plot_1.png?nocache='+nocache).done(function () {
                 $("#plot1").show();
-                $("#plot1").attr("src", "https://expressrna.org/share/data/" + library_id + "/multiqc_plots/png/mqc_fastqc_adapter_content_plot_1.png?nocache="+nocache);
+                $("#plot1").attr("src", config["data_url"] + library_id + "/multiqc_plots/png/mqc_fastqc_adapter_content_plot_1.png?nocache="+nocache);
               })
               .error(function(){
                 $("#plot1").hide();
               });
 
               // no overrepresented? no image, check
-              $.get('https://expressrna.org/share/data/' + library_id + '/multiqc_plots/png/mqc_fastqc_overrepresented_sequencesi_plot_1.png?nocache='+nocache).done(function () {
+              $.get(config["data_url"] + library_id + '/multiqc_plots/png/mqc_fastqc_overrepresented_sequencesi_plot_1.png?nocache='+nocache).done(function () {
                 $("#plot2").show();
-                $("#plot2").attr("src", "https://expressrna.org/share/data/" + library_id + "/multiqc_plots/png/mqc_fastqc_overrepresented_sequencesi_plot_1.png?nocache="+nocache);
+                $("#plot2").attr("src", config["data_url"] + library_id + "/multiqc_plots/png/mqc_fastqc_overrepresented_sequencesi_plot_1.png?nocache="+nocache);
               })
               .error(function(){
                 $("#plot2").hide();
               });
 
-              $("#plot3").attr("src", "https://expressrna.org/share/data/" + library_id + "/multiqc_plots/png/mqc_fastqc_per_base_n_content_plot_1.png?nocache="+nocache);
-              $("#plot4").attr("src", "https://expressrna.org/share/data/" + library_id + "/multiqc_plots/png/mqc_fastqc_per_base_sequence_quality_plot_1.png?nocache="+nocache);
-              $("#plot5").attr("src", "https://expressrna.org/share/data/" + library_id + "/multiqc_plots/png/mqc_fastqc_per_sequence_gc_content_plot_Counts.png?nocache="+nocache);
-              $("#plot6").attr("src", "https://expressrna.org/share/data/" + library_id + "/multiqc_plots/png/mqc_fastqc_per_sequence_gc_content_plot_Percentages.png?nocache="+nocache);
-              $("#plot7").attr("src", "https://expressrna.org/share/data/" + library_id + "/multiqc_plots/png/mqc_fastqc_per_sequence_quality_scores_plot_1.png?nocache="+nocache);
-              $("#plot8").attr("src", "https://expressrna.org/share/data/" + library_id + "/multiqc_plots/png/mqc_fastqc_sequence_duplication_levels_plot_1.png?nocache="+nocache);
+              $("#plot3").attr("src", config["data_url"] + library_id + "/multiqc_plots/png/mqc_fastqc_per_base_n_content_plot_1.png?nocache="+nocache);
+              $("#plot4").attr("src", config["data_url"] + library_id + "/multiqc_plots/png/mqc_fastqc_per_base_sequence_quality_plot_1.png?nocache="+nocache);
+              $("#plot5").attr("src", config["data_url"] + library_id + "/multiqc_plots/png/mqc_fastqc_per_sequence_gc_content_plot_Counts.png?nocache="+nocache);
+              $("#plot6").attr("src", config["data_url"] + library_id + "/multiqc_plots/png/mqc_fastqc_per_sequence_gc_content_plot_Percentages.png?nocache="+nocache);
+              $("#plot7").attr("src", config["data_url"] + library_id + "/multiqc_plots/png/mqc_fastqc_per_sequence_quality_scores_plot_1.png?nocache="+nocache);
+              $("#plot8").attr("src", config["data_url"] + library_id + "/multiqc_plots/png/mqc_fastqc_sequence_duplication_levels_plot_1.png?nocache="+nocache);
               $("#btn_library_q").show();
             }).fail(function () {
               $("#btn_library_q").hide();
@@ -483,8 +483,8 @@ function display_library_experiments(experiments) {
           code_editable = " | " + code_edit + " | " + code_delete + "</div></td></tr>";
       }
     html += "<tr><td align='right'><div class='div_column'>Experiment identifier</div></td><td><div class='div_column_value'>" + "experiment <b>e" + experiments[exp_id].exp_id + "</b>" + code_editable;
-    fastq_link = "https://expressrna.org/share/data/" + experiments[exp_id].lib_id + "/e" + experiments[exp_id].exp_id + "/" + experiments[exp_id].lib_id + "_e" + experiments[exp_id].exp_id + ".fastq.bz2";
-    bam_link = "https://expressrna.org/share/data/" + experiments[exp_id].lib_id + "/e" + experiments[exp_id].exp_id + "/m1/" + experiments[exp_id].lib_id + "_e" + experiments[exp_id].exp_id + "_m1.bam";
+    fastq_link = config["data_url"] + experiments[exp_id].lib_id + "/e" + experiments[exp_id].exp_id + "/" + experiments[exp_id].lib_id + "_e" + experiments[exp_id].exp_id + ".fastq.bz2";
+    bam_link = config["data_url"] + experiments[exp_id].lib_id + "/e" + experiments[exp_id].exp_id + "/m1/" + experiments[exp_id].lib_id + "_e" + experiments[exp_id].exp_id + "_m1.bam";
     html += "<tr><td align='right'><div class='div_column_light'>Download links</div></td><td><div class='div_column_value'><a href=" + fastq_link + ">FastQ</a> | <a href=" + bam_link + ">BAM</a></div></td></tr>";
 
     for (var j=0; j<library.columns_display.length; j++) {
@@ -542,8 +542,8 @@ function display_library_experiments2(experiments) {
           code_edit = "<a href='javascript:edit_experiment(" + experiments[exp_id].exp_id + ");'><img src=media/edit.png style='padding-left: 2px; height: 18px; margin-top:-2px;vertical-align:middle; padding-right: 3px;'>Edit</a>";
           code_editable = "<td>" + code_edit + "</td><td>" + code_delete + "</td>";
       }
-    fastq_link = "https://expressrna.org/share/data/" + experiments[exp_id].lib_id + "/e" + experiments[exp_id].exp_id + "/" + experiments[exp_id].lib_id + "_e" + experiments[exp_id].exp_id + ".fastq.bz2";
-    bam_link = "https://expressrna.org/share/data/" + experiments[exp_id].lib_id + "/e" + experiments[exp_id].exp_id + "/m1/" + experiments[exp_id].lib_id + "_e" + experiments[exp_id].exp_id + "_m1.bam";
+    fastq_link = config["data_url"] + experiments[exp_id].lib_id + "/e" + experiments[exp_id].exp_id + "/" + experiments[exp_id].lib_id + "_e" + experiments[exp_id].exp_id + ".fastq.bz2";
+    bam_link = config["data_url"] + experiments[exp_id].lib_id + "/e" + experiments[exp_id].exp_id + "/m1/" + experiments[exp_id].lib_id + "_e" + experiments[exp_id].exp_id + "_m1.bam";
     html += "<td class='exp_row' style='text-align:right'><div class='div_column_value'>" + "<b>e" + experiments[exp_id].exp_id + "</b></td>";
     for (var j=0; j<library.columns_display.length; j++) {
       column_name = library.columns_display[j][1];
@@ -575,17 +575,17 @@ function display_library_experiments2(experiments) {
 function display_library_ge() {
   html = "<br>";
   html += "Links to <b>constructed polyA database</b> (from all experiments in library) and to data tables of gene expression.<br><br>"
-  polya_bed_link = "https://expressrna.org/share/polya/" + library.lib_id + ".bed.gz";
+  polya_bed_link = config["polya_url"] + library.lib_id + ".bed.gz";
   html += "<div style='background-color: #e1e1e1; border-radius: 3px; float:left; padding-left: 3px; padding-right: 3px; margin-right: 5px;'>PolyA database</div><div class='div_column_value'><a target=_new href='" + polya_bed_link + "'>Download polyA database</a></div>";
   html += "<div style='font-size: 12px; color: #555555; padding-left: 3px;'>The polyA database is constructed from all experimental data in the library. Reads are grouped depending on library method (Quantseq Reverse, Quantseq Forward, Nanopore) and thresholds are applied to estimate RNA molecule ends. The results are reported in BED format. A detailed description is available in the <a href='javascript:open_help();'>Docs section</a>.</div>";
   html += "<br><br>";
 
-  polya_expression_table_link = "https://expressrna.org/share/data/" + library.lib_id + "/" + library.lib_id + "_polya_expression.tab?nocache="+nocache;
+  polya_expression_table_link = config["data_url"] + library.lib_id + "/" + library.lib_id + "_polya_expression.tab?nocache="+nocache;
   html += "<div style='background-color: #e1e1e1; border-radius: 3px; float:left; padding-left: 3px; padding-right: 3px; margin-right: 5px;'>PolyA Counts</div><div class='div_column_value'><a target=_new href='" + polya_expression_table_link + "'>Download polyA count table</a></div>";
   html += "<div style='font-size: 12px; color: #555555; padding-left: 3px;'>The polyA count table provides information on individual polyA site read count for each of the library experiments separately.</div>";
   html += "<br><br>";
 
-  gene_expression_table_link = "https://expressrna.org/share/data/" + library.lib_id + "/" + library.lib_id + "_gene_expression.tab?nocache="+nocache;
+  gene_expression_table_link = config["data_url"] + library.lib_id + "/" + library.lib_id + "_gene_expression.tab?nocache="+nocache;
   html += "<div style='background-color: #e1e1e1; border-radius: 3px; float:left; padding-left: 3px; padding-right: 3px; margin-right: 5px;'>Gene Counts</div><div class='div_column_value'><a target=_new href='" + gene_expression_table_link + "'>Download gene expression table</a></div>";
   html += "<div style='font-size: 12px; color: #555555; padding-left: 3px;'>The gene expression table provides information on global gene expression levels. Computed with htseq-count and aligned (.bam) files from each experiment in the library.</div>";
   $("#div_library_ge").html(html);
