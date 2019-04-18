@@ -1,0 +1,4 @@
+# please add also / to end the URL
+var config = {};
+config["data_url"] ="https://expressrna.org/share/data/";
+config["polya_url"] = "https://expressrna.org/share/polya/";
