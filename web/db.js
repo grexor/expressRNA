@@ -23,6 +23,7 @@ genomes = {};
 genomes["hg38"] = ["hg19", "hg38, <i>Homo sapiens</i>, assembly: hg38, annotation: Ensembl 90"]
 genomes["hg19"] = ["hg19", "hg19, <i>Homo sapiens</i>, assembly: hg19, annotation: Ensembl 75"]
 genomes["mm10"] = ["mm10", "mm10, Mus musculus, assembly: mm10, annotation: Ensembl 90"]
+genomes["mm9"] = ["mm9", "mm9, Mus musculus, assembly: mm9, annotation: Ensembl 67"]
 genomes["dm6"] = ["dm6", "dm6, <i>Drosophila melanogaster</i>, assembly: dm6, annotation: Ensembl 90"]
 genomes["at"] = ["at", "at, <i>Arabidopsis thaliana</i>, assembly: at, annotation: Ensembl 39"]
 genomes["mar3"] = ["mar3", "mar3, <i>Marchantia polymorpha</i>, assembly: mar3, annotation: mar3"]

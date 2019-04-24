@@ -73,6 +73,11 @@ db["genomes"]["mm10"]["desc"] = "<i>Mus musculus</i>, Assembly: <a href='%s' tar
 db["genomes"]["mm10"]["link_assembly"] = "ftp://ftp.ensembl.org/pub/release-90/fasta/mus_musculus/dna/Mus_musculus.GRCm38.dna.primary_assembly.fa.gz"
 db["genomes"]["mm10"]["link_annotation"] = "ftp://ftp.ensembl.org/pub/release-90/gtf/mus_musculus/Mus_musculus.GRCm38.90.gtf.gz"
 
+db["genomes"]["mm9"] = {}
+db["genomes"]["mm9"]["desc"] = "<i>Mus musculus</i>, Assembly: <a href='%s' target=_new'>mm10<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>, Annotation: <a href='%s' target=_new>GTF Ensembl 90<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>";
+db["genomes"]["mm9"]["link_assembly"] = "ftp://ftp.ensembl.org/pub/release-67/fasta/mus_musculus/dna/Mus_musculus.NCBIM37.67.dna.toplevel.fa.gz"
+db["genomes"]["mm9"]["link_annotation"] = "ftp://ftp.ensembl.org/pub/release-67/gtf/mus_musculus/Mus_musculus.NCBIM37.67.gtf.gz"
+
 db["genomes"]["rn6"] = {}
 db["genomes"]["rn6"]["desc"] = "<i>Rattus norvegicus</i>, Assembly: <a href='%s' target=_new'>rn6<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>, Annotation: <a href='%s' target=_new>GTF Ensembl 91<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>";
 db["genomes"]["rn6"]["link_assembly"] = "ftp://ftp.ensembl.org/pub/release-91/fasta/rattus_norvegicus/dna/Rattus_norvegicus.Rnor_6.0.dna.toplevel.fa.gz"
