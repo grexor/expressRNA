@@ -2,5 +2,6 @@ User-agent: *
 Disallow: /licence.html
 Disallow: /rnamotifs2
 Disallow: /share
+Disallow: /github.txt
 
 Sitemap: http://www.expressrna.org/sitemap.xml

@@ -1,6 +1,9 @@
 cp *.html deploy/
 cp *.css deploy/
 
+cp github.txt deploy/
+cp robots.txt deploy/
+
 cp -ap docs deploy/
 cp -ap media deploy/
 cp -ap software deploy/
