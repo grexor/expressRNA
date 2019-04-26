@@ -17,7 +17,7 @@ var timestamp = date.getFullYear()+"" + month + "" + day;
 
 $.ajax({
   type: "GET",
-  url: config["github_url"],
+  url: config["github_url"]+"?nocache="+nocache,
   })
   .done(function(data) {
           $("#lbl_commits").html(data);
