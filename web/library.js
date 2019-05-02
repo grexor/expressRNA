@@ -483,9 +483,18 @@ function display_library_experiments(experiments) {
           code_editable = " | " + code_edit + " | " + code_delete + "</div></td></tr>";
       }
     html += "<tr><td align='right'><div class='div_column'>Experiment identifier</div></td><td><div class='div_column_value'>" + "experiment <b>e" + experiments[exp_id].exp_id + "</b>" + code_editable;
-    fastq_link = config["data_url"] + experiments[exp_id].lib_id + "/e" + experiments[exp_id].exp_id + "/" + experiments[exp_id].lib_id + "_e" + experiments[exp_id].exp_id + ".fastq.bz2";
-    bam_link = config["data_url"] + experiments[exp_id].lib_id + "/e" + experiments[exp_id].exp_id + "/m1/" + experiments[exp_id].lib_id + "_e" + experiments[exp_id].exp_id + "_m1.bam";
-    html += "<tr><td align='right'><div class='div_column_light'>Download links</div></td><td><div class='div_column_value'><a href=" + fastq_link + ">FastQ</a> | <a href=" + bam_link + ">BAM</a></div></td></tr>";
+
+    if (library["seq_type"]=="single") {
+      fastq_link = config["data_url"] + experiments[exp_id].lib_id + "/e" + experiments[exp_id].exp_id + "/" + experiments[exp_id].lib_id + "_e" + experiments[exp_id].exp_id + ".fastq.bz2";
+      bam_link = config["data_url"] + experiments[exp_id].lib_id + "/e" + experiments[exp_id].exp_id + "/m1/" + experiments[exp_id].lib_id + "_e" + experiments[exp_id].exp_id + "_m1.bam";
+      html += "<tr><td align='right'><div class='div_column_light'>Download links</div></td><td><div class='div_column_value'><a href=" + fastq_link + ">FastQ</a> | <a href=" + bam_link + ">BAM</a></div></td></tr>";
+    } else {
+      fastq_link1 = config["data_url"] + experiments[exp_id].lib_id + "/e" + experiments[exp_id].exp_id + "/" + experiments[exp_id].lib_id + "_e" + experiments[exp_id].exp_id + "_R1.fastq.bz2";
+      fastq_link2 = config["data_url"] + experiments[exp_id].lib_id + "/e" + experiments[exp_id].exp_id + "/" + experiments[exp_id].lib_id + "_e" + experiments[exp_id].exp_id + "_R2.fastq.bz2";
+      bam_link1 = config["data_url"] + experiments[exp_id].lib_id + "/e" + experiments[exp_id].exp_id + "/m1/" + experiments[exp_id].lib_id + "_e" + experiments[exp_id].exp_id + "_R1_m1.bam";
+      bam_link2 = config["data_url"] + experiments[exp_id].lib_id + "/e" + experiments[exp_id].exp_id + "/m1/" + experiments[exp_id].lib_id + "_e" + experiments[exp_id].exp_id + "_R2_m1.bam";
+      html += "<tr><td align='right'><div class='div_column_light'>Download links</div></td><td><div class='div_column_value'><a href=" + fastq_link1 + ">FastQ R1</a> | <a href=" + bam_link1 + ">BAM R1</a> | <a href=" + fastq_link2 + ">FastQ R2</a> | <a href=" + bam_link2 + ">BAM R2</a></div></td></tr>";
+    }
 
     for (var j=0; j<library.columns_display.length; j++) {
       column_name = library.columns_display[j][1];
@@ -542,8 +551,7 @@ function display_library_experiments2(experiments) {
           code_edit = "<a href='javascript:edit_experiment(" + experiments[exp_id].exp_id + ");'><img src=media/edit.png style='padding-left: 2px; height: 18px; margin-top:-2px;vertical-align:middle; padding-right: 3px;'>Edit</a>";
           code_editable = "<td>" + code_edit + "</td><td>" + code_delete + "</td>";
       }
-    fastq_link = config["data_url"] + experiments[exp_id].lib_id + "/e" + experiments[exp_id].exp_id + "/" + experiments[exp_id].lib_id + "_e" + experiments[exp_id].exp_id + ".fastq.bz2";
-    bam_link = config["data_url"] + experiments[exp_id].lib_id + "/e" + experiments[exp_id].exp_id + "/m1/" + experiments[exp_id].lib_id + "_e" + experiments[exp_id].exp_id + "_m1.bam";
+
     html += "<td class='exp_row' style='text-align:right'><div class='div_column_value'>" + "<b>e" + experiments[exp_id].exp_id + "</b></td>";
     for (var j=0; j<library.columns_display.length; j++) {
       column_name = library.columns_display[j][1];
@@ -563,7 +571,19 @@ function display_library_experiments2(experiments) {
 
     lib_id = experiments[exp_id].lib_id;
     exp_id = experiments[exp_id].exp_id;
-    html += "<td class='exp_row'><div class='div_column_value'><a href=" + fastq_link + ">FastQ</a> , <a href=" + bam_link + ">BAM</a></div></td>";
+
+    if (library["seq_type"]=="single") {
+      fastq_link = config["data_url"] + experiments[exp_id].lib_id + "/e" + experiments[exp_id].exp_id + "/" + experiments[exp_id].lib_id + "_e" + experiments[exp_id].exp_id + ".fastq.bz2";
+      bam_link = config["data_url"] + experiments[exp_id].lib_id + "/e" + experiments[exp_id].exp_id + "/m1/" + experiments[exp_id].lib_id + "_e" + experiments[exp_id].exp_id + "_m1.bam";
+      html += "<td class='exp_row'><div class='div_column_value'><a href=" + fastq_link + ">FastQ</a> , <a href=" + bam_link + ">BAM</a></div></td>";
+    } else {
+      fastq_link1 = config["data_url"] + experiments[exp_id].lib_id + "/e" + experiments[exp_id].exp_id + "/" + experiments[exp_id].lib_id + "_e" + experiments[exp_id].exp_id + "_R1.fastq.bz2";
+      fastq_link2 = config["data_url"] + experiments[exp_id].lib_id + "/e" + experiments[exp_id].exp_id + "/" + experiments[exp_id].lib_id + "_e" + experiments[exp_id].exp_id + "_R2.fastq.bz2";
+      bam_link1 = config["data_url"] + experiments[exp_id].lib_id + "/e" + experiments[exp_id].exp_id + "/m1/" + experiments[exp_id].lib_id + "_e" + experiments[exp_id].exp_id + "_R1_m1.bam";
+      bam_link2 = config["data_url"] + experiments[exp_id].lib_id + "/e" + experiments[exp_id].exp_id + "/m1/" + experiments[exp_id].lib_id + "_e" + experiments[exp_id].exp_id + "_R2_m1.bam";
+      html += "<td class='exp_row'><div class='div_column_value'><a href=" + fastq_link1 + ">FastQ R1</a>, <a href=" + bam_link1 + ">BAM R1</a>, <a href=" + fastq_link2 + ">FastQ R1</a>, <a href=" + bam_link2 + ">BAM R1</a></div></td>";
+    }
+
     html += "<td>" + code_editable + "</td>";
     html += "</tr>";
   }
