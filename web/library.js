@@ -581,7 +581,7 @@ function display_library_experiments2(experiments) {
       fastq_link2 = config["data_url"] + experiments[exp_id].lib_id + "/e" + experiments[exp_id].exp_id + "/" + experiments[exp_id].lib_id + "_e" + experiments[exp_id].exp_id + "_R2.fastq.bz2";
       bam_link1 = config["data_url"] + experiments[exp_id].lib_id + "/e" + experiments[exp_id].exp_id + "/m1/" + experiments[exp_id].lib_id + "_e" + experiments[exp_id].exp_id + "_R1_m1.bam";
       bam_link2 = config["data_url"] + experiments[exp_id].lib_id + "/e" + experiments[exp_id].exp_id + "/m1/" + experiments[exp_id].lib_id + "_e" + experiments[exp_id].exp_id + "_R2_m1.bam";
-      html += "<td class='exp_row'><div class='div_column_value'><a href=" + fastq_link1 + ">FastQ R1</a>, <a href=" + bam_link1 + ">BAM R1</a>, <a href=" + fastq_link2 + ">FastQ R1</a>, <a href=" + bam_link2 + ">BAM R1</a></div></td>";
+      html += "<td class='exp_row'><div class='div_column_value'><a href=" + fastq_link1 + ">FastQ R1</a>, <a href=" + bam_link1 + ">BAM R1</a>, <a href=" + fastq_link2 + ">FastQ R2</a>, <a href=" + bam_link2 + ">BAM R2</a></div></td>";
     }
 
     html += "<td>" + code_editable + "</td>";

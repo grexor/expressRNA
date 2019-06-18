@@ -2,7 +2,7 @@ AuthType Basic
 AuthName "Login"
 AuthBasicProvider file
 AuthUserFile /var/wwwpass
-Require user uzh
+Require user gr ug agf ab
 
 Options +Includes
 XBitHack On
