@@ -853,6 +853,9 @@ class TableClass():
     # todo: parameter once=True/False
     def add_ticket(self, email, command, desc, once=True):
         conn = Session()
+        if once: # remove all previous tickets with status = 0
+            conn.execute("delete from tickets where status=0 and command='%s'" % (command))
+            conn.commit()
         t = Tickets()
         t.email = email
         t.command = command
