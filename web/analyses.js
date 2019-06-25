@@ -1,19 +1,55 @@
 menu_select("link_search");
 
 function new_analysis() {
+
   html = "<b>New Analysis</b><br>";
-  html += "Please contact us over <b><a href='mailto:expressrna@gmail.com' target=_new style='text-decoration: none;'>e-mail</a></b> to establish new analysis. We are working on a new interface that will automate the process, meanwhile we are happy to help defining the analysis for you." + "<br>";
+  html += "Here you can define a new analysis. Please choose analysis type below" + "<br>";
+
+  analysis_html = "<select onchange='adjust_analysis_cbutton();' id='select_analysis' name='select_analysis' size=7 style='margin-left: 2px; width: 400px; font-size: 12px; outline: none;'>";
+  for (var analysis in analyses)
+      analysis_html += "<option selected value='" + analysis + "'>" + analyses[analysis][1] + "</option>";
+  analysis_html += "</select>";
+
+  html += "<div style='padding-top: 3px; padding-left: 3px; font-size: 12px;'><b>Select analysis type</b></div>" + analysis_html + "<br>";
+
   vex.dialog.open({
       unsafeMessage: html,
       buttons: [
-          $.extend({}, vex.dialog.buttons.YES, { text: 'Close' }),
+          $.extend({}, vex.dialog.buttons.YES, { text: 'Create', id:'btn_analysis_create' }),
+          $.extend({}, vex.dialog.buttons.NO, { text: 'Cancel',  id:'btn_analysis_cancel' })
       ],
+      afterOpen: function(event) {
+        setTimeout(adjust_analysis_cbutton, 1); // this trick somehow works, otherwise the buttons are not yet in DOM
+      },
       callback: function (data) {
           if (!data) {
           } else {
+            analysis = $('#select_analysis').find(":selected").val();
+            //new_analysis_do(analysis);
           }
       }
   })
+}
+
+function adjust_analysis_cbutton() {
+  $('#btn_analysis_create').css("display", "none");
+  var buttons = document.getElementsByTagName('button');
+  var buttons = document.getElementsByTagName('button');
+  for (var i = 0; i < buttons.length; i++) {
+      var button = buttons[i];
+      if ($(button).html()=="Create") {
+        if ( ($('#select_analysis').find(":selected").val()==undefined) || ($('#select_analysis').find(":selected").val()==undefined))
+        {
+          button.disabled = true;
+          $(button).css("opacity", 0.1);
+          $(button).css("cursor", "default");
+        } else {
+          button.disabled = false;
+          $(button).css("opacity", 1);
+          $(button).css("cursor", "pointer");
+        }
+      }
+  }
 }
 
 function search_analyses() {

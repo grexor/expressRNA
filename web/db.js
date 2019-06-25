@@ -37,6 +37,9 @@ methods["paseq"] = ["paseq", "PA-seq 3'-end targeted sequencing"]
 methods["nano"] = ["nano", "Nanopore, long-read sequencing (direct RNA)"]
 methods["bs"] = ["bs", "Bisulfite sequencing"]
 
+analyses = {};
+analyses["apa"] = ["APA", "Alternative PolyAdenylation (APA) comparison"]
+
 var db = {};
 
 db["libraries"] = {};
