@@ -38,7 +38,8 @@ methods["nano"] = ["nano", "Nanopore, long-read sequencing (direct RNA)"]
 methods["bs"] = ["bs", "Bisulfite sequencing"]
 
 analyses = {};
-analyses["apa"] = ["APA", "Alternative PolyAdenylation (APA) comparison"]
+//analyses["apa"] = ["APA", "Alternative PolyAdenylation (APA) comparison"]
+analyses["dge"] = ["dge", "Differential gene expression"]
 
 var db = {};
 

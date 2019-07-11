@@ -594,7 +594,20 @@ function display_library_experiments2(experiments) {
 
 function display_library_ge() {
   html = "<br>";
-  html += "Links to <b>constructed polyA database</b> (from all experiments in library) and to data tables of gene expression.<br><br>"
+
+  if (google_user!=undefined)
+    if (google_user.getBasicProfile().getEmail()=="gregor.rot@gmail.com")
+  {
+    // add new analysis button
+    html += '<div id="div_control_library_newanalyses" style="display">';
+    html += '<a href="javascript:new_analysis_library()" class="title_link">';
+    html += '<font style="font-size: 13px;"><img src="media/calculator.png" style="height: 20px; margin-top:-5px;vertical-align:middle; padding-right: 3px; opacity: 0.4">New Analysis<font>';
+    html += '</a>';
+    html += '</div>';
+    html += "<br>";
+  }
+
+  html += "<b>Downloads:</b> links to constructed polyA databases and gene expression tables<br><br>"
   polya_bed_link = config["polya_url"] + library.lib_id + ".bed.gz";
   html += "<div style='background-color: #e1e1e1; border-radius: 3px; float:left; padding-left: 3px; padding-right: 3px; margin-right: 5px;'>PolyA database</div><div class='div_column_value'><a target=_new href='" + polya_bed_link + "'>Download polyA database</a></div>";
   html += "<div style='font-size: 12px; color: #555555; padding-left: 3px;'>The polyA database is constructed from all experimental data in the library. Reads are grouped depending on library method (Quantseq Reverse, Quantseq Forward, Nanopore) and thresholds are applied to estimate RNA molecule ends. The results are reported in BED format. A detailed description is available in the <a href='javascript:open_help();'>Docs section</a>.</div>";
@@ -608,6 +621,7 @@ function display_library_ge() {
   gene_expression_table_link = config["data_url"] + library.lib_id + "/" + library.lib_id + "_gene_expression.tab?nocache="+nocache;
   html += "<div style='background-color: #e1e1e1; border-radius: 3px; float:left; padding-left: 3px; padding-right: 3px; margin-right: 5px;'>Gene Counts</div><div class='div_column_value'><a target=_new href='" + gene_expression_table_link + "'>Download gene expression table</a></div>";
   html += "<div style='font-size: 12px; color: #555555; padding-left: 3px;'>The gene expression table provides information on global gene expression levels. Computed with htseq-count and aligned (.bam) files from each experiment in the library.</div>";
+
   $("#div_library_ge").html(html);
 }
 
@@ -739,5 +753,107 @@ function disable_paste_format(object) {
     document.execCommand("insertHTML", false, text);
   });
 }
+
+function new_analysis_library() {
+
+  html = "<b>New Analysis</b><br>";
+  html += "Here you can define a new analysis. Please choose analysis parameters below" + "<br>";
+
+  html += "<textarea name='analysis_name' rows=2 style='margin-top: 10px; outline: none; resize: none; width: 400px; font-size: 13px; color: #555555;' placeholder='Analysis name'></textarea>";
+
+  analysis_html = "<div style='padding-top: 10px; padding-bottom: 5px; line-height: normal; padding-left: 3px; font-size: 12px;'><b>Select analysis type</b></div>";
+
+  analysis_html += "<select onchange='adjust_analysis_cbutton_library();' id='select_analysis' name='select_analysis' size=2 style='margin-left: 2px; width: 400px; font-size: 12px; outline: none;'>";
+  for (var analysis in analyses)
+      analysis_html += "<option selected value='" + analysis + "'>" + analyses[analysis][1] + "</option>";
+  analysis_html += "</select>";
+
+  analysis_html += "<div style='padding-top: 20px; padding-bottom: 5px; width: 400px; line-height: normal; padding-left: 3px; font-size: 12px;'><b>Mark experiments with control and test by selecting them and clicking on buttons Control and Test on the right of the table.</b></div>";
+
+  analysis_html += "<table border=0><tr><td>";
+
+  analysis_html += "<div id='comp_experiment_select'>" + make_html_experiment_select(); + "</div>";
+
+  analysis_html += "</td>";
+  analysis_html += "<td style='padding-left: 10px;' valign=top><br><div style='font-size: 12px; color: #777777;'>Select experiments and click one of the buttons to label them:</div><br><input type=button value=' Control ' onclick='mark_experiment(\"control\");'>&nbsp;&nbsp;<input type=button value=' Test ' onclick='mark_experiment(\"test\");'></td>";
+
+  analysis_html += "</tr></table>";
+
+  html += analysis_html + "<br>";
+
+  vex.dialog.open({
+      unsafeMessage: html,
+      buttons: [
+          $.extend({}, vex.dialog.buttons.YES, { text: 'Create', id:'btn_analysis_create' }),
+          $.extend({}, vex.dialog.buttons.NO, { text: 'Cancel',  id:'btn_analysis_cancel' })
+      ],
+      afterOpen: function(event) {
+        setTimeout(adjust_analysis_cbutton_library, 1); // this trick somehow works, otherwise the buttons are not yet in DOM
+      },
+      callback: function (data) {
+          if (!data) {
+            for (exp_id in library.experiments)
+                library.experiments[exp_id]["analysis_set"] = undefined;
+          } else {
+            analysis = $('#select_analysis').find(":selected").val();
+            //new_analysis_do(analysis);
+          }
+      }
+  })
+}
+
+function mark_experiment(value) {
+  selected_array = $('#select_experiments').val();
+  for (item in selected_array) {
+    exp_id = selected_array[item];
+    library.experiments[exp_id].analysis_set = value;
+  }
+  $("#comp_experiment_select").html(make_html_experiment_select());
+}
+
+function make_html_experiment_select() {
+  analysis_html = "<select multiple id='select_experiments' name='select_experiments' size=" + Math.min(15, Object.keys(library.experiments).length) + " style='margin-left: 2px; width: 400px; font-size: 12px; outline: none; font-family: Courier'>";
+
+  for (exp_id in library.experiments) {
+    var exp_desc = "exp_" + exp_id + ", ";
+    for (var j=0; j<library.columns_display.length; j++) {
+      column_name = library.columns_display[j][1];
+      column_name_human = library.columns_display[j][0];
+      column_value = library.experiments[exp_id][column_name];
+      if (column_name=="method")
+        column_value = library.experiments[exp_id]["method_desc"]
+      if (column_value=="")
+        column_value = "&nbsp;";
+      exp_desc += column_value + " | ";
+    }
+    if (library.experiments[exp_id]["analysis_set"]!=undefined)
+      exp_desc = library.experiments[exp_id]["analysis_set"] + " : " + exp_desc;
+    analysis_html += "<option value='" + exp_id + "'>" + exp_desc + "</option>";
+  }
+  analysis_html += "</select>";
+  return analysis_html;
+}
+
+function adjust_analysis_cbutton_library() {
+  $('#btn_analysis_create').css("display", "none");
+  var buttons = document.getElementsByTagName('button');
+  var buttons = document.getElementsByTagName('button');
+  for (var i = 0; i < buttons.length; i++) {
+      var button = buttons[i];
+      if ($(button).html()=="Create") {
+        if ( ($('#select_analysis').find(":selected").val()==undefined) || ($('#select_analysis').find(":selected").val()==undefined))
+        {
+          button.disabled = true;
+          $(button).css("opacity", 0.1);
+          $(button).css("cursor", "default");
+        } else {
+          button.disabled = false;
+          $(button).css("opacity", 1);
+          $(button).css("cursor", "pointer");
+        }
+      }
+  }
+}
+
 
 tippy('.btn', {theme: 'light', interactive: true});
