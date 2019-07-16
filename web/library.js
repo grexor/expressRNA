@@ -759,7 +759,7 @@ function new_analysis_library() {
   html = "<b>New Analysis</b><br>";
   html += "Here you can define a new analysis. Please choose analysis parameters below" + "<br>";
 
-  html += "<textarea name='analysis_name' rows=2 style='margin-top: 10px; outline: none; resize: none; width: 400px; font-size: 13px; color: #555555;' placeholder='Analysis name'></textarea>";
+  html += "<textarea name='analysis_name' id='analysis_name' rows=2 style='margin-top: 10px; outline: none; resize: none; width: 400px; font-size: 13px; color: #555555;' placeholder='Analysis name'></textarea>";
 
   analysis_html = "<div style='padding-top: 10px; padding-bottom: 5px; line-height: normal; padding-left: 3px; font-size: 12px;'><b>Select analysis type</b></div>";
 
@@ -769,18 +769,12 @@ function new_analysis_library() {
   analysis_html += "</select>";
 
   analysis_html += "<div style='padding-top: 20px; padding-bottom: 5px; width: 400px; line-height: normal; padding-left: 3px; font-size: 12px;'><b>Mark experiments with control and test by selecting them and clicking on buttons Control and Test on the right of the table.</b></div>";
-
   analysis_html += "<table border=0><tr><td>";
-
   analysis_html += "<div id='comp_experiment_select'>" + make_html_experiment_select(); + "</div>";
-
   analysis_html += "</td>";
   analysis_html += "<td style='padding-left: 10px;' valign=top><br><div style='font-size: 12px; color: #777777;'>Select experiments and click one of the buttons to label them:</div><br><input type=button value=' Control ' onclick='mark_experiment(\"control\");'>&nbsp;&nbsp;<input type=button value=' Test ' onclick='mark_experiment(\"test\");'></td>";
-
   analysis_html += "</tr></table>";
-
   html += analysis_html + "<br>";
-
   vex.dialog.open({
       unsafeMessage: html,
       buttons: [
@@ -795,8 +789,25 @@ function new_analysis_library() {
             for (exp_id in library.experiments)
                 library.experiments[exp_id]["analysis_set"] = undefined;
           } else {
-            analysis = $('#select_analysis').find(":selected").val();
-            //new_analysis_do(analysis);
+            if (google_user==undefined) // no logged in user? quit
+              return;
+            post_data = {};
+            post_data["action"] = "new_analysis";
+            post_data["email"] = google_user.getBasicProfile().getEmail();
+            post_data["lib_id"] = library.lib_id;
+            post_data["analysis_type"] = $('#select_analysis').find(":selected").val(); // dge, apa
+            post_data["analysis_name"] = $('#analysis_name').val();
+            post_data["experiments"] = JSON.stringify(library.experiments);
+
+            $.post('/expressrna_gw/index.py', post_data)
+                .success(function(result) {
+                  result = $.parseJSON(result);
+                  search_analyses();
+                  open_analysis(result["analysis_id"]);
+                })
+                .error(function(){
+            });
+
           }
       }
   })

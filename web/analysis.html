@@ -7,7 +7,7 @@
       <div id="lbl_analysis_method" style="font-weight: 100; padding-left:20px; padding-bottom: 5px;"></div>
       <div id="lbl_analysis_genome" style="font-weight: 100; padding-left:20px; padding-bottom: 5px;"></div>
 
-      <table border=0 class=apatype_menu>
+      <table border=0 id=table_apa class=apatype_menu>
         <tr>
           <td id="btn_same" onclick="javascript:open_analysis_pair_type('same');" class="unselectable">
             same-exon
@@ -141,19 +141,19 @@
             <tr style='background-color: #dfdfdf;'>
               <td><font color=gray><b>File</b></font></td><td><font color=gray><b>Description</b></font></td><td><font color=gray><b>Link</b></font></td>
             </tr>
-            <tr>
+            <tr id=row_apa_switch_download>
               <td class='nowrap'><img src=media/right_empty.png height=8 style='padding-right:3px; margin-top:-2px;vertical-align:middle'>Alternative Polyadenylation Switches</td><td class='notes'>Alternative polyadenylation (APA) of genes with proximal and distal polyA site per gene.</td><td class='nowrap'><a id=link_analysis_download1 target="_download1" download><img src=media/icon_download_small.png height=10 style='padding-right:3px; margin-top:-2px;vertical-align:middle'>Download</a></td>
             </tr>
-            <tr>
+            <tr id=row_dge_download>
               <td class='nowrap'><img src=media/right_empty.png height=8 style='padding-right:3px; margin-top:-2px;vertical-align:middle'>Differential Gene Expression</td><td class='notes'>Differentially expressed genes: we compute gene expression by summing polyA sites cDNA for each gene and test for differential expression with <a href=http://bioconductor.org/packages/release/bioc/html/edgeR.html target=_new>edgeR</a>.</td><td class='nowrap'><a id=link_analysis_download2 target="_download2" download><img src=media/icon_download_small.png height=10 style='padding-right:3px; margin-top:-2px;vertical-align:middle'>Download</a></td>
             </tr>
-            <tr>
+            <tr id=row_apausage_download>
               <td class='nowrap'><img src=media/right_empty.png height=8 style='padding-right:3px; margin-top:-2px;vertical-align:middle'>PolyA Site Usage</td><td class='notes'>cDNA table of all polyA sites across all experiments.</td><td class='nowrap'><a id=link_analysis_download3 target="_download3" download><img src=media/icon_download_small.png height=10 style='padding-right:3px; margin-top:-2px;vertical-align:middle'>Download</a></td>
             </tr>
-            <tr>
+            <tr id=row_ge_download>
               <td class='nowrap'><img src=media/right_empty.png height=8 style='padding-right:3px; margin-top:-2px;vertical-align:middle'>Gene Expression</td><td class='notes'>Gene expression table across all experiments.</td><td class='nowrap'><a id=link_analysis_download4 target="_download4" download><img src=media/icon_download_small.png height=10 style='padding-right:3px; margin-top:-2px;vertical-align:middle'>Download</a></td>
             </tr>
-            <tr>
+            <tr id=row_apaheat_download>
               <td class='nowrap'><img src=media/right_empty.png height=8 style='padding-right:3px; margin-top:-2px;vertical-align:middle'>Heatmap: proximal polyA</td><td class='notes'>Heatmap of 50 top regulated proximal polyA sites with PSI.</td><td class='nowrap'><a id=link_analysis_download5 target="_download5" download><img src=media/icon_download_small.png height=10 style='padding-right:3px; margin-top:-2px;vertical-align:middle'>PDF</a><a id=link_analysis_download6 target="_download6"><img src=media/icon_download_small.png height=10 style='padding-right:3px; margin-top:-2px;vertical-align:middle'>TAB</a></td>
             </tr>
           </table>

@@ -319,6 +319,7 @@ class TableClass():
             r["method"] = comps.method
             r["method_search"] = db["methods"][comps.method]["desc"]
             r["genome"] = comps.genome
+            r["analysis_type"] = comps.analysis_type
             r["genome_search"] = db["genomes"][comps.genome]["desc"]
             if r["method_search"]!="not selected":
                 r["method_search"] = r["method_search"] % (db["methods"][r["method"]]["link"])
@@ -458,6 +459,7 @@ class TableClass():
         r = {}
         r["comps_id"] = comps_id
         r["comps_name"] = comps.name
+        r["analysis_type"] = comps.analysis_type
         r["CLIP"] = comps.CLIP
         r["site_selection"] = comps.site_selection
         r["significance_thr"] = comps.significance_thr
@@ -735,6 +737,76 @@ class TableClass():
         del library.experiments[int(exp_id)]
         library.save()
         r = {"status":"success", "lib_id":lib_id}
+        return json.dumps(r, default=dthandler)
+
+    def new_analysis(self):
+        def new_analysis_id():
+            data_folder = apa.path.comps_folder
+            prefix = "%s_" % (datetime.datetime.now().strftime("%Y%m%d"))
+
+            libs = glob.glob(os.path.join(data_folder, "%s*" % prefix))
+            if len(libs)==0:
+                postfix = "1"
+            else:
+                postfix = 0
+                for lib_id in libs:
+                    postfix = max(postfix, int(lib_id.split(prefix)[1]), postfix)
+                postfix += 1
+
+            analysis_id = "%s%s" % (prefix, postfix)
+            return analysis_id
+
+        email = self.check_login(self.pars.get("email", "public"))
+        if email=="public":
+            r = {"status":"fail"}
+            return json.dumps(r, default=dthandler)
+        analysis_name = self.pars.get("analysis_name", "")
+        analysis_type = self.pars.get("analysis_type", "")
+        experiments = self.pars.get("experiments", "")
+        analysis_id = new_analysis_id()
+        analysis_folder = os.path.join(apa.path.comps_folder, analysis_id)
+        os.makedirs(analysis_folder)
+
+        # write analysis config file
+        f = open(os.path.join(analysis_folder, "%s.config" % analysis_id), "wt")
+        f.write("id\texperiments\tname\n")
+        experiments = json.loads(experiments)
+        control_experiments = []
+        test_experiments = []
+        for exp_id, exp_data in experiments.items():
+            if exp_data.get("analysis_set", None)=="control":
+                control_experiments.append("%s_e%s" % (exp_data["lib_id"], exp_id))
+            if exp_data.get("analysis_set", None)=="test":
+                test_experiments.append("%s_e%s" % (exp_data["lib_id"], exp_id))
+
+        control_experiments = sorted(control_experiments, key=lambda x: int(x.split("_")[2][1:])) # sort by exp_id
+        test_experiments = sorted(test_experiments, key=lambda x: int(x.split("_")[2][1:])) # sort by exp_id
+
+        for index, exp in enumerate(control_experiments):
+            f.write("c%s\t%s\t%s\n" % ((index+1), exp, exp))
+        for index, exp in enumerate(test_experiments):
+            f.write("t%s\t%s\t%s\n" % ((index+1), exp, exp))
+
+        f.write("\n")
+        f.write("control_name:control\n")
+        f.write("test_name:test\n")
+
+        f.write("site_selection:DEX\n")
+        f.write("polya_db:20190523_1\n")
+        f.write('poly_type:["strong", "weak", "less", "noclass"]\n')
+        f.write("presence_thr:3\n")
+        f.write("cDNA_thr:3\n\n")
+
+        f.write("authors:%s\n" % email)
+        f.write("access:%s\n" % email)
+        f.write("name:%s\n" % analysis_name)
+
+        f.write("\n")
+        f.write("analysis_type:%s\n" % analysis_type)
+
+        f.close()
+
+        r = {"status":"success", "analysis_id":analysis_id}
         return json.dumps(r, default=dthandler)
 
     def rnamap(self):

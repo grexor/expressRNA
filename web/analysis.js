@@ -437,36 +437,58 @@ function display_analysis_apamap(div_name, pair_type) {
 
             display_analysis_experiments(data.control, data.test, data);
 
-            display_analysis_go(comps_data.go);
-            display_analysis_rnamap("analysis_proximal", "proximal", db["analysis"]["pair_type"], db["analysis"]["clip_index"]);
-            display_analysis_rnamap("analysis_distal", "distal", db["analysis"]["pair_type"], db["analysis"]["clip_index"]);
-            display_analysis_rnamap("analysis_s1", "s1", db["analysis"]["pair_type"], db["analysis"]["clip_index"]);
-            display_analysis_rnamap("analysis_s2", "s2", db["analysis"]["pair_type"], db["analysis"]["clip_index"]);
-            display_analysis_heat("analysis_heat_proximal_pos", "proximal", db["analysis"]["pair_type"], "pos", db["analysis"]["clip_index"]);
-            display_analysis_heat("analysis_heat_proximal_neg", "proximal", db["analysis"]["pair_type"], "neg", db["analysis"]["clip_index"]);
-            display_analysis_heat("analysis_heat_distal_pos", "distal", db["analysis"]["pair_type"], "pos", db["analysis"]["clip_index"]);
-            display_analysis_heat("analysis_heat_distal_neg", "distal", db["analysis"]["pair_type"], "neg", db["analysis"]["clip_index"]);
-            $("#img_analysis_atlas").attr("src", "/comps/" + db["analysis"]["analysis_id"] + "/" + db["analysis"]["analysis_id"] + "_sites_per_gene.png?nocache="+nocache);
-            $("#img_analysis_cluster").attr("src", "/comps/" + db["analysis"]["analysis_id"] + "/" + db["analysis"]["analysis_id"] + ".cluster_genes.png?nocache="+nocache);
-            $("#a_analysis_cluster").attr("href", "/comps/" + db["analysis"]["analysis_id"] + "/" + db["analysis"]["analysis_id"] + ".cluster_genes.png?nocache="+nocache);
+            // common analysis code
             $("#link_analysis_download1").attr("href", "https://expressRNA.org/share/comps/" + db["analysis"]["analysis_id"] + "/" + db["analysis"]["analysis_id"] + ".pairs_de.tab");
             $("#link_analysis_download2").attr("href", "https://expressRNA.org/share/comps/" + db["analysis"]["analysis_id"] + "/" + db["analysis"]["analysis_id"] + ".genes_de.tab");
             $("#link_analysis_download3").attr("href", "https://expressRNA.org/share/comps/" + db["analysis"]["analysis_id"] + "/" + db["analysis"]["analysis_id"] + ".expression_sites.tab");
             $("#link_analysis_download4").attr("href", "https://expressRNA.org/share/comps/" + db["analysis"]["analysis_id"] + "/" + db["analysis"]["analysis_id"] + ".expression_genes.tab");
             $("#link_analysis_download5").attr("href", "https://expressRNA.org/share/comps/" + db["analysis"]["analysis_id"] + "/" + db["analysis"]["analysis_id"] + ".heatmap.pdf");
             $("#link_analysis_download6").attr("href", "https://expressRNA.org/share/comps/" + db["analysis"]["analysis_id"] + "/" + db["analysis"]["analysis_id"] + ".heatmap.tab");
-            display_analysis_apamap("div_analysis_apamap", db["analysis"]["pair_type"]);
 
-            $.get("/rnamotifs2/" + db["analysis"]["analysis_id"] + "_proximal_" + db["analysis"]["pair_type"] +"/rnamap/index.html?nocache="+nocache).done(function () {
-              $("#btn_analysis_rna").show();
-              //$("#iframe_analysis_proximal").attr("src", "/rnamotifs2/" + db["analysis"]["analysis_id"] + "_proximal_" + db["analysis"]["pair_type"] +"/rnamap/index.html?nocache="+nocache);
-              $("#iframe_analysis_proximal").load("/rnamotifs2/" + db["analysis"]["analysis_id"] + "_proximal_" + db["analysis"]["pair_type"] +"/rnamap/index.html?nocache="+nocache);
-              //$("#iframe_analysis_distal").attr("src", "/rnamotifs2/" + db["analysis"]["analysis_id"] + "_distal"+ "_" + db["analysis"]["pair_type"] +"/rnamap/index.html?nocache="+nocache);
-              $("#iframe_analysis_distal").load("/rnamotifs2/" + db["analysis"]["analysis_id"] + "_distal_" + db["analysis"]["pair_type"] +"/rnamap/index.html?nocache="+nocache);
-            }).fail(function () {
-              $("#div_analysis_rna").hide();
-              $("#btn_analysis_rna").hide();
-            });
+            if (data.analysis_type=="apa") {
+              $("#table_apa").show();
+              $("#analysis_apamap_title").show();
+              $("#div_analysis_apamap").show();
+              $("#btn_analysis_atlas").show();
+              $("#row_apa_switch_download").show();
+              $("#row_apausage_download").show();
+              $("#row_apaheat_download").show();
+              display_analysis_go(comps_data.go);
+              display_analysis_rnamap("analysis_proximal", "proximal", db["analysis"]["pair_type"], db["analysis"]["clip_index"]);
+              display_analysis_rnamap("analysis_distal", "distal", db["analysis"]["pair_type"], db["analysis"]["clip_index"]);
+              display_analysis_rnamap("analysis_s1", "s1", db["analysis"]["pair_type"], db["analysis"]["clip_index"]);
+              display_analysis_rnamap("analysis_s2", "s2", db["analysis"]["pair_type"], db["analysis"]["clip_index"]);
+              display_analysis_heat("analysis_heat_proximal_pos", "proximal", db["analysis"]["pair_type"], "pos", db["analysis"]["clip_index"]);
+              display_analysis_heat("analysis_heat_proximal_neg", "proximal", db["analysis"]["pair_type"], "neg", db["analysis"]["clip_index"]);
+              display_analysis_heat("analysis_heat_distal_pos", "distal", db["analysis"]["pair_type"], "pos", db["analysis"]["clip_index"]);
+              display_analysis_heat("analysis_heat_distal_neg", "distal", db["analysis"]["pair_type"], "neg", db["analysis"]["clip_index"]);
+              $("#img_analysis_atlas").attr("src", "/comps/" + db["analysis"]["analysis_id"] + "/" + db["analysis"]["analysis_id"] + "_sites_per_gene.png?nocache="+nocache);
+              $("#img_analysis_cluster").attr("src", "/comps/" + db["analysis"]["analysis_id"] + "/" + db["analysis"]["analysis_id"] + ".cluster_genes.png?nocache="+nocache);
+              $("#a_analysis_cluster").attr("href", "/comps/" + db["analysis"]["analysis_id"] + "/" + db["analysis"]["analysis_id"] + ".cluster_genes.png?nocache="+nocache);
+              display_analysis_apamap("div_analysis_apamap", db["analysis"]["pair_type"]);
+
+              $.get("/rnamotifs2/" + db["analysis"]["analysis_id"] + "_proximal_" + db["analysis"]["pair_type"] +"/rnamap/index.html?nocache="+nocache).done(function () {
+                $("#btn_analysis_rna").show();
+                //$("#iframe_analysis_proximal").attr("src", "/rnamotifs2/" + db["analysis"]["analysis_id"] + "_proximal_" + db["analysis"]["pair_type"] +"/rnamap/index.html?nocache="+nocache);
+                $("#iframe_analysis_proximal").load("/rnamotifs2/" + db["analysis"]["analysis_id"] + "_proximal_" + db["analysis"]["pair_type"] +"/rnamap/index.html?nocache="+nocache);
+                //$("#iframe_analysis_distal").attr("src", "/rnamotifs2/" + db["analysis"]["analysis_id"] + "_distal"+ "_" + db["analysis"]["pair_type"] +"/rnamap/index.html?nocache="+nocache);
+                $("#iframe_analysis_distal").load("/rnamotifs2/" + db["analysis"]["analysis_id"] + "_distal_" + db["analysis"]["pair_type"] +"/rnamap/index.html?nocache="+nocache);
+              }).fail(function () {
+                $("#div_analysis_rna").hide();
+                $("#btn_analysis_rna").hide();
+              });
+            } // analysis_type = apa
+
+            if (data.analysis_type=="dge") {
+              $("#div_analysis_clip").hide();
+              $("#table_apa").hide();
+              $("#analysis_apamap_title").hide();
+              $("#div_analysis_apamap").hide();
+              $("#btn_analysis_atlas").hide();
+              $("#row_apa_switch_download").hide();
+              $("#row_apausage_download").hide();
+              $("#row_apaheat_download").hide();
+            }
 
         })
         .error(function(){
@@ -474,50 +496,54 @@ function display_analysis_apamap(div_name, pair_type) {
   }
 
   function display_analysis_parameters_fill(data) {
-    html = "<table class='es_table' width=850>";
-    html += "<tr style='background-color: #efefef;'><td colspan=9><div style='font-weight: 600; color: #777777; padding-top: 5px; padding-bottom: 5px; font-size: 12px;'>Parameters of the analysis</div></td></tr>";
-    html += "<tr style='background-color: #dfdfdf;'>";
+    html = "";
+    if (data.analysis_type=="apa") {
+      html += "Information about analysis parameters and experiments included in the analysis<br><br>"
+      html += "<table class='es_table' width=850>";
+      html += "<tr style='background-color: #efefef;'><td colspan=9><div style='font-weight: 600; color: #777777; padding-top: 5px; padding-bottom: 5px; font-size: 12px;'>Parameters of the analysis</div></td></tr>";
+      html += "<tr style='background-color: #dfdfdf;'>";
 
-    help_polya_db = "";
+      help_polya_db = "";
 
-    html += "<td class=nowrap><font color=gray><b>Parameter Name</b></font></td>";
-    html += "<td class=nowrap><font color=gray><b>Parameter Description</b></font></td>";
-    html += "<td class=nowrap><font color=gray><b>Parameter Value</b></font></td>";
-    html += "</tr>";
+      html += "<td class=nowrap><font color=gray><b>Parameter Name</b></font></td>";
+      html += "<td class=nowrap><font color=gray><b>Parameter Description</b></font></td>";
+      html += "<td class=nowrap><font color=gray><b>Parameter Value</b></font></td>";
+      html += "</tr>";
+      polyadb_help = polyadb_help_dic[data["polya_db"]];
+      html += "<tr><td class=nowrap>PolyA Database</td>";
+      html += "<td>Genome-wide list of polyA sites used to compute the signal by clustering aligned reads around polyA sites.</td>";
+      if (polyadb_help==undefined) {
+        polyadb_help = "To determine polyA site usage, a novel polyA database (atlas) was constructed from the set of experiments used in the analysis or a broader set from the entire data library. Check which experiments were used in the <a href=https://expressRNA.org/share/polya/" + data["polya_db"] + ".config target=_new>" + data["polya_db"] + " database config file</a> for this analysis."
+        polyadb_help = "<font color='darkgreen' class='btn' title='" + polyadb_help + "'><img src=media/help.png style='height: 15px; margin-top:-2px;vertical-align:middle; padding-left: 3px;'></font>";
+        html += "<td><a href='https://www.expressrna.org/share/polya/" + data["polya_db"] + ".bed.gz' target=_new>" + data["polya_db"] + "</a>" + polyadb_help + "</td></tr>";
+      } else {
+        polyadb_help = "<font color='darkgreen' class='btn' title='" + polyadb_help + "'><img src=media/help.png style='height: 15px; margin-top:-2px;vertical-align:middle; padding-left: 3px;'></font>";
+        html += "<td><a href='https://www.expressrna.org/share/polya/" + data["polya_db"] + ".bed.gz' target=_new>" + data["polya_db"] + "</a>" + polyadb_help + "</td></tr>";
+      }
 
-    polyadb_help = polyadb_help_dic[data["polya_db"]];
-    html += "<tr><td class=nowrap>PolyA Database</td>";
-    html += "<td>Genome-wide list of polyA sites used to compute the signal by clustering aligned reads around polyA sites.</td>";
-    if (polyadb_help==undefined) {
-      polyadb_help = "To determine polyA site usage, a novel polyA database (atlas) was constructed from the set of experiments used in the analysis or a broader set from the entire data library. Check which experiments were used in the <a href=https://expressRNA.org/share/polya/" + data["polya_db"] + ".config target=_new>" + data["polya_db"] + " database config file</a> for this analysis."
-      polyadb_help = "<font color='darkgreen' class='btn' title='" + polyadb_help + "'><img src=media/help.png style='height: 15px; margin-top:-2px;vertical-align:middle; padding-left: 3px;'></font>";
-      html += "<td><a href='https://www.expressrna.org/share/polya/" + data["polya_db"] + ".bed.gz' target=_new>" + data["polya_db"] + "</a>" + polyadb_help + "</td></tr>";
-    } else {
-      polyadb_help = "<font color='darkgreen' class='btn' title='" + polyadb_help + "'><img src=media/help.png style='height: 15px; margin-top:-2px;vertical-align:middle; padding-left: 3px;'></font>";
-      html += "<td><a href='https://www.expressrna.org/share/polya/" + data["polya_db"] + ".bed.gz' target=_new>" + data["polya_db"] + "</a>" + polyadb_help + "</td></tr>";
-    }
+      html += "<tr><td class=nowrap>APA site selection</td>";
+      html += "<td>The software applied to estimate differential polyA site usage.</td>";
+      html += "<td>" + apa_software_dic[data["site_selection"]] + "</td></tr>";
 
-    html += "<tr><td class=nowrap>APA site selection</td>";
-    html += "<td>The software applied to estimate differential polyA site usage.</td>";
-    html += "<td>" + apa_software_dic[data["site_selection"]] + "</td></tr>";
+      html += "<tr><td class=nowrap>PolyA site significance threshold</td>";
+      html += "<td>FDR threshold value (control vs. test) for the individual polyA site to be considered undergoing a significant change.</td>";
+      html += "<td>" + data["significance_thr"] + "</td></tr>";
 
-    html += "<tr><td class=nowrap>PolyA site significance threshold</td>";
-    html += "<td>FDR threshold value (control vs. test) for the individual polyA site to be considered undergoing a significant change.</td>";
-    html += "<td>" + data["significance_thr"] + "</td></tr>";
+      html += "<tr><td class=nowrap>PolyA site cDNA threshold</td>";
+      html += "<td>Minimum number of reads (cDNA) at an individual polyA site for the site to be considered in the analysis.</td>";
+      html += "<td>" + data["cDNA_thr"] + "</td></tr>";
 
-    html += "<tr><td class=nowrap>PolyA site cDNA threshold</td>";
-    html += "<td>Minimum number of reads (cDNA) at an individual polyA site for the site to be considered in the analysis.</td>";
-    html += "<td>" + data["cDNA_thr"] + "</td></tr>";
+      html += "<tr><td class=nowrap>PolyA site presence threshold</td>";
+      html += "<td>Minimum proportion of experiments required to have the minimum cDNA threshold for an individual polyA site, for the polyA site to be considered in the analysis. This parameter is 1/n (1 = all experiments, 2 = half of the experiments, 3 = third of experiments).</td>";
+      html += "<td>" + data["presence_thr"] + "</td></tr>";
 
-    html += "<tr><td class=nowrap>PolyA site presence threshold</td>";
-    html += "<td>Minimum proportion of experiments required to have the minimum cDNA threshold for an individual polyA site, for the polyA site to be considered in the analysis. This parameter is 1/n (1 = all experiments, 2 = half of the experiments, 3 = third of experiments).</td>";
-    html += "<td>" + data["presence_thr"] + "</td></tr>";
+      html += "<tr><td class=nowrap>PolyA site gene fraction threshold</td>";
+      html += "<td>Minimum fraction of a polyA site in the gene compared to the most used polyA site in the gene for the polyA site to be considered in the analysis. Example: if a minor site has only 1% cDNA across all experiments compared to the polyA site with highest cDNA, and the threshold is 5%, the 1% polyA site will be ignored.</td>";
+      html += "<td>" + "5%" + "</td></tr>";
+      html += "</table>";
 
-    html += "<tr><td class=nowrap>PolyA site gene fraction threshold</td>";
-    html += "<td>Minimum fraction of a polyA site in the gene compared to the most used polyA site in the gene for the polyA site to be considered in the analysis. Example: if a minor site has only 1% cDNA across all experiments compared to the polyA site with highest cDNA, and the threshold is 5%, the 1% polyA site will be ignored.</td>";
-    html += "<td>" + "5%" + "</td></tr>";
+    } // analysis_type == apa
 
-    html += "</table>";
     return html;
   }
 
@@ -573,7 +599,6 @@ function display_analysis_experiments_fill(data_analysis, data, label) {
 
 function display_analysis_experiments(data_control, data_test, data) {
   html = "<center>";
-  html += "Information about analysis parameters and experiments included in the analysis<br><br>"
   html += display_analysis_parameters_fill(data);
   html += "<br>";
   html += display_analysis_experiments_fill(data, data_control, "Control experiments");
