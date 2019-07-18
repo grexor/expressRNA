@@ -134,6 +134,12 @@ body.waiting *
   margin-bottom: 10px;
 }
 
+.content_center table,tr,td {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+
 .content_center a {
     text-decoration: none;
 }
@@ -452,8 +458,8 @@ tbody {
 }
 
 .download_table {
-  font-size: 12px;
-  color: #666666; /* table font color */
+  font-size: 12px !important;
+  color: #666666 !important; /* table font color */
   border-collapse: collapse;
   border: 1px solid #aaaaaa; /* outside table border */
   width: 800px;
@@ -496,8 +502,8 @@ tbody {
 }
 
 .es_table {
-  font-size: 12px;
-  color: #666666; /* table font color */
+  font-size: 12px !important;
+  color: #666666 !important; /* table font color */
   border-collapse: collapse;
   border: 1px solid #aaaaaa; /* outside table border */
 }

@@ -153,7 +153,7 @@ function display_analyses(data) {
       html += "<div><b>Genome</b>: " + temp[i].genome_search + "</div>"
       html += "<div><b>Method</b>: " + temp[i].method_search + "</div>"
       html += "<div><b>Notes</b>: " + analysis_notes_search + "</div>";
-      html += "<div><b>Authors</b>: " + analysis_authors_search.split(",").join(", ") + "</div>";
+      html += "<div><b>Authors</b>: " + analysis_authors_search + "</div>";
       html += "<div><b>Last Change</b>: " + format_date_time(new Date(temp[i].last_change)) + "</div>";
       html += "</div>";
       html += "</div>";

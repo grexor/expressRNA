@@ -1,3 +1,5 @@
+var timer_get_analysis_status;
+
 menu_select("link_search");
 
   var trace1 = {
@@ -376,6 +378,10 @@ function display_analysis_apamap(div_name, pair_type) {
   }
 
   function get_analysis(analysis_id, pair_type) {
+    try  {
+      clearInterval(timer_get_analysis_status);
+    } catch (err) {}
+    timer_get_analysis_status = setInterval(get_analysis_status, 3000);
     db["analysis"]["pair_type"] = pair_type;
     db["analysis"]["analysis_id"] = analysis_id;
     pair_type = db["analysis"]["pair_type"];
@@ -391,12 +397,14 @@ function display_analysis_apamap(div_name, pair_type) {
         .success(function(result) {
             data = $.parseJSON(result);
             db["analysis"]["query"] = data;
-
             if (db["analysis"]["analysis_module"]==undefined)
               db["analysis"]["analysis_module"] = "es";
             if (db["analysis"]["pair_type"]==undefined)
               db["analysis"]["pair_type"] = "same";
-
+            if (google_user!=undefined)
+            if ((data.access.indexOf(google_user.getBasicProfile().getEmail())!=-1) || (google_user.getBasicProfile().getEmail()=="gregor.rot@gmail.com")) {
+                $("#btn_analysis_delete").show();
+            }
             $("#btn_same").removeClass("selected");
             $("#btn_skipped").removeClass("selected");
             $("#btn_composite").removeClass("selected");
@@ -405,9 +413,11 @@ function display_analysis_apamap(div_name, pair_type) {
 
             open_analysis_div(db["analysis"]["analysis_module"]);
 
-            $("#lbl_analysis_comps").html("<b>" + data.comps_name + "</b><br><b>Analysis ID</b>: " + data.comps_id);
-            $("#lbl_analysis_genome").html("<b>Genome</b>: " + data.genome_desc);
-            $("#lbl_analysis_method").html("<b>Method</b>: " + data.method_desc);
+            $("#lbl_analysis_id").html(data.comps_id);
+            $("#lbl_analysis_name").html(data.comps_name);
+            $("#lbl_analysis_authors").html(data.authors);
+            $("#lbl_analysis_genome").html(data.genome_desc);
+            $("#lbl_analysis_method").html(data.method_desc);
 
             if (data.CLIP.length>0) {
               clip_selector = '<form style="height: 5px;"><b>iCLIP:</b> <select id=clip_selector style="width:300px;" onchange="clip_analysis_selector_change();">';
@@ -490,6 +500,34 @@ function display_analysis_apamap(div_name, pair_type) {
               $("#row_apaheat_download").hide();
             }
 
+            if (db["analysis"]["query"].status=="processing") {
+              $('#div_analysis_download').css("opacity", "0.2");
+              $("#lbl_analysis_status").html('<b><font color=#aa0000>Analysis Status: processing</font></b><img src=media/spinner.gif style="height: 16px; margin-top:-3px;vertical-align:middle; padding-right: 3px; opacity: 0.7">')
+            } else {
+              $("#lbl_analysis_status").html('<b><font color=#00aa00>Analysis Status: complete</font></b>');
+            }
+        })
+        .error(function(){
+    });
+  }
+
+  function get_analysis_status() {
+    post_data = {};
+    post_data["action"] = "get_analysis_status";
+    post_data["analysis_id"] = db["analysis"]["analysis_id"];
+    $.post('/expressrna_gw/index.py', post_data)
+        .success(function(result) {
+          if (result=="processing") {
+            $("#lbl_analysis_status").html('<b><font color=#aa0000>Analysis Status: processing</font></b><img src=media/spinner.gif style="height: 16px; margin-top:-3px;vertical-align:middle; padding-right: 3px; opacity: 0.7">')
+            $('#div_analysis_download').css("opacity", "0.2");
+            //$('#div_analysis_download a').click(function(e){ e.preventDefault(); });
+            $('#div_analysis_es').css("opacity", "0.2");
+            //$('#div_analysis_es a').click(function(e){ e.preventDefault(); });
+          } else {
+            $('#div_analysis_download').css("opacity", "1");
+            $('#div_analysis_es').css("opacity", "1");
+            $("#lbl_analysis_status").html('<b><font color=#00aa00>Analysis Status: complete</font></b>');
+          }
         })
         .error(function(){
     });
@@ -502,9 +540,7 @@ function display_analysis_apamap(div_name, pair_type) {
       html += "<table class='es_table' width=850>";
       html += "<tr style='background-color: #efefef;'><td colspan=9><div style='font-weight: 600; color: #777777; padding-top: 5px; padding-bottom: 5px; font-size: 12px;'>Parameters of the analysis</div></td></tr>";
       html += "<tr style='background-color: #dfdfdf;'>";
-
       help_polya_db = "";
-
       html += "<td class=nowrap><font color=gray><b>Parameter Name</b></font></td>";
       html += "<td class=nowrap><font color=gray><b>Parameter Description</b></font></td>";
       html += "<td class=nowrap><font color=gray><b>Parameter Value</b></font></td>";
@@ -606,6 +642,10 @@ function display_analysis_experiments(data_control, data_test, data) {
   html += display_analysis_experiments_fill(data, data_test, "Test experiments");
   $("#div_analysis_es").html(html);
   tippy('.btn', {theme: 'light', interactive: true});
+
+  if (db["analysis"]["query"].status=="processing") {
+    $('#div_analysis_es').css("opacity", "0.2");
+  }
 }
 
 function display_analysis_go_fill(data) {
@@ -681,6 +721,40 @@ function display_analysis_go(data) {
   $("#btn_analysis_go_C").css("background-color", "#e1e1e1");
   $("#btn_analysis_go_" + go_aspect).css("background-color", "#c1c1c1");
 
+}
+
+function delete_analysis() {
+  html = "<b>Analysis Delete for " + db["analysis"]["analysis_id"] + "</b><br>";
+  html += "Are you really sure you would like to delete this analysis and all it's results?" + "<br>";
+  vex.dialog.open({
+      unsafeMessage: html,
+      buttons: [
+          $.extend({}, vex.dialog.buttons.YES, { text: 'Delete' }),
+          $.extend({}, vex.dialog.buttons.NO, { text: 'Cancel' })
+      ],
+      callback: function (data) {
+          if (!data) {
+          } else {
+            delete_analysis_do(db["analysis"]["analysis_id"]);
+          }
+      }
+  })
+}
+
+function delete_analysis_do(analysis_id) {
+  post_data = {};
+  post_data["action"] = "delete_analysis";
+  if (google_user!=undefined)
+    post_data["email"] = google_user.getBasicProfile().getEmail();
+  post_data["analysis_id"] = analysis_id;
+  $.post('/expressrna_gw/index.py', post_data)
+      .success(function(result) {
+        search_analyses();
+        open_analyses();
+        update_user_usage();
+      })
+      .error(function(){
+  });
 }
 
 tippy('.btn', {theme: 'light', interactive: true});

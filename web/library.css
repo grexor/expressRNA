@@ -1,7 +1,7 @@
 .table_experiments {
-  font-size: 12px;
+  font-size: 12px !important;
   border-collapse: collapse;
-  color: #666666;
+  color: #777777 !important;
 }
 
 .table_experiments tr:hover {

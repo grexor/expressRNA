@@ -281,6 +281,13 @@ class TableClass():
         result['records'] = len(result['data'])
         return str(json.dumps(result))
 
+    def get_analysis_status(self):
+        analysis_id = self.pars.get("analysis_id", None)
+        if analysis_id!=None:
+            analysis = apa.comps.Comps(analysis_id)
+            return analysis.status
+        return ""
+
     def list_analysis(self):
         """
         Return list of all analysis for the logged-in user or for "public"
@@ -319,6 +326,7 @@ class TableClass():
             r["method"] = comps.method
             r["method_search"] = db["methods"][comps.method]["desc"]
             r["genome"] = comps.genome
+            r["status"] = comps.status
             r["analysis_type"] = comps.analysis_type
             r["genome_search"] = db["genomes"][comps.genome]["desc"]
             if r["method_search"]!="not selected":
@@ -330,11 +338,11 @@ class TableClass():
                 if term=="":
                     continue
                 include_analysis = False
-                if comps.name.lower().find(term)!=-1 or comps.notes.lower().find(term)!=-1 or comps.authors.lower().find(term)!=-1 or comps.comps_id.lower().find(term)!=-1 or r["method_search"].lower().find(term)!=-1 or r["genome_search"].lower().find(term)!=-1 or r["authors_search"].lower().find(term)!=-1:
+                if comps.name.lower().find(term)!=-1 or comps.notes.lower().find(term)!=-1 or ",".join(comps.authors).lower().find(term)!=-1 or comps.comps_id.lower().find(term)!=-1 or r["method_search"].lower().find(term)!=-1 or r["genome_search"].lower().find(term)!=-1 or ",".join(r["authors_search"]).lower().find(term)!=-1:
                     include_analysis = True
                     r["comps_name_search"] = self.replace_ignorecase(term, "<div style='display: inline; font-weight: bold; color: #FF0000'>", "</div>", self.remove_links(r["comps_name_search"]))
                     r["notes_search"] = self.replace_ignorecase(term, "<div style='display: inline; font-weight: bold; color: #FF0000'>", "</div>", self.remove_links(r["notes_search"]))
-                    r["authors_search"] = self.replace_ignorecase(term, "<div style='display: inline; font-weight: bold; color: #FF0000'>", "</div>", self.remove_links(r["authors_search"]))
+                    r["authors_search"] = self.replace_ignorecase(term, "<div style='display: inline; font-weight: bold; color: #FF0000'>", "</div>", self.remove_links(", ".join(r["authors_search"])))
                     if r["method_search"]!="not selected":
                         r["method_search"] = self.replace_ignorecase(term, "<div style='display: inline; font-weight: bold; color: #FF0000'>", "</div>", self.remove_links(r["method_search"]))
                     if r["genome_search"]!="not selected":
@@ -470,6 +478,9 @@ class TableClass():
         r["control"] = make_table(comps.control)
         r["test"] = make_table(comps.test)
         r["polya_db"] = comps.polya_db
+        r["access"] = comps.access
+        r["authors"] = comps.authors
+        r["status"] = comps.status
 
         r["genome_desc"] = db["genomes"][comps.genome]["desc"]
         if r["genome_desc"]!="not selected":
@@ -762,6 +773,8 @@ class TableClass():
             return json.dumps(r, default=dthandler)
         analysis_name = self.pars.get("analysis_name", "")
         analysis_type = self.pars.get("analysis_type", "")
+        analysis_genome = self.pars.get("genome", "")
+        analysis_method = self.pars.get("method", "")
         experiments = self.pars.get("experiments", "")
         analysis_id = new_analysis_id()
         analysis_folder = os.path.join(apa.path.comps_folder, analysis_id)
@@ -803,9 +816,39 @@ class TableClass():
 
         f.write("\n")
         f.write("analysis_type:%s\n" % analysis_type)
+        f.write("method:%s\n" % analysis_method)
+        f.write("genome:%s\n" % analysis_genome)
+        f.write("\n")
+        f.write("status:%s\n" % "processing")
 
         f.close()
 
+        self.add_ticket(email, "apa.comps -comps_id %s" % (analysis_id), "process analysis %s" % (analysis_id))
+
+        r = {"status":"success", "analysis_id":analysis_id}
+        return json.dumps(r, default=dthandler)
+
+    def delete_analysis(self):
+        apa.annotation.init()
+        email = self.check_login(self.pars.get("email", "public"))
+        if email=="public":
+            r = {"status":"fail"}
+            return json.dumps(r, default=dthandler)
+        analysis_id = self.pars.get("analysis_id", None)
+        if analysis_id==None:
+            r = {"status":"fail"}
+            return json.dumps(r, default=dthandler)
+        if len(analysis_id)<=6:
+            r = {"status":"fail"}
+            return json.dumps(r, default=dthandler)
+        analysis = apa.comps.Comps(analysis_id)
+        if (email not in analysis.access):
+            r = {"status":"fail"}
+            return json.dumps(r, default=dthandler)
+        analysis_folder = os.path.join(apa.path.comps_folder, analysis_id)
+        if analysis_folder.startswith("/home/gregor/apa/data.comps/") and len(analysis_folder)>(len("/home/gregor/apa/data.comps/")+6):
+            if os.path.exists(analysis_folder):
+                shutil.rmtree(analysis_folder)
         r = {"status":"success", "analysis_id":analysis_id}
         return json.dumps(r, default=dthandler)
 

@@ -162,17 +162,29 @@ function upload_experiment() {
   html += "<table border=0 style='font-size: inherit; color: #444;'>";
   html += "<tr>";
   html += "<td valign=top style='padding-bottom: 5px'>";
-  html += "<label for='newfile' class='cfu'>Select FASTQ file (R1)</label>";
-  html += "<input type='file' id='newfile' name='newfile' style='display: none;' accept='.gz,.bz2'>";
-  html += "<input type='hidden' name='action' value='upload_file'>";
-  html += "<input type='hidden' name='email' value='" + google_user.getBasicProfile().getEmail() + "'>";
-  html += "<input type='hidden' name='lib_id' value='" + library.lib_id + "'>";
-  html += "</td>";
-  html += "<td valign=top>";
-  html += "<div id='newfile_name' style=''>Select FASTQ file (R1)</div>";
-  html += "</td>";
-  html += "</tr>";
+  if (library.seq_type=="single") {
+    html += "<label for='newfile' class='cfu'>Select FASTQ file</label>";
+    html += "<input type='file' id='newfile' name='newfile' style='display: none;' accept='.gz,.bz2'>";
+    html += "<input type='hidden' name='action' value='upload_file'>";
+    html += "<input type='hidden' name='email' value='" + google_user.getBasicProfile().getEmail() + "'>";
+    html += "<input type='hidden' name='lib_id' value='" + library.lib_id + "'>";
+    html += "</td>";
+    html += "<td valign=top>";
+    html += "<div id='newfile_name' style=''>Select FASTQ file</div>";
+    html += "</td>";
+    html += "</tr>";
+  }
   if (library.seq_type=="paired") {
+    html += "<label for='newfile' class='cfu'>Select FASTQ file (R1)</label>";
+    html += "<input type='file' id='newfile' name='newfile' style='display: none;' accept='.gz,.bz2'>";
+    html += "<input type='hidden' name='action' value='upload_file'>";
+    html += "<input type='hidden' name='email' value='" + google_user.getBasicProfile().getEmail() + "'>";
+    html += "<input type='hidden' name='lib_id' value='" + library.lib_id + "'>";
+    html += "</td>";
+    html += "<td valign=top>";
+    html += "<div id='newfile_name' style=''>Select FASTQ file (R1)</div>";
+    html += "</td>";
+    html += "</tr>";
     html += "<tr>";
     html += "<td valign=top>";
     html += "<input type='file' id='newfile2' name='newfile2' style='display: none;' accept='.gz,.bz2'>";
@@ -463,12 +475,17 @@ function adjust_library_ubutton(sw) {
   }
 
 function display_library_experiments(experiments) {
-  html = "<br>";
-  html += "<center><a href='javascript:library_display_function(0);'><img src=media/list.svg style='opacity: 0.5; padding-left: 2px; height: 18px; margin-top:-2px;vertical-align:middle; padding-right: 0px;'></a><a href='javascript:library_display_function(1);'><img src=media/table.svg style='padding-left: 2px; height: 18px; margin-top:-2px;vertical-align:middle; padding-right: 3px;'></a>";
-  html += "<b>Table of Experiments (switch between views, double click row to edit annotation)</b><br><br>";
+  html = "<br><center>";
   help_id = "Number of the experiment in the library, starting with 1 (e1).";
   help_aligned = "Percentage of uniquely aligned reads to the reference genome.";
   help_identifier = "The identifier links the experiment to the library. The identification is composed of: library_id (e.g. 20171212_data) + experiment_id (e.g. e1). This ID uniquely identifies the experiment data in expressRNA.";
+
+  if (Object.keys(experiments).length==0) {
+    html += '<div id="btn_library_upload3" style="">You can start by <a href="javascript:upload_experiment();"><img src="media/upload.png" height=18 style="height: 16px; margin-top:-3px;vertical-align:middle; padding-right: 3px; opacity: 0.7">uploading the first experiment</a>.</div>';
+  } else {
+    html += "<center><a href='javascript:library_display_function(0);'><img src=media/list.svg style='opacity: 0.5; padding-left: 2px; height: 18px; margin-top:-2px;vertical-align:middle; padding-right: 0px;'></a><a href='javascript:library_display_function(1);'><img src=media/table.svg style='padding-left: 2px; height: 18px; margin-top:-2px;vertical-align:middle; padding-right: 3px;'></a>";
+    html += "<b>Table of Experiments (switch between views, double click row to edit annotation)</b><br><br>";
+  }
 
   for (exp_id in experiments)
   {
@@ -534,9 +551,14 @@ function display_library_experiments2(experiments) {
   help_id = "Number of the experiment in the library, starting with 1 (e1).";
   help_aligned = "Percentage of uniquely aligned reads to the reference genome.";
   help_identifier = "The identifier links the experiment to the library. The identification is composed of: library_id (e.g. 20171212_data) + experiment_id (e.g. e1). This ID uniquely identifies the experiment data in expressRNA.";
+  html += "<center>";
 
-  html += "<center><a href='javascript:library_display_function(0);'><img src=media/list.svg style='padding-left: 2px; height: 18px; margin-top:-2px;vertical-align:middle; padding-right: 0px;'></a><a href='javascript:library_display_function(1);'><img src=media/table.svg style='opacity: 0.5; padding-left: 2px; height: 18px; margin-top:-2px;vertical-align:middle; padding-right: 3px;'></a>";
-  html += "<b>Table of Experiments (switch between views, double click row to edit annotation)</b><br><br>";
+  if (Object.keys(experiments).length==0) {
+    html += '<div id="btn_library_upload3" style="">You can start by <a href="javascript:upload_experiment();"><img src="media/upload.png" height=18 style="height: 16px; margin-top:-3px;vertical-align:middle; padding-right: 3px; opacity: 0.7">uploading the first experiment</a>.</div>';
+  } else {
+    html += "<a href='javascript:library_display_function(0);'><img src=media/list.svg style='padding-left: 2px; height: 18px; margin-top:-2px;vertical-align:middle; padding-right: 0px;'></a><a href='javascript:library_display_function(1);'><img src=media/table.svg style='opacity: 0.5; padding-left: 2px; height: 18px; margin-top:-2px;vertical-align:middle; padding-right: 3px;'></a>";
+    html += "<b>Table of Experiments (switch between views, double click row to edit annotation)</b><br><br>";
+  }
 
   html += "<table border=0 class='table_experiments'>";
   for (exp_id in experiments)
@@ -599,7 +621,7 @@ function display_library_ge() {
     if (google_user.getBasicProfile().getEmail()=="gregor.rot@gmail.com")
   {
     // add new analysis button
-    html += '<div id="div_control_library_newanalyses" style="display">';
+    html += '<div id="div_control_library_newanalyses" style="display;">';
     html += '<a href="javascript:new_analysis_library()" class="title_link">';
     html += '<font style="font-size: 13px;"><img src="media/calculator.png" style="height: 20px; margin-top:-5px;vertical-align:middle; padding-right: 3px; opacity: 0.4">New Analysis<font>';
     html += '</a>';
@@ -795,6 +817,8 @@ function new_analysis_library() {
             post_data["action"] = "new_analysis";
             post_data["email"] = google_user.getBasicProfile().getEmail();
             post_data["lib_id"] = library.lib_id;
+            post_data["method"] = library.method;
+            post_data["genome"] = library.genome;
             post_data["analysis_type"] = $('#select_analysis').find(":selected").val(); // dge, apa
             post_data["analysis_name"] = $('#analysis_name').val();
             post_data["experiments"] = JSON.stringify(library.experiments);
