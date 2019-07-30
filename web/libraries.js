@@ -130,6 +130,7 @@ function search_libraries() {
 }
 
 function sort_libraries_by(column_id) {
+  db["libraries"]["current_page"] = 0; // when sorting by clicking on a column, always reset page to 1 (0)
   columns = ["name", "notes", "method", "lib_id"]
   for (var i=0; i<columns.length; i++) {
     if ( (db["libraries"]["current_column_sort"]==columns[i]+":asc") && (column_id==columns[i]) ) {

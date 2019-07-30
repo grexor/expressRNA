@@ -3,6 +3,8 @@ menu_select("link_search");
 var file1ok = false;
 var file2ok = false;
 var experiment_display_function = "display_library_experiments2";
+var timer_get_library_status;
+var last_lib_status = "";
 
 function edit_library() {
   html = "<b>Library Edit</b> (" + library.lib_id + ")<br>";
@@ -27,7 +29,7 @@ function edit_library() {
       unsafeMessage: html,
       input: [
           '<textarea name="name" rows=1 placeholder="Name of Library" style="margin-bottom:10px;">' + library.name + '</textarea>',
-          '<textarea name="notes" rows=4 placeholder="Additional Notes">' + library.notes + '</textarea>',
+          '<textarea name="notes" rows=4 placeholder="Additional Notes">' + library.notes.replace(/<br>/g,"\n") + '</textarea>',
           '<table style="font-size: inherit; font-weight: 200; font-family: \"Helvetica Neue\", sans-serif; color: #444;" border=0><tr><td valign=top width=270>',
           'Annotation Fields:<textarea style="margin-top: 3px;" name="columns" rows=6 placeholder="Annotation Fields (one per line)">' + columns.join("\n") + '</textarea>',
           '</td><td valign=top width=270>',
@@ -48,7 +50,7 @@ function edit_library() {
           if (!data) {
           } else {
             library.name = data.name;
-            library.notes = data.notes;
+            library.notes = data.notes.replace(/\r\n|\r|\n/g,"<br>");
             library.access = data.access.split("\n");
             if (data.lib_public)
               library.access.push("public");
@@ -265,7 +267,7 @@ function upload_experiment() {
                             // For handling the progress of the upload
                             myXhr.upload.addEventListener('progress', function(e) {
                               perc = Math.round(e.loaded / e.total * 100);
-                              $("#div_library_perc").css("width", Math.round(500*(perc/100.0)));
+                              $("#div_library_perc").css("width", Math.round(498*(perc/100.0)));
                               $("#div_library_perc_text").html(perc + "%");
                             } , false);
                         }
@@ -333,6 +335,10 @@ function adjust_library_ubutton(sw) {
   function get_library(library_id) {
     db["library"]["library_id"] = library_id;
     $("body").addClass("waiting");
+    try  {
+      clearInterval(timer_get_library_status);
+    } catch (err) {}
+    timer_get_library_status = setInterval(get_library_status, 3000);
     post_data = {};
     post_data["action"] = "get_library";
     if (google_user!=undefined)
@@ -343,9 +349,9 @@ function adjust_library_ubutton(sw) {
             $("body").removeClass("waiting");
             library = $.parseJSON(result);
             db["library"]["query"] = library;
-            html_library_genome = "<b>Genome</b>: " + library.genome_desc;
-            html_library_method = "<b>Method</b>: " + library.method_desc;
-            html_library_seq_type = "<b>Sequencing</b>: " + library.seq_type;
+            html_library_genome = library.genome_desc;
+            html_library_method = library.method_desc;
+            html_library_seq_type = library.seq_type;
             if (google_user!=undefined)
             if ((library.owner.indexOf(google_user.getBasicProfile().getEmail())!=-1) || (google_user.getBasicProfile().getEmail()=="gregor.rot@gmail.com")) {
                 $("#btn_library_edit").show();
@@ -354,9 +360,9 @@ function adjust_library_ubutton(sw) {
                 html_library_genome += " | <a href=javascript:change_library_genome();>Change</a>";
                 html_library_method += " | <a href=javascript:change_library_method();>Change</a>";
               }
-            $("#lbl_library_id").html("<b>Library ID</b>: " + library.lib_id);
-            $("#lbl_library_name").html("<b>Name</b>: " + library.name);
-            $("#lbl_library_notes").html("<b>Notes</b>: " + library.notes);
+            $("#lbl_library_id").html(library.lib_id);
+            $("#lbl_library_name").html(library.name);
+            $("#lbl_library_notes").html(library.notes);
             $("#lbl_library_genome").html(html_library_genome);
             $("#lbl_library_method").html(html_library_method);
             $("#lbl_library_seq_type").html(html_library_seq_type);
@@ -400,11 +406,39 @@ function adjust_library_ubutton(sw) {
             if (db["library"]["library_module"]==undefined) // default library module
               db["library"]["library_module"] = "ex";
             open_library_div(db["library"]["library_module"]);
+
+            get_library_status();
+
+
         })
         .error(function(){
           $("body").removeClass("waiting");
     });
   }
+
+  function get_library_status() {
+    post_data = {};
+    post_data["action"] = "get_library_status";
+    post_data["lib_id"] = library.lib_id;
+    $.post('/expressrna_gw/index.py', post_data)
+        .success(function(result) {
+          if (result!="") {
+            $("#lbl_library_status").html('<b><font color=#aa0000>Library Status: processing</font></b><img src=media/spinner.gif style="height: 16px; margin-top:-3px;vertical-align:middle; padding-right: 3px; opacity: 0.7">')
+            $('#div_library_ge').css("opacity", "0.2");
+            $('#div_library_q').css("opacity", "0.2");
+          } else {
+            $('#div_library_ge').css("opacity", "1");
+            $('#div_library_q').css("opacity", "1");
+            $("#lbl_library_status").html('<b><font color=#00aa00>Library Status: complete</font></b>');
+          }
+          if (last_lib_status!=result)
+            get_library(library.lib_id);
+          last_lib_status = result;
+        })
+        .error(function(){
+    });
+  }
+
 
   function save_library(data) {
     post_data = {};
@@ -430,9 +464,9 @@ function adjust_library_ubutton(sw) {
       if (!present)
         data.columns.push(element);
     }
-    post_data["columns"] = JSON.stringify(data.columns)
-    post_data["columns_display"] = JSON.stringify(data.columns_display)
-    post_data["experiments"] = JSON.stringify(data.experiments)
+    post_data["columns"] = JSON.stringify(data.columns);
+    post_data["columns_display"] = JSON.stringify(data.columns_display);
+    post_data["experiments"] = JSON.stringify(data.experiments);
     $.post('/expressrna_gw/index.py', post_data)
         .success(function(result) {
           get_library(data.lib_id); // read back data from updated library
@@ -585,10 +619,13 @@ function display_library_experiments2(experiments) {
         column_value = "&nbsp;";
       html += "<td class='exp_row'><div class='div_column_value'>" + column_value + "</div></td>";
     }
-    if (experiments[exp_id].stats[0]!="") {
+    if ( (experiments[exp_id].stats[0]!="") && (experiments[exp_id].stats[0]!=0)) {
       map_text = experiments[exp_id].stats[0] + "M reads; " + experiments[exp_id].stats[1] + "%";
       map_width = Math.min(100, Number(experiments[exp_id].stats[1]).toFixed(0)) + "%";
       html += "<td class='exp_row' style='z-index: -2;'><div style='position: relative;'><div style='z-index: 2000; border: 1px solid #eeeeee; width: 130px; text-align: center; margin-bottom: 2px; padding-left: 3px; padding-right: 3px; border-radius: 3px; font-size: 11px;'>" + map_text + "</div><div style='width: " + map_width + "; text-align: center; height: 100%; border-radius: 3px; background-color: #e1e1e1; font-size: 10px; position: absolute; top: 0px; left: 0px; z-index: -5;'>&nbsp;</div></div></td>";
+    } else {
+      map_text = "processing / queued";
+      html += "<td class='exp_row' style='z-index: -2;'><div style='position: relative;'><div style='z-index: 2000; border: 1px solid #eeeeee; width: 130px; text-align: center; margin-bottom: 2px; padding-left: 3px; padding-right: 3px; border-radius: 3px; font-size: 11px;'>" + map_text + "</div><div style='width: " + "0" + "; text-align: center; height: 100%; border-radius: 3px; background-color: #e1e1e1; font-size: 10px; position: absolute; top: 0px; left: 0px; z-index: -5;'>&nbsp;</div></div></td>";
     }
 
     lib_id = experiments[exp_id].lib_id;
@@ -618,18 +655,18 @@ function display_library_ge() {
   html = "<br>";
 
   if (google_user!=undefined)
-    if (google_user.getBasicProfile().getEmail()=="gregor.rot@gmail.com")
+  if ((library.owner.indexOf(google_user.getBasicProfile().getEmail())!=-1) || (google_user.getBasicProfile().getEmail()=="gregor.rot@gmail.com"))
   {
     // add new analysis button
-    html += '<div id="div_control_library_newanalyses" style="display;">';
+    html += '<div class="div_header" style="color:#555555"><b>Start New Analysis</b>: define a new analysis / comparison using the experiments from your library</div>';
+    html += '<div id="div_control_library_newanalyses" style="float: left; padding-bottom: 10px">';
     html += '<a href="javascript:new_analysis_library()" class="title_link">';
-    html += '<font style="font-size: 13px;"><img src="media/calculator.png" style="height: 20px; margin-top:-5px;vertical-align:middle; padding-right: 3px; opacity: 0.4">New Analysis<font>';
+    html += '<font style="font-size: 13px;"><img src="media/calculator.png" style="height: 20px; margin-top:-5px;vertical-align:middle; padding-right: 3px; opacity: 0.4">Differential Gene Expression<font>';
     html += '</a>';
-    html += '</div>';
-    html += "<br>";
+    html += '</div><br><br>';
   }
 
-  html += "<b>Downloads:</b> links to constructed polyA databases and gene expression tables<br><br>"
+  html += '<div class="div_header" style="color:#555555"><b>Downloads:</b> links to constructed polyA databases and gene expression tables</div>';
   polya_bed_link = config["polya_url"] + library.lib_id + ".bed.gz";
   html += "<div style='background-color: #e1e1e1; border-radius: 3px; float:left; padding-left: 3px; padding-right: 3px; margin-right: 5px;'>PolyA database</div><div class='div_column_value'><a target=_new href='" + polya_bed_link + "'>Download polyA database</a></div>";
   html += "<div style='font-size: 12px; color: #555555; padding-left: 3px;'>The polyA database is constructed from all experimental data in the library. Reads are grouped depending on library method (Quantseq Reverse, Quantseq Forward, Nanopore) and thresholds are applied to estimate RNA molecule ends. The results are reported in BED format. A detailed description is available in the <a href='javascript:open_help();'>Docs section</a>.</div>";
@@ -650,7 +687,7 @@ function display_library_ge() {
 function edit_experiment(exp_id) {
   if (google_user==undefined)
     return;
-  if ((library.owner.indexOf(google_user.getBasicProfile().getEmail())!=-1) && (google_user.getBasicProfile().getEmail()!="gregor.rot@gmail.com"))
+  if ((library.owner.indexOf(google_user.getBasicProfile().getEmail())==-1) && (google_user.getBasicProfile().getEmail()!="gregor.rot@gmail.com"))
     return;
   library = db["library"]["query"];
   html = "<b>Editing experiment " + exp_id + "</b> for library " + library.lib_id + "</b><br>";
@@ -778,23 +815,30 @@ function disable_paste_format(object) {
 
 function new_analysis_library() {
 
-  html = "<b>New Analysis</b><br>";
-  html += "Here you can define a new analysis. Please choose analysis parameters below" + "<br>";
+  if (Object.keys(library.experiments).length < 3) {
+    html = "<b>Differential Gene Expression</b><br>";
+    html += "You need at least 4 experiments to define a differential gene expression (DGE) analysis." + "<br>";
+    vex.dialog.open({
+        unsafeMessage: html,
+        buttons: [
+            $.extend({}, vex.dialog.buttons.NO, { text: 'Close' })
+        ],
+        callback: function (data) {
+        }
+    })
+    return;
+  }
 
-  html += "<textarea name='analysis_name' id='analysis_name' rows=2 style='margin-top: 10px; outline: none; resize: none; width: 400px; font-size: 13px; color: #555555;' placeholder='Analysis name'></textarea>";
+  html = "<b>Differential Gene Expression Analysis</b><br>";
+  html += "Here you define new differential gene expression analysis. Please choose experiment groupA (control) and groupB (test) below." + "<br>";
 
-  analysis_html = "<div style='padding-top: 10px; padding-bottom: 5px; line-height: normal; padding-left: 3px; font-size: 12px;'><b>Select analysis type</b></div>";
+  html += "<textarea name='analysis_name' id='analysis_name' rows=2 style='border-radius: 5px; margin-top: 10px; outline: none; resize: none; width: 400px; font-size: 13px; color: #777777;' placeholder='Analysis name'></textarea>";
 
-  analysis_html += "<select onchange='adjust_analysis_cbutton_library();' id='select_analysis' name='select_analysis' size=2 style='margin-left: 2px; width: 400px; font-size: 12px; outline: none;'>";
-  for (var analysis in analyses)
-      analysis_html += "<option selected value='" + analysis + "'>" + analyses[analysis][1] + "</option>";
-  analysis_html += "</select>";
-
-  analysis_html += "<div style='padding-top: 20px; padding-bottom: 5px; width: 400px; line-height: normal; padding-left: 3px; font-size: 12px;'><b>Mark experiments with control and test by selecting them and clicking on buttons Control and Test on the right of the table.</b></div>";
+  analysis_html = "<br><br>Mark (distribute) experiments into group A (control) and group B (test).<br>Minimum 2 replicates per group.<br>";
   analysis_html += "<table border=0><tr><td>";
   analysis_html += "<div id='comp_experiment_select'>" + make_html_experiment_select(); + "</div>";
   analysis_html += "</td>";
-  analysis_html += "<td style='padding-left: 10px;' valign=top><br><div style='font-size: 12px; color: #777777;'>Select experiments and click one of the buttons to label them:</div><br><input type=button value=' Control ' onclick='mark_experiment(\"control\");'>&nbsp;&nbsp;<input type=button value=' Test ' onclick='mark_experiment(\"test\");'></td>";
+  analysis_html += "<td style='padding-left: 10px;' valign=top><input type=button value=' Group A ' onclick='mark_experiment(\"groupA\");'><br><br><input type=button value=' Group B ' onclick='mark_experiment(\"groupB\");'></td>";
   analysis_html += "</tr></table>";
   html += analysis_html + "<br>";
   vex.dialog.open({
@@ -819,7 +863,7 @@ function new_analysis_library() {
             post_data["lib_id"] = library.lib_id;
             post_data["method"] = library.method;
             post_data["genome"] = library.genome;
-            post_data["analysis_type"] = $('#select_analysis').find(":selected").val(); // dge, apa
+            post_data["analysis_type"] = "dge"; // dge, apa"
             post_data["analysis_name"] = $('#analysis_name').val();
             post_data["experiments"] = JSON.stringify(library.experiments);
 
@@ -844,13 +888,13 @@ function mark_experiment(value) {
     library.experiments[exp_id].analysis_set = value;
   }
   $("#comp_experiment_select").html(make_html_experiment_select());
+  adjust_analysis_cbutton_library();
 }
 
 function make_html_experiment_select() {
-  analysis_html = "<select multiple id='select_experiments' name='select_experiments' size=" + Math.min(15, Object.keys(library.experiments).length) + " style='margin-left: 2px; width: 400px; font-size: 12px; outline: none; font-family: Courier'>";
-
+  analysis_html = "<select multiple id='select_experiments' onchange='adjust_analysis_cbutton_library()' name='select_experiments' size=" + Math.min(15, Object.keys(library.experiments).length+2) + " style='margin-left: 2px; width: 400px; font-size: 12px; outline: none; color: #777777; border-radius: 2px;'>";
   for (exp_id in library.experiments) {
-    var exp_desc = "exp_" + exp_id + ", ";
+    var exp_desc = ["exp_" + exp_id];
     for (var j=0; j<library.columns_display.length; j++) {
       column_name = library.columns_display[j][1];
       column_name_human = library.columns_display[j][0];
@@ -859,8 +903,11 @@ function make_html_experiment_select() {
         column_value = library.experiments[exp_id]["method_desc"]
       if (column_value=="")
         column_value = "&nbsp;";
-      exp_desc += column_value + " | ";
+      if (column_value!="&nbsp;") {
+        exp_desc.push(column_value);
+      }
     }
+    exp_desc = exp_desc.join(", ");
     if (library.experiments[exp_id]["analysis_set"]!=undefined)
       exp_desc = library.experiments[exp_id]["analysis_set"] + " : " + exp_desc;
     analysis_html += "<option value='" + exp_id + "'>" + exp_desc + "</option>";
@@ -876,19 +923,26 @@ function adjust_analysis_cbutton_library() {
   for (var i = 0; i < buttons.length; i++) {
       var button = buttons[i];
       if ($(button).html()=="Create") {
-        if ( ($('#select_analysis').find(":selected").val()==undefined) || ($('#select_analysis').find(":selected").val()==undefined))
+        num_groupA = 0;
+        num_groupB = 0;
+        for (exp_id in library.experiments) {
+          if (library.experiments[exp_id].analysis_set=="groupA")
+            num_groupA += 1
+          if (library.experiments[exp_id].analysis_set=="groupB")
+            num_groupB += 1
+        }
+        if ((num_groupA>=2) && (num_groupB>=2))
         {
-          button.disabled = true;
-          $(button).css("opacity", 0.1);
-          $(button).css("cursor", "default");
-        } else {
           button.disabled = false;
           $(button).css("opacity", 1);
           $(button).css("cursor", "pointer");
+        } else {
+          button.disabled = true;
+          $(button).css("opacity", 0.1);
+          $(button).css("cursor", "default");
         }
       }
   }
 }
-
 
 tippy('.btn', {theme: 'light', interactive: true});

@@ -402,8 +402,9 @@ function display_analysis_apamap(div_name, pair_type) {
             if (db["analysis"]["pair_type"]==undefined)
               db["analysis"]["pair_type"] = "same";
             if (google_user!=undefined)
-            if ((data.access.indexOf(google_user.getBasicProfile().getEmail())!=-1) || (google_user.getBasicProfile().getEmail()=="gregor.rot@gmail.com")) {
+            if ((data.owner.indexOf(google_user.getBasicProfile().getEmail())!=-1) || (google_user.getBasicProfile().getEmail()=="gregor.rot@gmail.com")) {
                 $("#btn_analysis_delete").show();
+                $("#btn_analysis_edit").show();
             }
             $("#btn_same").removeClass("selected");
             $("#btn_skipped").removeClass("selected");
@@ -752,6 +753,83 @@ function delete_analysis_do(analysis_id) {
         search_analyses();
         open_analyses();
         update_user_usage();
+      })
+      .error(function(){
+  });
+}
+
+
+function edit_analysis() {
+  adata = db["analysis"]["query"];
+  html = "<b>Analysis Edit</b> (" + db["analysis"]["analysis_id"] + ")<br>";
+  html += "<div style='font-size: 12px; color: #444444;'>Here you can edit some of the basic analysis text.</div>"
+  public_analysis = "";
+  analysis_access = Object.assign([], adata["access"]);
+  analysis_owners = Object.assign([], adata["owner"]);
+  if (analysis_owners.length==0) {
+    analysis_owners.push(analysis_access[0]);
+  }
+  var index = analysis_access.indexOf("public");
+  if (index > -1) {
+      analysis_access.splice(index, 1);
+      public_analysis = "checked";
+  }
+  vex.dialog.open({
+      unsafeMessage: html,
+      input: [
+          '<textarea name="name" rows=1 placeholder="Name of Analysis" style="margin-bottom:10px;">' + adata["comps_name"] + '</textarea>',
+          '<textarea name="notes" rows=4 placeholder="Additional Notes">' + adata["notes"] + '</textarea>',
+          '<table style="font-size: inherit; font-weight: 200; font-family: \"Helvetica Neue\", sans-serif; color: #444;" border=0><tr><td valign=top width=270>',
+          'Allow access to:<textarea style="margin-top: 3px;" name="access" rows=3 placeholder="Enter one e-mail per line">' + analysis_access.join("\n") + '</textarea>',
+          '<input type=checkbox ' + public_analysis + ' id="ana_public" name="ana_public"><label class=unselectable for="ana_public">Make Analysis Public (visible to everyone)</label>',
+          '</td><td valign=top width=270>',
+          'Owners (can edit):<textarea style="margin-top: 3px;" name="owner" rows=3 placeholder="Enter one e-mail per line">' + analysis_owners.join("\n") + '</textarea>',
+          '</td></tr></table>',
+      ].join(''),
+      buttons: [
+          $.extend({}, vex.dialog.buttons.YES, { text: 'Save' }),
+          $.extend({}, vex.dialog.buttons.NO, { text: 'Cancel' })
+      ],
+      callback: function (data) {
+          if (!data) {
+          } else {
+            var analysis = {};
+            analysis.analysis_id = db["analysis"]["analysis_id"];
+            analysis.name = data.name;
+            analysis.notes = data.notes;
+            try {
+              analysis.access = data.access.split("\n");
+            } catch (err) {
+              analysis.access = [];
+            }
+            try {
+              analysis.owner = data.owner.split("\n");
+            } catch (err) {
+              analysis.owner = [];
+            }
+            if (data.ana_public)
+              analysis.access.push("public");
+            save_analysis(analysis);
+          }
+      }
+  })
+}
+
+function save_analysis(data) {
+  post_data = {};
+  post_data["action"] = "save_analysis";
+  if (google_user!=undefined)
+    post_data["email"] = google_user.getBasicProfile().getEmail();
+  post_data["analysis_id"] = data.analysis_id;
+  post_data["name"] = data.name;
+  post_data["notes"] = data.notes;
+  console.log(post_data["notes"]);
+  post_data["access"] = data.access.join(",");
+  post_data["owner"] = data.owner.join(",");
+  $.post('/expressrna_gw/index.py', post_data)
+      .success(function(result) {
+        get_analysis(data.analysis_id);
+        search_analyses();
       })
       .error(function(){
   });

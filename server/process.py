@@ -14,7 +14,10 @@ while True:
     q = conn.query(Tickets).filter(Tickets.date_started==None).order_by(Tickets.tid).all()
     for rec in q:
         print "==="
-        print "processing TID=%s" % rec.tid
+        try:
+            print "processing TID=%s" % rec.tid
+        except:
+            continue
         print rec.command
         rec.date_started = datetime.datetime.now()
         rec.status = 1 # processing

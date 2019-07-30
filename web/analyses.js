@@ -83,6 +83,7 @@ function search_analyses() {
 }
 
 function sort_analyses_by(column_id) {
+  db["analyses"]["current_page"] = 0; // when sorting by clicking on a column, always reset page to 1 (0)
   columns = ["name", "notes", "analysis_id", "last_change"]
   for (var i=0; i<columns.length; i++) {
     if ( (db["analyses"]["current_column_sort"]==columns[i]+":asc") && (column_id==columns[i]) ) {

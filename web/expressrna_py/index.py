@@ -22,6 +22,18 @@ db = {}
 db["methods"] = {}
 db["methods"][""] = {"desc": "not selected"}
 
+db["methods"]["paperclip"] = {}
+db["methods"]["paperclip"]["desc"] = "PAPERCLIP RNA-seq 3'-end targeted protocol, see <a href='%s' target=_new>publication</a>"
+db["methods"]["paperclip"]["link"] = "https://www.sciencedirect.com/science/article/pii/S2211124716302649?via%3Dihub"
+
+db["methods"]["3seq"] = {}
+db["methods"]["3seq"]["desc"] = "3'-seq, RNA-seq 3'-end targeted protocol%s"
+db["methods"]["3seq"]["link"] = ""
+
+db["methods"]["lexfwd"] = {}
+db["methods"]["lexfwd"]["desc"] = "<a href='%s' target=_new>Lexogen Quantseq Forward<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>"
+db["methods"]["lexfwd"]["link"] = "http://www.lexogen.com"
+
 db["methods"]["lexrev"] = {}
 db["methods"]["lexrev"]["desc"] = "<a href='%s' target=_new>Lexogen Quantseq Reverse<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>"
 db["methods"]["lexrev"]["link"] = "http://www.lexogen.com"
@@ -189,7 +201,7 @@ class TableClass():
                 self.add_ticket(email, "bzip2 "+target[:-3], "bzip2 " + "%s_e%s.fastq" % (lib_id, exp_id))
             self.add_ticket(email, "apa.map -lib_id %s -exp_id %s -cpu 4" % (lib_id, exp_id), "map e%s (library %s) to reference genome %s" % (exp_id, lib_id, library.genome))
             self.add_ticket(email, "apa.map.stats -lib_id %s -exp_id %s" % (lib_id, exp_id), "map statistics for e%s (library %s)" % (exp_id, lib_id))
-            self.add_ticket(email, "apa.fastqc /home/gregor/apa/data.apa/%s" % lib_id, "fastqc for library %s" % (lib_id))
+            self.add_ticket(email, "apa.fastqc /home/gregor/apa/data.apa/%s %s" % (lib_id, lib_id), "fastqc for library %s" % (lib_id))
             self.add_ticket(email, "apa.bed.gene_expression -lib_id %s" % lib_id, "gene expression table for library %s" % lib_id)
             self.add_ticket(email, "apa.bed.multi -lib_id %s" % (lib_id), "bed files for library %s" % lib_id)
             self.add_ticket(email, "apa.polya.makeconfig -lib_id %s" % (lib_id), "polya make config database for library %s" % lib_id)
@@ -239,7 +251,7 @@ class TableClass():
             """
             self.add_ticket(email, "apa.map -lib_id %s -exp_id %s -cpu 4" % (lib_id, exp_id), "map e%s (library %s) to reference genome %s" % (exp_id, lib_id, library.genome))
             self.add_ticket(email, "apa.map.stats -lib_id %s -exp_id %s" % (lib_id, exp_id), "map statistics for e%s (library %s)" % (exp_id, lib_id))
-            self.add_ticket(email, "apa.fastqc /home/gregor/apa/data.apa/%s" % lib_id, "fastqc for library %s" % (lib_id))
+            self.add_ticket(email, "apa.fastqc /home/gregor/apa/data.apa/%s %s" % (lib_id, lib_id), "fastqc for library %s" % (lib_id))
             self.add_ticket(email, "apa.bed.gene_expression -lib_id %s" % lib_id, "gene expression table for library %s" % lib_id)
             self.add_ticket(email, "apa.bed.multi -lib_id %s" % (lib_id), "bed files for library %s" % lib_id)
             self.add_ticket(email, "apa.polya.makeconfig -lib_id %s" % (lib_id), "polya make config database for library %s" % lib_id)
@@ -479,6 +491,7 @@ class TableClass():
         r["test"] = make_table(comps.test)
         r["polya_db"] = comps.polya_db
         r["access"] = comps.access
+        r["owner"] = comps.owner
         r["authors"] = comps.authors
         r["status"] = comps.status
 
@@ -587,6 +600,13 @@ class TableClass():
         r["go"] = go
         return json.dumps(r, default=dthandler)
 
+    def get_library_status(self):
+        lib_id = self.pars.get("lib_id", None)
+        if lib_id!=None:
+            lib = apa.annotation.Library(lib_id)
+            return lib.status
+        return ""
+
     def get_library(self):
 
         apa.annotation.init()
@@ -658,6 +678,24 @@ class TableClass():
         library.columns_display = json.loads(self.pars["columns_display"])
         library.experiments = json.loads(self.pars["experiments"])
         library.save()
+        r = {"status":"success"}
+        return json.dumps(r, default=dthandler)
+
+    def save_analysis(self):
+        apa.annotation.init()
+        r = {"status":"fail"}
+        analysis_id = self.pars.get("analysis_id", None)
+        analysis = apa.comps.Comps(analysis_id)
+        email = self.pars.get("email", "public")
+        if (email=="public"):
+            return json.dumps(r, default=dthandler)
+        #if (email not in library.owner) and email!="gregor.rot@gmail.com":
+        #    return json.dumps(r, default=dthandler)
+        analysis.name = self.pars.get("name", "")
+        analysis.notes = self.pars.get("notes", "")
+        analysis.access = self.pars.get("access", "").split(",")
+        analysis.owner = self.pars.get("owner", "").split(",")
+        analysis.save()
         r = {"status":"success"}
         return json.dumps(r, default=dthandler)
 
@@ -787,9 +825,9 @@ class TableClass():
         control_experiments = []
         test_experiments = []
         for exp_id, exp_data in experiments.items():
-            if exp_data.get("analysis_set", None)=="control":
+            if exp_data.get("analysis_set", None)=="groupA":
                 control_experiments.append("%s_e%s" % (exp_data["lib_id"], exp_id))
-            if exp_data.get("analysis_set", None)=="test":
+            if exp_data.get("analysis_set", None)=="groupB":
                 test_experiments.append("%s_e%s" % (exp_data["lib_id"], exp_id))
 
         control_experiments = sorted(control_experiments, key=lambda x: int(x.split("_")[2][1:])) # sort by exp_id
@@ -804,14 +842,16 @@ class TableClass():
         f.write("control_name:control\n")
         f.write("test_name:test\n")
 
-        f.write("site_selection:DEX\n")
-        f.write("polya_db:20190523_1\n")
-        f.write('poly_type:["strong", "weak", "less", "noclass"]\n')
-        f.write("presence_thr:3\n")
-        f.write("cDNA_thr:3\n\n")
+        if analysis_type=="apa":
+            f.write("site_selection:DEX\n")
+            f.write("polya_db:20190523_1\n")
+            f.write('poly_type:["strong", "weak", "less", "noclass"]\n')
+            f.write("presence_thr:3\n")
+            f.write("cDNA_thr:3\n\n")
 
         f.write("authors:%s\n" % email)
         f.write("access:%s\n" % email)
+        f.write("owner:%s\n" % email)
         f.write("name:%s\n" % analysis_name)
 
         f.write("\n")

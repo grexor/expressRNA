@@ -29,6 +29,9 @@ genomes["at"] = ["at", "at, <i>Arabidopsis thaliana</i>, assembly: at, annotatio
 genomes["mar3"] = ["mar3", "mar3, <i>Marchantia polymorpha</i>, assembly: mar3, annotation: mar3"]
 
 methods = {};
+methods["paperclip"] = ["paperclip", "PAPERCLIP, RNA-seq 3'-end targeted protocol"]
+methods["3seq"] = ["3seq", "3'-seq, RNA-seq 3'-end targeted protocol"]
+methods["deffwd"] = ["deffwd", "RNA-seq 3'-end targeted"]
 methods["lexrev"] = ["lexrev", "Lexrev, Lexogen Quantseq Reverse, 3'-end targeted"]
 methods["lexfwd"] = ["lexrev", "Lexfwd, Lexogen Quantseq Forward, 3'-end targeted"]
 methods["RNAseq"] = ["RNAseq", "RNA-seq, classic whole transcriptome RNA-seq"]
@@ -73,7 +76,7 @@ db["access_levels"]["guest"]["diskspace"] = 0
 db["access_levels"]["level1"] = {}
 db["access_levels"]["level1"]["experiments"] = 4
 db["access_levels"]["level1"]["libraries"] = 1
-db["access_levels"]["level1"]["diskspace"] = 100
+db["access_levels"]["level1"]["diskspace"] = 250
 
 //level2
 db["access_levels"]["level2"] = {}
