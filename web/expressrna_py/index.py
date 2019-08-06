@@ -62,6 +62,34 @@ db["methods"]["paseq"] = {}
 db["methods"]["paseq"]["desc"] = "PA-seq 3'-end targeted sequencing%s"
 db["methods"]["paseq"]["link"] = ""
 
+db["methods"]["passeq"] = {}
+db["methods"]["passeq"]["desc"] = "PAS-seq 3'-end targeted sequencing%s"
+db["methods"]["passeq"]["link"] = ""
+
+db["methods"]["polyaseq"] = {}
+db["methods"]["polyaseq"]["desc"] = "PolyA-Seq 3'-end targeted sequencing%s"
+db["methods"]["polyaseq"]["link"] = ""
+
+db["methods"]["3pseq"] = {}
+db["methods"]["3pseq"]["desc"] = "3P-Seq 3'-end targeted sequencing%s"
+db["methods"]["3pseq"]["link"] = ""
+
+db["methods"]["sapas"] = {}
+db["methods"]["sapas"]["desc"] = "SAPAS 3'-end targeted sequencing%s"
+db["methods"]["sapas"]["link"] = ""
+
+db["methods"]["3reads"] = {}
+db["methods"]["3reads"]["desc"] = "3READS 3'-end targeted sequencing%s"
+db["methods"]["3reads"]["link"] = ""
+
+db["methods"]["drs"] = {}
+db["methods"]["drs"]["desc"] = "DRS 3'-end targeted sequencing%s"
+db["methods"]["drs"]["link"] = ""
+
+db["methods"]["aseq"] = {}
+db["methods"]["aseq"]["desc"] = "ASEQ 3'-end targeted sequencing%s"
+db["methods"]["aseq"]["link"] = ""
+
 db["genomes"] = {}
 db["genomes"][""] = {"desc" : "not selected"}
 

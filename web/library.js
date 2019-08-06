@@ -50,7 +50,12 @@ function edit_library() {
           if (!data) {
           } else {
             library.name = data.name;
-            library.notes = data.notes.replace(/\r\n|\r|\n/g,"<br>");
+            console.log(data.notes);
+            if (data.notes!=undefined) {
+              library.notes = data.notes.replace(/\r\n|\r|\n/g,"<br>");
+            } else {
+              library.notes = "";
+            }
             library.access = data.access.split("\n");
             if (data.lib_public)
               library.access.push("public");
@@ -347,6 +352,10 @@ function adjust_library_ubutton(sw) {
     $.post('/expressrna_gw/index.py', post_data)
         .success(function(result) {
             $("body").removeClass("waiting");
+            if (result=="empty") {
+              console.log("got empty library result");
+              return;
+            }
             library = $.parseJSON(result);
             db["library"]["query"] = library;
             html_library_genome = library.genome_desc;
@@ -464,6 +473,7 @@ function adjust_library_ubutton(sw) {
       if (!present)
         data.columns.push(element);
     }
+
     post_data["columns"] = JSON.stringify(data.columns);
     post_data["columns_display"] = JSON.stringify(data.columns_display);
     post_data["experiments"] = JSON.stringify(data.experiments);
@@ -806,6 +816,12 @@ function edit_experiment(exp_id) {
   }
 
 function disable_paste_format(object) {
+  // prevent pressing ENTER in edit experiment
+  object.keypress(function(event) {
+        if (event.keyCode == 13) {
+            event.preventDefault();
+        }
+  });
   object.on("paste", function(e) {
     e.preventDefault();
     var text = (e.originalEvent || e).clipboardData.getData('text/plain');

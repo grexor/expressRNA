@@ -29,6 +29,13 @@ genomes["at"] = ["at", "at, <i>Arabidopsis thaliana</i>, assembly: at, annotatio
 genomes["mar3"] = ["mar3", "mar3, <i>Marchantia polymorpha</i>, assembly: mar3, annotation: mar3"]
 
 methods = {};
+methods["aseq"] = ["aseq", "ASEQ, RNA-seq 3'-end targeted protocol"]
+methods["drs"] = ["drs", "DRS, RNA-seq 3'-end targeted protocol"]
+methods["3reads"] = ["3reads", "3READS, RNA-seq 3'-end targeted protocol"]
+methods["sapas"] = ["sapas", "SAPAS, RNA-seq 3'-end targeted protocol"]
+methods["3pseq"] = ["3pseq", "3P-Seq, RNA-seq 3'-end targeted protocol"]
+methods["polyaseq"] = ["polyaseq", "PolyA-Seq, RNA-seq 3'-end targeted protocol"]
+methods["passeq"] = ["passeq", "PAS-Seq, RNA-seq 3'-end targeted protocol"]
 methods["paperclip"] = ["paperclip", "PAPERCLIP, RNA-seq 3'-end targeted protocol"]
 methods["3seq"] = ["3seq", "3'-seq, RNA-seq 3'-end targeted protocol"]
 methods["deffwd"] = ["deffwd", "RNA-seq 3'-end targeted"]

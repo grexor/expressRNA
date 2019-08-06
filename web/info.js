@@ -102,10 +102,13 @@ function show_stats_experiments() {
           element_inner.display_value1 = element_inner.value
           element_inner.display_value2 = element_inner.value
           element_inner.label = item + ", " + element_inner.value;
-          element_inner.display_label = item + "<br>" + element_inner.value + " experiments<br>"+Number(100*element_inner.fraction).toFixed(0)+"% of all experiments";
+          human_number = Number(100*element_inner.fraction).toFixed(0);
+          if (human_number==0)
+            human_number = "<1";
+          element_inner.display_label = item + "<br>" + element_inner.value + " experiments<br>"+human_number+"%";
           element_inner.color = "#f1f1f1";
           pie_data.push(element_inner);
-          table_stats_methods += "<tr><td align=right style='border-right: 1px solid #cacaca; padding-right: 5px;'>" + item + "</td><td align=right>" + element_inner.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " experiments (" + Number(100*element_inner.fraction).toFixed(0)+"% of all experiments)</td></tr>";
+          table_stats_methods += "<tr><td align=right style='border-right: 1px solid #cacaca; padding-right: 5px;'>" + item + "</td><td align=right>" + element_inner.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " experiments (" + human_number+"%)</td></tr>";
         }
         table_stats_methods += "<tr><td colspan=2 align=right style='font-weight: 600; color: #777777; padding-right: 5px;'>" + sum_all.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " experiments total</td></tr>";
         var stats_methods_config = {
@@ -151,10 +154,13 @@ function show_stats_experiments() {
           element_inner.display_value1 = element_inner.value
           element_inner.display_value2 = element_inner.value
           element_inner.label = item + ", " + element_inner.value + "M";
-          element_inner.display_label = item + "<br>" + element_inner.value + " million reads<br>"+Number(100*element_inner.fraction).toFixed(0)+"% of all reads";
+          human_number = Number(100*element_inner.fraction).toFixed(0);
+          if (human_number==0)
+            human_number = "<1";
+          element_inner.display_label = item + "<br>" + element_inner.value + " million reads<br>"+human_number+"% ";
           element_inner.color = "#f1f1f1";
           pie_data.push(element_inner);
-          table_stats_reads += "<tr><td align=right style='border-right: 1px solid #cacaca; padding-right: 5px;'>" + item + "</td><td align=right>" + element_inner.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " million reads (" + Number(100*element_inner.fraction).toFixed(0)+"% of all reads)</td></tr>";
+          table_stats_reads += "<tr><td align=right style='border-right: 1px solid #cacaca; padding-right: 5px;'>" + item + "</td><td align=right>" + element_inner.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " million reads (" + human_number + "%)</td></tr>";
         }
         table_stats_reads += "<tr><td colspan=2 align=right style='font-weight: 600; color: #777777; padding-right: 5px;'>" + sum_all.toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " million reads total</td></tr>";
         var stats_reads_config = {
