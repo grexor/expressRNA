@@ -185,7 +185,12 @@ function display_libraries() {
 
   html_header += "<div>" + make_libraries_pagination_html() + "</div>"
 
-  html_header += "<div style='font-size=11px; padding-top: 10px; padding-bottom: 5px;'>Displaying " + Math.min(temp.length, 100) + " of " + db["libraries"]["query"].count + " libraries</div>";
+  num_experiments = 0;
+  for (var i=0; i<Math.min(100, temp.length); i++) {
+    num_experiments += temp[i].num_experiments;
+  }
+
+  html_header += "<div style='font-size=11px; padding-top: 10px; padding-bottom: 5px;'>Displaying " + Math.min(temp.length, 100) + " of " + db["libraries"]["query"].count + " libraries. Displayed libraries contain " + num_experiments + " experiments</div>";
 
   $("#table_libraries_header").html(html_header);
 
@@ -207,6 +212,8 @@ function display_libraries() {
       html += "<div><b>Notes</b>: " + notes_search + "</div>";
       html += "<div><b>Genome</b>: " + temp[i].genome_search + "</div>";
       html += "<div><b>Method</b>: " + temp[i].method_search + "</div>";
+      if (temp[i].tags_search!="")
+        html += "<div><b>Tags</b>: " + temp[i].tags_search + "</div>";
       html += "<div><b>Status</b>: " + "<font color=gray>Complete</font>" + "</div>";
       html += "</div>";
       html += "</div>";
@@ -302,3 +309,5 @@ function add_libraries_filter(filter) {
 }
 
 libraries_tags_reinit();
+
+tippy('.btn', {theme: 'light', interactive: true});

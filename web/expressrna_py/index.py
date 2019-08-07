@@ -423,11 +423,14 @@ class TableClass():
             r["name_search"] = lib_data.name
             r["notes"] = lib_data.notes
             r["notes_search"] = lib_data.notes
+            r["tags"] = lib_data.tags
+            r["tags_search"] = lib_data.tags
             r["method"] = lib_data.method
             r["method_search"] = db["methods"][lib_data.method]["desc"]
             if (r["method_search"])!="not selected":
                 r["method_search"] = r["method_search"] % db["methods"][lib_data.method]["link"]
             r["genome"] = lib_data.genome
+            r["num_experiments"] = len(lib_data.experiments)
             r["genome_search"] = db["genomes"][lib_data.genome]["desc"]
             if (r["genome_search"])!="not selected":
                 r["genome_search"] = r["genome_search"] % (db["genomes"][r["genome"]]["link_assembly"], db["genomes"][r["genome"]]["link_annotation"])
@@ -436,11 +439,12 @@ class TableClass():
                 if term=="":
                     continue
                 include_library = False
-                if r["lib_id"].lower().find(term)!=-1 or r["name"].lower().find(term)!=-1 or r["notes"].lower().find(term)!=-1 or r["method_search"].lower().find(term)!=-1 or r["genome_search"].lower().find(term)!=-1:
+                if r["tags_search"].lower().find(term)!=-1 or r["lib_id"].lower().find(term)!=-1 or r["name"].lower().find(term)!=-1 or r["notes"].lower().find(term)!=-1 or r["method_search"].lower().find(term)!=-1 or r["genome_search"].lower().find(term)!=-1:
                     include_library = True
                     r["lib_id_search"] = self.replace_ignorecase(term, "<div style='display: inline; font-weight: bold; color: #FF0000'>", "</div>", r["lib_id_search"])
                     r["name_search"] = self.replace_ignorecase(term, "<div style='display: inline; font-weight: bold; color: #FF0000'>", "</div>", self.remove_links(r["name_search"]))
                     r["notes_search"] = self.replace_ignorecase(term, "<div style='display: inline; font-weight: bold; color: #FF0000'>", "</div>", self.remove_links(r["notes_search"]))
+                    r["tags_search"] = self.replace_ignorecase(term, "<div style='display: inline; font-weight: bold; color: #FF0000'>", "</div>", self.remove_links(r["tags_search"]))
                     if r["method_search"]!="not selected":
                         r["method_search"] = self.replace_ignorecase(term, "<div style='display: inline; font-weight: bold; color: #FF0000'>", "</div>", self.remove_links(r["method_search"]))
                     if r["genome_search"]!="not selected":
@@ -669,6 +673,7 @@ class TableClass():
         r["owner"] = library.owner
         r["access"] = library.access
         r["genome"] = library.genome
+        r["tags"] = library.tags
         r["seq_type"] = library.seq_type
         r["genome_desc"] = db["genomes"][library.genome]["desc"]
         if r["genome_desc"]!="not selected":
@@ -698,6 +703,7 @@ class TableClass():
             return json.dumps(r, default=dthandler)
         library.name = self.pars.get("name", "")
         library.notes = self.pars.get("notes", "")
+        library.tags = self.pars.get("tags", "")
         library.method = self.pars.get("method", "")
         library.genome = self.pars.get("genome", "")
         library.access = self.pars.get("access", "").split(",")

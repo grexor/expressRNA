@@ -30,6 +30,7 @@ function edit_library() {
       input: [
           '<textarea name="name" rows=1 placeholder="Name of Library" style="margin-bottom:10px;">' + library.name + '</textarea>',
           '<textarea name="notes" rows=4 placeholder="Additional Notes">' + library.notes.replace(/<br>/g,"\n") + '</textarea>',
+          '<textarea name="tags" rows=2 placeholder="Tags">' + library.tags + '</textarea>',
           '<table style="font-size: inherit; font-weight: 200; font-family: \"Helvetica Neue\", sans-serif; color: #444;" border=0><tr><td valign=top width=270>',
           'Annotation Fields:<textarea style="margin-top: 3px;" name="columns" rows=6 placeholder="Annotation Fields (one per line)">' + columns.join("\n") + '</textarea>',
           '</td><td valign=top width=270>',
@@ -50,12 +51,12 @@ function edit_library() {
           if (!data) {
           } else {
             library.name = data.name;
-            console.log(data.notes);
             if (data.notes!=undefined) {
               library.notes = data.notes.replace(/\r\n|\r|\n/g,"<br>");
             } else {
               library.notes = "";
             }
+            library.tags = data.tags;
             library.access = data.access.split("\n");
             if (data.lib_public)
               library.access.push("public");
@@ -361,6 +362,7 @@ function adjust_library_ubutton(sw) {
             html_library_genome = library.genome_desc;
             html_library_method = library.method_desc;
             html_library_seq_type = library.seq_type;
+            html_library_tags = library.tags;
             if (google_user!=undefined)
             if ((library.owner.indexOf(google_user.getBasicProfile().getEmail())!=-1) || (google_user.getBasicProfile().getEmail()=="gregor.rot@gmail.com")) {
                 $("#btn_library_edit").show();
@@ -375,6 +377,7 @@ function adjust_library_ubutton(sw) {
             $("#lbl_library_genome").html(html_library_genome);
             $("#lbl_library_method").html(html_library_method);
             $("#lbl_library_seq_type").html(html_library_seq_type);
+            $("#lbl_library_tags").html(html_library_tags);
             //display_library_experiments2(library.experiments)
             window[experiment_display_function](library.experiments);
             display_library_ge();
@@ -457,6 +460,7 @@ function adjust_library_ubutton(sw) {
     post_data["lib_id"] = data.lib_id;
     post_data["name"] = data.name;
     post_data["notes"] = data.notes;
+    post_data["tags"] = data.tags;
     post_data["access"] = data.access.join(",");
     post_data["owner"] = data.owner.join(",");
     post_data["genome"] = data.genome;

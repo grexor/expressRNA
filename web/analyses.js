@@ -123,6 +123,7 @@ function display_analyses(data) {
   if (google_user!=undefined)
     if (google_user.getBasicProfile().getEmail()=="gregor.rot@gmail.com")
       $("#div_control_analyses").show();
+  $("#div_control_analyses").hide();
 
   html_header = "<div style='float:left;'>"
   html_header += "<div onclick=\"sort_analyses_by('name')\" style='user-select: none; width: 60px; text-align: center; cursor: pointer; margin-right: 15px; float: left; display: inline-block; border-radius: 5px; padding-left: 6px; padding-right: 10px; padding-top: 2px; padding-bottom: 2px; background: #e1e1e1;'>Name <div class=arrow>" + html_arrow_analyses(db["analyses"]["current_column_sort"], "name") + "</div></div>";
