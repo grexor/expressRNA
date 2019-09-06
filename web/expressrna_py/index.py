@@ -128,6 +128,11 @@ db["genomes"]["dm6"]["desc"] = "<i>Drosophila melanogaster</i>, Assembly: <a hre
 db["genomes"]["dm6"]["link_assembly"] = "ftp://ftp.ensembl.org/pub/release-90/fasta/drosophila_melanogaster/dna/Drosophila_melanogaster.BDGP6.dna.toplevel.fa.gz"
 db["genomes"]["dm6"]["link_annotation"] = "ftp://ftp.ensembl.org/pub/release-90/gtf/drosophila_melanogaster/Drosophila_melanogaster.BDGP6.90.chr.gtf.gz"
 
+db["genomes"]["dd"] = {}
+db["genomes"]["dd"]["desc"] = "<i>Dictyostelium discoideum</i>, Assembly: <a href='%s' target=_new'>dd2.7<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>, Annotation: <a href='%s' target=_new>GTF Ensembl 44<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>";
+db["genomes"]["dd"]["link_assembly"] = "ftp://ftp.ensemblgenomes.org/pub/protists/release-44/fasta/dictyostelium_discoideum/dna/Dictyostelium_discoideum.dicty_2.7.dna.toplevel.fa.gz"
+db["genomes"]["dd"]["link_annotation"] = "ftp://ftp.ensemblgenomes.org/pub/protists/release-44/gtf/dictyostelium_discoideum/Dictyostelium_discoideum.dicty_2.7.44.gtf.gz"
+
 db["genomes"]["at"] = {}
 db["genomes"]["at"]["desc"] = "<i>Arabidopsis thaliana</i>, Assembly: <a href='%s' target=_new'>at<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>, Annotation: <a href='%s' target=_new>GTF Ensembl 39<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>";
 db["genomes"]["at"]["link_assembly"] = "ftp://ftp.ensemblgenomes.org/pub/plants/release-39/fasta/arabidopsis_thaliana/dna/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa.gz"
@@ -562,6 +567,26 @@ class TableClass():
                         go["%s_%s_%s_%s" % (reg_type, site_type, pair_type, aspect)] = []
         r["go"] = go
         return json.dumps(r, default=dthandler)
+
+    def get_ep(self):
+        lib_id = self.pars.get("lib_id", None)
+        genes = self.pars.get("genes", None)
+        #genes = "DDB_G0267242,DDB_G0267248"
+        if lib_id==None:
+            return ""
+        fname = os.path.join(apa.path.lib_folder(lib_id), "%s_gene_expression.tab" % (lib_id))
+        result = []
+        if genes!=None:
+            genes = "\|".join(genes.split(","))
+            res, _ = pybio.utils.Cmd("grep -i '%s' %s" % (genes, fname)).run()
+            res = res.split("\n")[:-1]
+        else:
+            res, _ = pybio.utils.Cmd("head -n 6 %s" % (fname)).run()
+            res = res.split("\n")[1:-1]
+        for line in res:
+            line = line.split("\t")
+            result.append(line)
+        return json.dumps(result, default=dthandler)
 
     # DELETE v1.1
     def get_comps(self):

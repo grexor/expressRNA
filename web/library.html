@@ -54,6 +54,11 @@
             Laboratory
           </td>
           <td style="padding-left: 0px; padding-right: 0px; width:15px; background-color: transparent !important; cursor:default;"></td>
+          <td id="btn_library_ep" onclick="javascript:open_library_div('ep');" class="unselectable">
+            <img src="media/ep.png" height=16px style="margin-top:-4px; padding-right: 2px; vertical-align:middle">
+            Expression Profiles
+          </td>
+          <td style="padding-left: 0px; padding-right: 0px; width:15px; background-color: transparent !important; cursor:default;"></td>
           <td id="btn_library_q" style="display:none;" onclick="javascript:open_library_div('q');" class="unselectable">
             <img src="media/q.png" height=16px style="margin-top:-4px; padding-right: 2px; vertical-align:middle">
             Quality Control
@@ -68,6 +73,14 @@
         </div>
 
         <div id="div_library_ge" style='display:none'>
+        </div>
+
+        <div id="div_library_ep" style='display:none'>
+          <center>
+          <br>
+          <div id="div_search_genes" style='width: 800px; padding-bottom: 10px; padding-left: 100px;'><textarea id='area_genes_search'></textarea></div>
+          <br>
+          <div id='div_ep1'></div>
         </div>
 
         <div id="div_library_q" style='display:none'>

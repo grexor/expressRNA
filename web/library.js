@@ -325,9 +325,11 @@ function adjust_library_ubutton(sw) {
     $("#btn_library_ex").css("background-color", "#e1e1e1");
     $("#btn_library_q").css("background-color", "#e1e1e1");
     $("#btn_library_ge").css("background-color", "#e1e1e1");
+    $("#btn_library_ep").css("background-color", "#e1e1e1");
     $("#div_library_ex").hide();
     $("#div_library_q").hide();
     $("#div_library_ge").hide();
+    $("#div_library_ep").hide();
   }
 
   function open_library_div(library_module) {
@@ -336,6 +338,9 @@ function adjust_library_ubutton(sw) {
     $("#div_library_" + library_module).show();
     $("#btn_library_" + library_module).css("background-color", "#c1c1c1");
     add_history({"action":"library", "library_id":library.lib_id, "module":library_module}, "index.html?action=library&library_id=" + library.lib_id + "&module="+library_module);
+    if (library_module=="ep") {
+      show_div_ep();
+    }
   }
 
   function get_library(library_id) {
@@ -421,6 +426,7 @@ function adjust_library_ubutton(sw) {
 
             get_library_status();
 
+            get_ep(initialize=1);
 
         })
         .error(function(){
@@ -438,9 +444,11 @@ function adjust_library_ubutton(sw) {
             $("#lbl_library_status").html('<b><font color=#aa0000>Library Status: processing</font></b><img src=media/spinner.gif style="height: 16px; margin-top:-3px;vertical-align:middle; padding-right: 3px; opacity: 0.7">')
             $('#div_library_ge').css("opacity", "0.2");
             $('#div_library_q').css("opacity", "0.2");
+            $('#div_library_ep').css("opacity", "0.2");
           } else {
             $('#div_library_ge').css("opacity", "1");
             $('#div_library_q').css("opacity", "1");
+            $('#div_library_ep').css("opacity", "1");
             $("#lbl_library_status").html('<b><font color=#00aa00>Library Status: complete</font></b>');
           }
           if (last_lib_status!=result)
@@ -964,5 +972,134 @@ function adjust_analysis_cbutton_library() {
       }
   }
 }
+
+function show_div_ep() {
+
+  window.layout_ep = {
+    title: '',
+    margin: {
+      l: 50,
+      r: 25,
+      b: 35,
+      t: 15
+    },
+    font: {
+      family: 'Arial',
+      size: 9,
+      color: '#7f7f7f'
+    },
+    xaxis: {
+      //range: [-200, 200],
+      title: 'experiment id',
+      titlefont: {
+              family: 'Arial',
+              size: 12,
+              color: '#7f7f7f'
+      },
+      tickfont: {
+              family: 'Arial',
+              size: 11,
+              color: '#7f7f7f'
+      },
+      zerolinecolor:'#cc0000',
+      hoverformat: '+f',
+    },
+    yaxis: {
+      //range: [-100, 100],
+      title: 'gene expression',
+      titlefont: {
+              family: 'Arial',
+              size: 12,
+              color: '#7f7f7f'
+      },
+      tickfont: {
+              family: 'Arial',
+              size: 11,
+              color: '#7f7f7f'
+      },
+      //exponentformat:'e',
+      // https://github.com/mbostock/d3/wiki/Formatting#numbers
+      hoverformat: '+.2f', // show mouse over values with 2 decimal precisions
+    },
+    width: 900,
+    height: 300,
+    paper_bgcolor: '#ffffff',
+    plot_bgcolor: '#ffffff',
+    hovermode: 'closest',
+    showlegend: true,
+  };
+}
+
+function get_ep(initialize=0) {
+  var post_data = {};
+  post_data["action"] = "get_ep";
+  post_data["lib_id"] = library.lib_id;
+  post_data["initialize"] = initialize;
+  try {
+    post_data["genes"] = String($('#area_genes_search').tagEditor('getTags')[0].tags.join(","));
+  } catch (err) { }
+  console.log(post_data["genes"]);
+  $.post('/expressrna_gw/index.py', post_data)
+      .success(function(result) {
+        data = $.parseJSON(result);
+        traces = [];
+        gene_names = [];
+        for (var i=0; i<data.length; i++) {
+          x = [];
+          y = [];
+          for (var j=2; j<data[i].length; j++) {
+            y.push(Number(data[i][j]))
+            x.push(j-1)
+          }
+          gene_name = data[i][0];
+          if (data[i][1]!="")
+            gene_name += ", " + data[i][1];
+          trace = {"x":x, "y":y, "type":"scatter", "name":gene_name};
+          gene_names.push(gene_name);
+          traces.push(trace);
+        }
+        Plotly.newPlot('div_ep1', traces, layout_ep, { displayModeBar: false });
+        if (initialize==1)
+          search_library_with(gene_names.join("|||"));
+      })
+      .error(function(){
+        return undefined;
+  });
+}
+
+function library_tags_reinit() {
+  $('#area_genes_search').tagEditor('destroy');
+  $('#area_genes_search').val("");
+  $('#area_genes_search').tagEditor({initialTags: [], beforeTagSave: area_library_search_beforesave, beforeTagDelete: area_library_search_tagdelete, forceLowercase: false, delimiter: "||", placeholder: 'Enter genes ...', onChange: area_library_search_changed});
+}
+
+function area_library_search_beforesave() {
+}
+
+function area_library_search_changed(field, editor, tags) {
+}
+
+function area_library_search_tagdelete(field, editor, tags, val) {
+  var new_tags = tags;
+  var index = new_tags.indexOf(val);
+  if (index > -1)
+    new_tags.splice(index, 1);
+  search_library_with(new_tags.join("|||"));
+}
+
+function search_library_with(tags) {
+  library_tags_reinit();
+  tags = tags.split("|||");
+  for (var i=0; i<tags.length; i++) {
+    $('#area_genes_search').tagEditor('addTag', tags[i]);
+  }
+  get_ep(initialize=0);
+}
+
+function add_library_filter(filter) {
+  $('#area_genes_search').tagEditor('addTag', filter);
+}
+
+library_tags_reinit();
 
 tippy('.btn', {theme: 'light', interactive: true});
