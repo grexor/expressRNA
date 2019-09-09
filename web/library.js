@@ -1077,6 +1077,7 @@ function area_library_search_beforesave() {
 }
 
 function area_library_search_changed(field, editor, tags) {
+  get_ep();
 }
 
 function area_library_search_tagdelete(field, editor, tags, val) {
