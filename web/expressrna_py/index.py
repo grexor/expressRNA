@@ -571,16 +571,18 @@ class TableClass():
     def get_ep(self):
         lib_id = self.pars.get("lib_id", None)
         genes = self.pars.get("genes", None)
+        initialize = self.pars.get("initialize", None)
         #genes = "DDB_G0267242,DDB_G0267248"
         if lib_id==None:
             return ""
-        fname = os.path.join(apa.path.lib_folder(lib_id), "%s_gene_expression.tab" % (lib_id))
+        fname = os.path.join(apa.path.lib_folder(lib_id), "%s_gene_expression_cpm.tab" % (lib_id))
         result = []
+        res = []
         if genes!=None:
             genes = "\|".join(genes.split(","))
             res, _ = pybio.utils.Cmd("grep -i '%s' %s" % (genes, fname)).run()
             res = res.split("\n")[:-1]
-        else:
+        if initialize=="yes":
             res, _ = pybio.utils.Cmd("head -n 6 %s" % (fname)).run()
             res = res.split("\n")[1:-1]
         for line in res:

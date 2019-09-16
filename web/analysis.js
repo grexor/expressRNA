@@ -758,7 +758,6 @@ function delete_analysis_do(analysis_id) {
   });
 }
 
-
 function edit_analysis() {
   adata = db["analysis"]["query"];
   html = "<b>Analysis Edit</b> (" + db["analysis"]["analysis_id"] + ")<br>";
@@ -823,7 +822,6 @@ function save_analysis(data) {
   post_data["analysis_id"] = data.analysis_id;
   post_data["name"] = data.name;
   post_data["notes"] = data.notes;
-  console.log(post_data["notes"]);
   post_data["access"] = data.access.join(",");
   post_data["owner"] = data.owner.join(",");
   $.post('/expressrna_gw/index.py', post_data)

@@ -358,10 +358,8 @@ function adjust_library_ubutton(sw) {
     $.post('/expressrna_gw/index.py', post_data)
         .success(function(result) {
             $("body").removeClass("waiting");
-            if (result=="empty") {
-              console.log("got empty library result");
+            if (result=="empty")
               return;
-            }
             library = $.parseJSON(result);
             db["library"]["query"] = library;
             html_library_genome = library.genome_desc;
@@ -425,8 +423,6 @@ function adjust_library_ubutton(sw) {
             open_library_div(db["library"]["library_module"]);
 
             get_library_status();
-
-            get_ep(initialize=1);
 
         })
         .error(function(){
@@ -1006,7 +1002,7 @@ function show_div_ep() {
     },
     yaxis: {
       //range: [-100, 100],
-      title: 'gene expression',
+      title: 'gene expression (CPM)',
       titlefont: {
               family: 'Arial',
               size: 12,
@@ -1028,9 +1024,13 @@ function show_div_ep() {
     hovermode: 'closest',
     showlegend: true,
   };
+
+  genes = String($('#area_genes_search').tagEditor('getTags')[0].tags.join(","));
+  if (genes=="")
+    get_ep(initialize="yes");
 }
 
-function get_ep(initialize=0) {
+function get_ep(initialize="no") {
   var post_data = {};
   post_data["action"] = "get_ep";
   post_data["lib_id"] = library.lib_id;
@@ -1038,7 +1038,6 @@ function get_ep(initialize=0) {
   try {
     post_data["genes"] = String($('#area_genes_search').tagEditor('getTags')[0].tags.join(","));
   } catch (err) { }
-  console.log(post_data["genes"]);
   $.post('/expressrna_gw/index.py', post_data)
       .success(function(result) {
         data = $.parseJSON(result);
@@ -1054,13 +1053,13 @@ function get_ep(initialize=0) {
           gene_name = data[i][0];
           if (data[i][1]!="")
             gene_name += ", " + data[i][1];
-          trace = {"x":x, "y":y, "type":"scatter", "name":gene_name};
+          trace = {"x":x, "y":y, "type":"scatter", "text": gene_name, "name":gene_name};
           gene_names.push(gene_name);
           traces.push(trace);
         }
         Plotly.newPlot('div_ep1', traces, layout_ep, { displayModeBar: false });
-        if (initialize==1)
-          search_library_with(gene_names.join("|||"));
+        if (initialize=="yes")
+            set_ep_tags(gene_names.join("|||"));
       })
       .error(function(){
         return undefined;
@@ -1089,12 +1088,16 @@ function area_library_search_tagdelete(field, editor, tags, val) {
 }
 
 function search_library_with(tags) {
-  library_tags_reinit();
-  tags = tags.split("|||");
-  for (var i=0; i<tags.length; i++) {
-    $('#area_genes_search').tagEditor('addTag', tags[i]);
-  }
-  get_ep(initialize=0);
+  $('#area_genes_search').tagEditor('destroy');
+  $('#area_genes_search').val("");
+  $('#area_genes_search').tagEditor({initialTags: tags.split("|||"), beforeTagSave: area_library_search_beforesave, beforeTagDelete: area_library_search_tagdelete, forceLowercase: false, delimiter: "||", placeholder: 'Enter genes ...', onChange: area_library_search_changed});
+  get_ep();
+}
+
+function set_ep_tags(tags) {
+  $('#area_genes_search').tagEditor('destroy');
+  $('#area_genes_search').val("");
+  $('#area_genes_search').tagEditor({initialTags: tags.split("|||"), beforeTagSave: area_library_search_beforesave, beforeTagDelete: area_library_search_tagdelete, forceLowercase: false, delimiter: "||", placeholder: 'Enter genes ...', onChange: area_library_search_changed});
 }
 
 function add_library_filter(filter) {
