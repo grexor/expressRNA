@@ -590,6 +590,75 @@ class TableClass():
             result.append(line)
         return json.dumps(result, default=dthandler)
 
+    def get_keywords_genes(self):
+        lib_id = self.pars.get("lib_id", None)
+        kw = self.pars.get("kw", "")
+        if len(kw)<2:
+            return json.dumps([])
+        if lib_id==None:
+            return ""
+        fname = os.path.join(apa.path.lib_folder(lib_id), "%s_gene_expression_cpm.tab" % (lib_id))
+        res, _ = pybio.utils.Cmd("grep -i '%s' %s" % (kw, fname)).run()
+        res = res.split("\n")
+        result = []
+        for line in res:
+            line = line.split("\t")
+            if len(line)<2:
+                continue
+            result.append(line[1]+", " + line[0])
+        result = self.sort_input_results(kw, result)
+        return json.dumps({"keywords":result[:30]})
+
+    def sort_input_results(self, inputString, unsortedResults):
+
+        perfect_starting_matches = []
+        perfect_matches = []
+        partial_starting_matches = []
+        rest_of_matches = []
+
+        # First we need to have them sort them
+        preliminary_sortedResults = sorted(unsortedResults)
+
+        # remove the trailing "s"
+        pSplit = re.compile(r"\s", re.UNICODE)
+        unsortedResults_wo_s = []; i = 0
+
+        for match in preliminary_sortedResults:
+            words = []
+            for word in re.split(pSplit, match):
+                try:
+                    if word[-1]=="s": word = word[:-1]
+                except:
+                    pass
+                words.append(word)
+
+            unsortedResults_wo_s.append( (" ".join(words), i) )
+            i += 1
+
+        sortedResults_wo_s = sorted(unsortedResults_wo_s)
+
+        sortedResults = []
+        for match, i in sortedResults_wo_s:
+            sortedResults.append(preliminary_sortedResults[i])
+
+        pPSM = re.compile(r"^%ss?(?![\w-])" % inputString, re.UNICODE|re.IGNORECASE)
+        pPM  = re.compile(r"\b%ss?(?![\w-])" % inputString, re.UNICODE|re.IGNORECASE)
+        pTSM  = re.compile(r"^%ss?" % inputString, re.UNICODE|re.IGNORECASE)
+
+        for match in sortedResults:
+            if re.search(pPSM, match):
+                perfect_starting_matches.append(match)
+            elif re.search(pPM, match):
+                perfect_matches.append(match)
+            elif re.search(pTSM, match):
+                partial_starting_matches.append(match)
+            else:
+                rest_of_matches.append(match)
+        return ( perfect_starting_matches+
+                 perfect_matches+
+                 partial_starting_matches+
+                 rest_of_matches )
+
     # DELETE v1.1
     def get_comps(self):
         stats = {}

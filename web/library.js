@@ -421,8 +421,8 @@ function adjust_library_ubutton(sw) {
             if (db["library"]["library_module"]==undefined) // default library module
               db["library"]["library_module"] = "ex";
             open_library_div(db["library"]["library_module"]);
-
             get_library_status();
+            get_ep(initialize="yes");
 
         })
         .error(function(){
@@ -1067,9 +1067,27 @@ function get_ep(initialize="no") {
 }
 
 function library_tags_reinit() {
+  var tag_config = {};
+  tag_config["animateDelete"] = 0;
+  tag_config["initialTags"] = [];
+  tag_config["beforeTagSave"] = area_library_search_beforesave;
+  tag_config["beforeTagDelete"] = area_library_search_tagdelete;
+  tag_config["forceLowercase"] = false;
+  tag_config["delimiter"] = "||";
+  tag_config["placeholder"] = "Enter genes ...";
+  tag_config["onChange"] = area_library_search_changed;
+  tag_config["autocomplete"] = {delay: 0, minLength:2, source: get_genes_kw};
   $('#area_genes_search').tagEditor('destroy');
   $('#area_genes_search').val("");
-  $('#area_genes_search').tagEditor({initialTags: [], beforeTagSave: area_library_search_beforesave, beforeTagDelete: area_library_search_tagdelete, forceLowercase: false, delimiter: "||", placeholder: 'Enter genes ...', onChange: area_library_search_changed});
+  $('#area_genes_search').tagEditor(tag_config);
+}
+
+function get_genes_kw(request, response) {
+  jQuery.get("/expressrna_gw/index.py", {kw: request.term, lib_id: library.lib_id, action: "get_keywords_genes"},
+    function (data) {
+              keywords_data = $.parseJSON(data);
+              response(keywords_data["keywords"]);
+  })
 }
 
 function area_library_search_beforesave() {
@@ -1088,16 +1106,39 @@ function area_library_search_tagdelete(field, editor, tags, val) {
 }
 
 function search_library_with(tags) {
+  var tag_config = {};
+  tag_config["animateDelete"] = 0;
+  tag_config["initialTags"] = tags.split("|||");
+  tag_config["beforeTagSave"] = area_library_search_beforesave;
+  tag_config["beforeTagDelete"] = area_library_search_tagdelete;
+  tag_config["forceLowercase"] = false;
+  tag_config["delimiter"] = "||";
+  tag_config["placeholder"] = "Enter genes ...";
+  tag_config["onChange"] = area_library_search_changed;
+  tag_config["autocomplete"] = {delay: 0, minLength:2, source: get_genes_kw};
+
   $('#area_genes_search').tagEditor('destroy');
   $('#area_genes_search').val("");
-  $('#area_genes_search').tagEditor({initialTags: tags.split("|||"), beforeTagSave: area_library_search_beforesave, beforeTagDelete: area_library_search_tagdelete, forceLowercase: false, delimiter: "||", placeholder: 'Enter genes ...', onChange: area_library_search_changed});
+  $('#area_genes_search').tagEditor(tag_config);
+  //$('#area_genes_search').tagEditor({initialTags: tags.split("|||"), beforeTagSave: area_library_search_beforesave, beforeTagDelete: area_library_search_tagdelete, forceLowercase: false, delimiter: "||", placeholder: 'Enter genes ...', onChange: area_library_search_changed});
   get_ep();
 }
 
 function set_ep_tags(tags) {
+  var tag_config = {};
+  tag_config["animateDelete"] = 0;
+  tag_config["initialTags"] = tags.split("|||");
+  tag_config["beforeTagSave"] = area_library_search_beforesave;
+  tag_config["beforeTagDelete"] = area_library_search_tagdelete;
+  tag_config["forceLowercase"] = false;
+  tag_config["delimiter"] = "||";
+  tag_config["placeholder"] = "Enter genes ...";
+  tag_config["onChange"] = area_library_search_changed;
+  tag_config["autocomplete"] = {delay: 0, minLength:2, source: get_genes_kw};
   $('#area_genes_search').tagEditor('destroy');
   $('#area_genes_search').val("");
-  $('#area_genes_search').tagEditor({initialTags: tags.split("|||"), beforeTagSave: area_library_search_beforesave, beforeTagDelete: area_library_search_tagdelete, forceLowercase: false, delimiter: "||", placeholder: 'Enter genes ...', onChange: area_library_search_changed});
+  $('#area_genes_search').tagEditor(tag_config);
+  //$('#area_genes_search').tagEditor({initialTags: tags.split("|||"), beforeTagSave: area_library_search_beforesave, beforeTagDelete: area_library_search_tagdelete, forceLowercase: false, delimiter: "||", placeholder: 'Enter genes ...', onChange: area_library_search_changed});
 }
 
 function add_library_filter(filter) {
