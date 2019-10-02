@@ -143,6 +143,11 @@ db["genomes"]["mar3"]["desc"] = "<i>Marchantia polymorpha</i>, Assembly: <a href
 db["genomes"]["mar3"]["link_assembly"] = "http://marchantia.info/download/download/JGI_3.1.fasta.gz"
 db["genomes"]["mar3"]["link_annotation"] = "http://marchantia.info/download/download/Mpolymorphav3.1.allTrs.gff3.gz"
 
+db["genomes"]["tt"] = {}
+db["genomes"]["tt"]["desc"] = "<i>Tetrahymena thermophila</i>, Assembly: <a href='%s' target=_new'>tt<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>, Annotation: <a href='%s' target=_new>Ciliate<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>";
+db["genomes"]["tt"]["link_assembly"] = "http://www.ciliate.org/system/downloads/T_thermophila_June2014_assembly.fasta"
+db["genomes"]["tt"]["link_annotation"] = "http://www.ciliate.org/system/downloads/T_thermophila_June2014.gff3"
+
 class TableClass():
 
     def log(self, message):
@@ -585,7 +590,7 @@ class TableClass():
         if initialize=="yes":
             res, _ = pybio.utils.Cmd("head -n 6 %s" % (fname)).run()
             res = res.split("\n")[1:-1]
-        for line in res:
+        for line in res[:10]: # max results
             line = line.split("\t")
             result.append(line)
         return json.dumps(result, default=dthandler)

@@ -28,6 +28,7 @@ genomes["dm6"] = ["dm6", "dm6, <i>Drosophila melanogaster</i>, assembly: dm6, an
 genomes["dd"] = ["dd", "dd, <i>Dictyostelium discoideum</i>, assembly: dd2.7, annotation: Ensembl 44"]
 genomes["at"] = ["at", "at, <i>Arabidopsis thaliana</i>, assembly: at, annotation: Ensembl 39"]
 genomes["mar3"] = ["mar3", "mar3, <i>Marchantia polymorpha</i>, assembly: mar3, annotation: mar3"]
+genomes["tt"] = ["tt", "tt, <i>Tetrahymena thermophila</i>, assembly: Ciliate, annotation: Ciliate"]
 
 methods = {};
 methods["aseq"] = ["aseq", "ASEQ, RNA-seq 3'-end targeted protocol"]
