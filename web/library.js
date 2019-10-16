@@ -356,7 +356,7 @@ function adjust_library_ubutton(sw) {
       post_data["email"] = google_user.getBasicProfile().getEmail();
     post_data["library_id"] = library_id;
     $.post('/expressrna_gw/index.py', post_data)
-        .success(function(result) {
+        .done(function(result) {
             $("body").removeClass("waiting");
             if (result=="empty")
               return;
@@ -393,7 +393,7 @@ function adjust_library_ubutton(sw) {
                 $("#plot1").show();
                 $("#plot1").attr("src", config["data_url"] + library_id + "/multiqc_plots/png/mqc_fastqc_adapter_content_plot_1.png?nocache="+nocache);
               })
-              .error(function(){
+              .fail(function(){
                 $("#plot1").hide();
               });
 
@@ -402,7 +402,7 @@ function adjust_library_ubutton(sw) {
                 $("#plot2").show();
                 $("#plot2").attr("src", config["data_url"] + library_id + "/multiqc_plots/png/mqc_fastqc_overrepresented_sequencesi_plot_1.png?nocache="+nocache);
               })
-              .error(function(){
+              .fail(function(){
                 $("#plot2").hide();
               });
 
@@ -425,7 +425,7 @@ function adjust_library_ubutton(sw) {
             get_ep(initialize="yes");
 
         })
-        .error(function(){
+        .fail(function(){
           $("body").removeClass("waiting");
     });
   }
@@ -435,7 +435,7 @@ function adjust_library_ubutton(sw) {
     post_data["action"] = "get_library_status";
     post_data["lib_id"] = library.lib_id;
     $.post('/expressrna_gw/index.py', post_data)
-        .success(function(result) {
+        .done(function(result) {
           if (result!="") {
             $("#lbl_library_status").html('<b><font color=#aa0000>Library Status: processing</font></b><img src=media/spinner.gif style="height: 16px; margin-top:-3px;vertical-align:middle; padding-right: 3px; opacity: 0.7">')
             $('#div_library_ge').css("opacity", "0.2");
@@ -451,7 +451,7 @@ function adjust_library_ubutton(sw) {
             get_library(library.lib_id);
           last_lib_status = result;
         })
-        .error(function(){
+        .fail(function(){
     });
   }
 
@@ -486,11 +486,11 @@ function adjust_library_ubutton(sw) {
     post_data["columns_display"] = JSON.stringify(data.columns_display);
     post_data["experiments"] = JSON.stringify(data.experiments);
     $.post('/expressrna_gw/index.py', post_data)
-        .success(function(result) {
+        .done(function(result) {
           get_library(data.lib_id); // read back data from updated library
           search_libraries(); // refresh library list
         })
-        .error(function(){
+        .fail(function(){
     });
   }
 
@@ -501,12 +501,12 @@ function adjust_library_ubutton(sw) {
       post_data["email"] = google_user.getBasicProfile().getEmail();
     post_data["library_id"] = library_id;
     $.post('/expressrna_gw/index.py', post_data)
-        .success(function(result) {
+        .done(function(result) {
           search_libraries();
           open_libraries();
           update_user_usage();
         })
-        .error(function(){
+        .fail(function(){
     });
   }
 
@@ -518,11 +518,11 @@ function adjust_library_ubutton(sw) {
     post_data["lib_id"] = library.lib_id;
     post_data["exp_id"] = exp_id;
     $.post('/expressrna_gw/index.py', post_data)
-        .success(function(result) {
+        .done(function(result) {
           get_library(library.lib_id);
           update_user_usage();
         })
-        .error(function(){
+        .fail(function(){
     });
   }
 
@@ -892,12 +892,12 @@ function new_analysis_library() {
             post_data["experiments"] = JSON.stringify(library.experiments);
 
             $.post('/expressrna_gw/index.py', post_data)
-                .success(function(result) {
+                .done(function(result) {
                   result = $.parseJSON(result);
                   search_analyses();
                   open_analysis(result["analysis_id"]);
                 })
-                .error(function(){
+                .fail(function(){
             });
 
           }
@@ -969,62 +969,62 @@ function adjust_analysis_cbutton_library() {
   }
 }
 
+var layout_ep = {
+  title: '',
+  margin: {
+    l: 50,
+    r: 25,
+    b: 35,
+    t: 15
+  },
+  font: {
+    family: 'Arial',
+    size: 9,
+    color: '#7f7f7f'
+  },
+  xaxis: {
+    //range: [-200, 200],
+    title: 'experiment id',
+    titlefont: {
+            family: 'Arial',
+            size: 12,
+            color: '#7f7f7f'
+    },
+    tickfont: {
+            family: 'Arial',
+            size: 11,
+            color: '#7f7f7f'
+    },
+    zerolinecolor:'#cc0000',
+    hoverformat: '+f',
+  },
+  yaxis: {
+    //range: [-100, 100],
+    title: 'gene expression (CPM)',
+    titlefont: {
+            family: 'Arial',
+            size: 12,
+            color: '#7f7f7f'
+    },
+    tickfont: {
+            family: 'Arial',
+            size: 11,
+            color: '#7f7f7f'
+    },
+    //exponentformat:'e',
+    // https://github.com/mbostock/d3/wiki/Formatting#numbers
+    hoverformat: '+.2f', // show mouse over values with 2 decimal precisions
+  },
+  width: 900,
+  height: 300,
+  paper_bgcolor: '#ffffff',
+  plot_bgcolor: '#ffffff',
+  hovermode: 'closest',
+  showlegend: true,
+};
+
+
 function show_div_ep() {
-
-  window.layout_ep = {
-    title: '',
-    margin: {
-      l: 50,
-      r: 25,
-      b: 35,
-      t: 15
-    },
-    font: {
-      family: 'Arial',
-      size: 9,
-      color: '#7f7f7f'
-    },
-    xaxis: {
-      //range: [-200, 200],
-      title: 'experiment id',
-      titlefont: {
-              family: 'Arial',
-              size: 12,
-              color: '#7f7f7f'
-      },
-      tickfont: {
-              family: 'Arial',
-              size: 11,
-              color: '#7f7f7f'
-      },
-      zerolinecolor:'#cc0000',
-      hoverformat: '+f',
-    },
-    yaxis: {
-      //range: [-100, 100],
-      title: 'gene expression (CPM)',
-      titlefont: {
-              family: 'Arial',
-              size: 12,
-              color: '#7f7f7f'
-      },
-      tickfont: {
-              family: 'Arial',
-              size: 11,
-              color: '#7f7f7f'
-      },
-      //exponentformat:'e',
-      // https://github.com/mbostock/d3/wiki/Formatting#numbers
-      hoverformat: '+.2f', // show mouse over values with 2 decimal precisions
-    },
-    width: 900,
-    height: 300,
-    paper_bgcolor: '#ffffff',
-    plot_bgcolor: '#ffffff',
-    hovermode: 'closest',
-    showlegend: true,
-  };
-
   genes = String($('#area_genes_search').tagEditor('getTags')[0].tags.join(","));
   if (genes=="")
     get_ep(initialize="yes");
@@ -1039,7 +1039,7 @@ function get_ep(initialize="no") {
     post_data["genes"] = String($('#area_genes_search').tagEditor('getTags')[0].tags.join(","));
   } catch (err) { }
   $.post('/expressrna_gw/index.py', post_data)
-      .success(function(result) {
+      .done(function(result) {
         data = $.parseJSON(result);
         traces = [];
         gene_names = [];
@@ -1061,7 +1061,7 @@ function get_ep(initialize="no") {
         if (initialize=="yes")
             set_ep_tags(gene_names.join("|||"));
       })
-      .error(function(){
+      .fail(function(){
         return undefined;
   });
 }

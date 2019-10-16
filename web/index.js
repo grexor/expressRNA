@@ -21,17 +21,20 @@ function libraries_document_loaded() {
 function login_done(force=false) {
   $("#content_about").load("about.html?nocache="+nocache, document_loaded);
   $("#content_profile").load("profile.html?nocache="+nocache, document_loaded);
-  $("#content_info").load("info.html?nocache="+nocache, document_loaded);
   $("#content_help").load("help.html?nocache="+nocache, document_loaded);
   $("#content_analyses").load("analyses.html?nocache="+nocache, analyses_document_loaded);
   $("#content_libraries").load("libraries.html?nocache="+nocache, libraries_document_loaded);
   $("#content_library").load("library.html?nocache="+nocache, document_loaded);
   $("#content_analysis").load("analysis.html?nocache="+nocache, document_loaded);
   $("#content_licence").load("licence.html?nocache="+nocache, document_loaded);
+  $("#content_news_blog").load("news_blog.html?nocache="+nocache, document_loaded);
+  $("#content_contributors").load("contributors.html?nocache="+nocache, document_loaded);
+  $("#content_server_stats").load("server_stats.html?nocache="+nocache, document_loaded);
+  $("#content_contact").load("contact.html?nocache="+nocache, document_loaded);
 }
 
 function all_documents_loaded() {
-  if (loaded_documents<9) {
+  if (loaded_documents<12) {
     return;
   }
     process_login_parameters(pars["action"], pars)
@@ -56,6 +59,14 @@ function process_login_parameters(action, data) {
       open_analysis(data["analysis_id"], data["module"], data["pair_type"]);
   else if (action=="library")
       open_library(data["library_id"], data["module"]);
+  else if (action=="newsblog")
+      open_news_blog();
+  else if (action=="contributors")
+      open_contributors();
+  else if (action=="server_stats")
+      open_server_stats();
+  else if (action=="contact")
+      open_contact();
   else
     open_about(); // default
 }

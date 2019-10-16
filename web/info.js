@@ -29,7 +29,7 @@ function show_stats_experiments() {
   post_data = {};
   post_data["action"] = "get_server_data_stats";
   $.post('/expressrna_gw/index.py', post_data)
-      .success(function(result) {
+      .done(function(result) {
         data = $.parseJSON(result);
 
         $("#div_stats_experiments").html("");
@@ -186,7 +186,7 @@ function show_stats_experiments() {
         $("#table_stats_reads").html(table_stats_reads);
 
       })
-      .error(function(){
+      .fail(function(){
   });
 
 

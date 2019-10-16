@@ -12,7 +12,7 @@ function login_ok(googleUser) {
     $("#div_user_detail").show();
     $("#tr_user_news").show();
     $("#tr_user_email").show();
-    $("#btn_signout").html('<img src=media/icon_profile.png height=18 style="padding-right: 5px; margin-top:-4px;vertical-align:middle"><a href="javascript:open_profile();" id="link_profile">' + googleUser.getBasicProfile().getName() + '</a>');
+    $("#btn_signout").html('<a class="nav-link" href="javascript:open_profile();" id="link_profile">' + googleUser.getBasicProfile().getName() + '</a>');
     $("#profile_note").html("");
     $("#profile_email").html(googleUser.getBasicProfile().getEmail());
     $("#profile_btn_signout").html('<img src=media/signout.png height=13 style="margin-top:-3px;vertical-align:middle; padding-right: 3px;"><a href="#" onclick="signOut();">Sign out</a>');
@@ -21,7 +21,7 @@ function login_ok(googleUser) {
     post_data["action"] = "login";
     post_data["email"] = googleUser.getBasicProfile().getEmail();
     $.post('/expressrna_gw/index.py', post_data)
-    .success(function(result) {
+    .done(function(result) {
         db["user"] = $.parseJSON(result);
         $("#chk_user_news").prop("checked", db["user"]["news"]);
         display_user_tickets(db["user"]["tickets"]);
@@ -33,7 +33,7 @@ function login_ok(googleUser) {
         // after login, we can not do it before, that's why it's here
         process_login_parameters(pars["action"], pars)
     })
-    .error(function(){
+    .fail(function(){
     })
 }
 
@@ -42,13 +42,13 @@ function update_user_usage() {
   post_data["action"] = "update_user_usage";
   post_data["email"] = google_user.getBasicProfile().getEmail();
   $.post('/expressrna_gw/index.py', post_data)
-  .success(function(result) {
+  .done(function(result) {
       data = $.parseJSON(result);
       db["user"]["libs"] = data["libs"];
       db["user"]["experiments"] = data["experiments"];
       display_user_access();
   })
-  .error(function(){
+  .fail(function(){
   })
 }
 
@@ -81,15 +81,16 @@ function signOut() {
 }
 function menu_clear() {
   $("#menu_about").attr('style', '');
-  $("#menu_info").attr("style", "");
+  $("#menu_info").attr('style', "");
   $("#menu_help").attr('style', '');
   $("#menu_profile").attr('style', '');
   $("#menu_analyses").attr('style', '');
   $("#menu_libraries").attr('style', '');
+  $("#btn_signout").attr('style', '');
 }
 function menu_select(name) {
   menu_clear();
-  $("#" + name).attr('style', 'border-bottom: 2px solid #c1c1c1;');
+  $("#" + name).attr('style', 'border-bottom: 2px solid #c1c1c1; background-color: #cc5555;');
 }
 function add_history(data, url) {
   if (pop_state==false) {

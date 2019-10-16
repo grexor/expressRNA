@@ -308,7 +308,7 @@ function get_publications(tags, page) {
   post_data["action"] = "publications";
   post_data["tags"] = tags;
   $.post('/expressrna_gw/index.py', post_data)
-      .success(function(result) {
+      .done(function(result) {
           data = $.parseJSON(result);
           var html = "";
           for (var i=(page*5); i<Math.min(data.length, (page+1)*5); i++) {
@@ -339,10 +339,8 @@ function get_publications(tags, page) {
 
           $("#table_publications").html(html);
       })
-      .error(function(){
-          //console.log('Error loading page');
+      .fail(function(){
   })
-
 
 }
 

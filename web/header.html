@@ -9,11 +9,9 @@
     <head>
         <link rel="stylesheet" type="text/css" href="expressRNA.css">
         <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400" rel="stylesheet">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="software/caret-master/jquery.caret.js" type="text/javascript" charset="utf-8"></script>
-        <script src="software/jQuery-tagEditor-master/jquery.tag-editor.js" type="text/javascript" charset="utf-8"></script>
-        <link href="software/jQuery-tagEditor-master/jquery.tag-editor.css" rel="stylesheet" type="text/css" charset="utf-8">
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
         <meta name="google-signin-client_id" content="791006066118-1m577h8b7nplonckttm8qtql82ijj6pc.apps.googleusercontent.com">
         <link rel="stylesheet" href="tippy/tippy.css">
@@ -25,49 +23,68 @@
         <script type="text/javascript" src="software/psd3/psd3.js"></script>
         <link rel="stylesheet" type="text/css" href="software/psd3/psd3.css" />
         <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
-    </head>
 
-    <!--
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    -->
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="boot.css">
+
+        <script src="software/jQuery-tagEditor-master/jquery.tag-editor.js" type="text/javascript" charset="utf-8"></script>
+        <link href="software/jQuery-tagEditor-master/jquery.tag-editor.css" rel="stylesheet" type="text/css" charset="utf-8">
+
+    </head>
 
     <script>vex.defaultOptions.className = 'vex-theme-flat-attack'</script>
     <link rel="stylesheet" href="software/vex/dist/css/vex.css" />
     <link rel="stylesheet" href="software/vex/dist/css/vex-theme-os.css" />
     <link rel="stylesheet" href="software/vex/dist/css/vex-theme-flat-attack.css" />
     <link rel="stylesheet" type="text/css" href="expressRNA_vex.css">
-
     <link rel="stylesheet" href="header.css">
 
 <body>
 
-<div class="menu_top">
-    <div class="menu_top_content">
-      <table border=0>
-          <tr>
-              <td valign=top style="padding-top:5px; padding-left: 8px;"><a href="javascript:open_about();" id="logo_link"><img src="media/logo.png" style='height:22px;'></a></td>
-              <td valign=top style="width: 70%; text-align: left; padding-top: 4px;">
-                <div style="float: left; width: 20px; text-align:center; padding-top: 3px;"><font color="lightgray" size=1px>|</font></div>
-                <div style="float: left;"><img src=media/start.png height=16 style="margin-top:-2px;vertical-align:middle">&nbsp;<a id="menu_analyses" href="javascript:open_analyses();">Analyses</a></div>
-                <div style="float: left; width: 20px; text-align:center; padding-top: 3px;"><font color="lightgray" size=1px>|</font></div>
-                <div style="float: left;"><img src=media/icon_data.png height=16 style="margin-top:-2px;vertical-align:middle">&nbsp;<a id="menu_libraries" href="javascript:open_libraries();">Libraries</a></div>
-                <div style="float: left; width: 20px; text-align:center; padding-top: 3px;"><font color="lightgray" size=1px>|</font></div>
-                <div style="float: left;"><img src=media/help.png height=16 style="margin-top:-3px;vertical-align:middle">&nbsp;<a href="javascript:open_help();" id="menu_help">Docs</a></div>
-                <div style="float: left; width: 20px; text-align:center; padding-top: 3px;"><font color="lightgray" size=1px>|</font></div>
-                <div style="float: left;"><img src=media/news.png height=16 style="margin-top:-4px;vertical-align:middle">&nbsp;<a id="menu_info" href="javascript:open_info();">News</a></div>
-                <div style="float: left; width: 20px; text-align:center; padding-top: 3px;"><font color="lightgray" size=1px>|</font></div>
-                <div style="float: left;"><img src=media/about2.png height=20 style="margin-top:-4px;vertical-align:middle">&nbsp;<a id="menu_about" href="javascript:open_about();">About</a></div>
-              </td>
-              <td valign=top style="width: 30%; text-align: right; padding-right: 10px; padding-top: 4px;">
-                <div style="float: right;"><div id="btn_signout" style="display: none; white-space: nowrap;"></div></div>
-                <div style="float: right;"><div id="btn_signin"></div></div>
-                <div style="float: right; width: 20px; text-align:center; padding-top: 3px;"><font color="lightgray" size=1px>|</font></div>
-                <div style="float: right;"><img src=media/idea.png height=20 style="margin-top:-4px;vertical-align:middle">&nbsp;<a id="menu_ideas" href="https://github.com/grexor/expressRNA/issues" target=_new>Ideas and Issues</a></div>
-              </td>
-          </tr>
-      </table>
+  <nav class="navbar fixed-top navbar-expand-md">
+    <a class="navbar-brand" href="javascript:open_about();"><img src=media/logo1.png style='height:23px; padding-right: 3px;'>expressRNA</a>
+    <button class="navbar-toggler navbar-dark" type="button" data-toggle="collapse" data-target="#main-navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="main-navigation">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" id="menu_libraries" href="javascript:open_libraries();">Libraries</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="menu_analyses" href="javascript:open_analyses();">Analyses</a>
+        </li>
+        <li class="nav-item dropdown" style='min-width: 120px'>
+            <a class="nav-link dropdown-toggle" href="#" id="menu_info" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Information
+            </a>
+            <div class="dropdown-menu" aria-labelledby="menu_info">
+              <a class="dropdown-item" href="javascript:open_about();">About expressRNA</a>
+              <a class="dropdown-item" href="javascript:open_news_blog();">Blog and News</a>
+              <a class="dropdown-item" href="javascript:open_help();">Documentation</a>
+              <a class="dropdown-item" href="javascript:open_contributors();">Contributors</a>
+              <a class="dropdown-item" href="javascript:open_server_stats();">Server Statistics</a>
+              <a class="dropdown-item" href="javascript:open_contact();">Contact</a>
+            </div>
+        </li>
+      </ul>
     </div>
-</div>
+
+    <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item" id='btn_signout'>
+                </li>
+                <li class="nav-item">
+                    <div class="nav-link" id='btn_signin'>Login</div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" target=_expressrna_ideas href="https://github.com/grexor/expressRNA/issues">Ideas and Issues</a>
+                </li>
+            </ul>
+    </div>
+
+  </nav>
 
 <script src="header.js"></script>
 

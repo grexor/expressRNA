@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="library.css">
 
-<div class="content_center">
+<div class="container">
 
     <div style='position: -webkit-sticky; position: sticky; padding-top: 50px; margin-top: -50px; top: 0px; background-color: #ffffff; z-index: 100; border-bottom: 1px solid #f1f1f1; padding-bottom: 5px;'>
       <div id="btn_library_delete" style="display: none; float: right;"><a href="javascript:delete_library();"><img src="media/delete.png" height=18 style="height: 16px; margin-top:-3px;vertical-align:middle; padding-right: 3px; opacity: 0.7">Delete Library</a></div>
@@ -42,30 +42,27 @@
       <br>
       <div id="lbl_library_status" style="font-weight: 100; padding-bottom: 10px;"></div>
 
-      <table align=center border=0 class=comps_menu>
-        <tr>
-          <td id="btn_library_ex" onclick="javascript:open_library_div('ex');" class="unselectable">
-            <img src="media/icon_es.png" height=16px style="margin-top:-4px; padding-right: 2px; vertical-align:middle">
-            Experiments
-          </td>
-          <td style="padding-left: 0px; padding-right: 0px; width:15px; background-color: transparent !important; cursor:default;"></td>
-          <td id="btn_library_ge" onclick="javascript:open_library_div('ge');" class="unselectable">
-            <img src="media/calculator.png" height=16px style="margin-top:-4px; padding-right: 2px; vertical-align:middle">
-            Laboratory
-          </td>
-          <td style="padding-left: 0px; padding-right: 0px; width:15px; background-color: transparent !important; cursor:default;"></td>
-          <td id="btn_library_ep" onclick="javascript:open_library_div('ep');" class="unselectable">
-            <img src="media/ep.png" height=16px style="margin-top:-4px; padding-right: 2px; vertical-align:middle">
-            Expression Profiles
-          </td>
-          <td style="padding-left: 0px; padding-right: 0px; width:15px; background-color: transparent !important; cursor:default;"></td>
-          <td id="btn_library_q" style="display:none;" onclick="javascript:open_library_div('q');" class="unselectable">
-            <img src="media/q.png" height=16px style="margin-top:-4px; padding-right: 2px; vertical-align:middle">
-            Quality Control
-          </td>
-          <td style="padding-left: 0px; padding-right: 0px; width:15px; background-color: transparent !important; cursor:default;"></td>
-        </tr>
-      </table>
+      <center>
+      <div id="btn_library_ex" class='button_large' onclick="javascript:open_library_div('ex');">
+        <img src="media/icon_es.png" height=16px style="margin-top:-4px; padding-right: 2px; vertical-align:middle">
+        Experiments
+      </div>
+
+      <div id="btn_library_ge" class='button_large' onclick="javascript:open_library_div('ge');">
+        <img src="media/calculator.png" height=16px style="margin-top:-4px; padding-right: 2px; vertical-align:middle">
+        Laboratory
+      </div>
+
+      <div id="btn_library_ep" class='button_large' onclick="javascript:open_library_div('ep');">
+        <img src="media/ep.png" height=16px style="margin-top:-4px; padding-right: 2px; vertical-align:middle">
+        Expression Profiles
+      </div>
+
+      <div id="btn_library_q" class='button_large' onclick="javascript:open_library_div('q');">
+        <img src="media/q.png" height=16px style="margin-top:-4px; padding-right: 2px; vertical-align:middle">
+        Quality Control
+      </div>
+
     </div>
 
     <div>
@@ -115,6 +112,6 @@
           </table>
         </div>
       </div>
-    </div>
+</div>
 
 <script src="library.js"></script>

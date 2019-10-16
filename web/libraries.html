@@ -1,32 +1,28 @@
 <link rel="stylesheet" href="libraries.css">
 
-<div class="content_center">
+<div class="container">
 
-  <div id='div_libraries_fixed' style='width: 1000px; position: fixed; background-color: #ffffff; margin-top: -20px; padding-top: 20px;'>
-  <div class="div_header"><b>Libraries and Experiments</b></div>
-  Search and browse sequencing libraries and containing experiments
+    <div class="div_header" style='width: 400px;'><b>Libraries and Experiments</b></div>
+    Search and browse sequencing libraries and containing experiments<br>
+    <div id="div_search_libraries" style='float:left; width: 300px; padding-bottom: 3px;'><textarea id='area_libraries_search'></textarea></div>
+    <br>
 
-    <table border=0 style='width: 100%'>
-      <tr>
-        <td class="content_table" valign=top colspan=1 style='width: 100%'>
-          <div id="div_search_libraries" style='float:left; width: 300px; padding-bottom: 3px;'><textarea id='area_libraries_search'></textarea></div>
-        </td>
-        <td align=right style='min-width: 200px'>
-          <div id="div_control_libraries" style="display:none; float:left;">
-            <a href="javascript:new_library()" class='title_link'>
-              <font style="font-size: 13px;"><img src="media/upload.png" style='height: 30px; margin-top:-5px;vertical-align:middle; padding-right: 3px; opacity: 0.7'>New Library<font></a>
-          </div>
-          <div style='float:right; padding-top: 4px;' id='libraries_help1'><font style="font-size: 13px; user-select: none; -ms-user-select: none; -moz-user-select: none; -khtml-user-select: none; -webkit-user-select: none;-webkit-touch-callout: none;"><img src="media/help.png" style='height: 16px; margin-top:-3px;vertical-align:middle; padding-left: 6px; padding-right: 4px; opacity: 0.7'><font color=#555555 class="btn" title="<b>Libraries</b> are containers for <b>experiments</b>. Here you are looking at a list of libraries, each containing several experiments. If you click on a Library ID, the library page will open, listing all the experiments. Each experiment is associated to a FASTQ file (or two, if the sequencing is paired-end).<br>Remember that libraries are just organizational units (like folders / directories on a computer), and that experiments are attached to the sequence data. In some contexts, experiments are often called <b>samples</b>.">Quick help</font></div>
-        </td>
-      </tr>
-    </table>
-
-    <div id="table_libraries_header"></div>
-
+    <div class='float-right' style='float:right; padding-top: 4px;' id='libraries_help1'>
+      <font style="font-size: 13px !important; user-select: none; -ms-user-select: none; -moz-user-select: none; -khtml-user-select: none; -webkit-user-select: none;-webkit-touch-callout: none;">
+        <img src="media/help.png" style='height: 16px; margin-top:-3px;vertical-align:middle; padding-left: 6px; padding-right: 4px; opacity: 0.7'><font color=#555555 class="etippy" title="<b>Libraries</b> are containers for <b>experiments</b>. Here you are looking at a list of libraries, each containing several experiments. If you click on a Library ID, the library page will open, listing all the experiments. Each experiment is associated to a FASTQ file (or two, if the sequencing is paired-end).<br>Remember that libraries are just organizational units (like folders / directories on a computer), and that experiments are attached to the sequence data. In some contexts, experiments are often called <b>samples</b>.">
+          Quick help</font>
+      </font>
     </div>
 
-    <div id="table_libraries"></div>
+    <div class='float-right' id="div_control_libraries" style="display:none; float:left;">
+      <a href="javascript:new_library()" class='title_link'>
+        <font style="font-size: 13px;"><img src="media/upload.png" style='height: 30px; margin-top:-5px;vertical-align:middle; padding-right: 3px; opacity: 0.7'>New Library<font></a>
+    </div>
 
+  <br>
+  <div id="table_libraries_header"></div>
+
+  <div id="table_libraries"></div>
 </div>
 
 <script src="libraries.js"></script>

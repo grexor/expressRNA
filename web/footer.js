@@ -2,7 +2,7 @@ function get_server_stats() {
   post_data = {};
   post_data["action"] = "get_server_stats";
   $.post('/expressrna_gw/index.py', post_data)
-      .success(function(result) {
+      .done(function(result) {
         data = $.parseJSON(result);
         for (var i=0; i<data["cpu"].length; i++) {
           cpu_perc = String(data["cpu"][i].toFixed(0));
@@ -14,7 +14,7 @@ function get_server_stats() {
           $("#div_cpu" + (i+1) + "_width").css("width", data["cpu"][i].toFixed(0)+"%");
         }
       })
-      .error(function(){
+      .fail(function(){
   });
 }
 

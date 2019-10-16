@@ -21,9 +21,9 @@ function save_user_data() {
   post_data["action"] = "save_login";
   post_data["data"] = JSON.stringify(db["user"]);
   $.post('/expressrna_gw/index.py', post_data)
-  .success(function(result) {
+  .done(function(result) {
   })
-  .error(function(){
+  .fail(function(){
   })
 }
 
@@ -62,11 +62,11 @@ function refetch_user_tickets() {
   else return;
   post_data["action"] = "refetch_tickets";
   $.post('/expressrna_gw/index.py', post_data)
-  .success(function(result) {
+  .done(function(result) {
     db["user"]["tickets"] = $.parseJSON(result);
     display_user_tickets(db["user"]["tickets"]);
   })
-  .error(function(){
+  .fail(function(){
   })
 }
 

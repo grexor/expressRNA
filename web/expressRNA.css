@@ -149,6 +149,32 @@ body.waiting *
   padding-left: calc(50% - 400px);
 }
 
+.container {
+  font-family: 'Roboto', sans-serif;
+  font-size: 13px;
+  width: 1000px;
+  padding-top: 50px;
+  padding-left: calc(50% - 500px);
+  font-weight: 300;
+  color: #444444;
+  margin-bottom: 10px;
+}
+
+.container table,tr,td {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+
+.container a {
+    text-decoration: none;
+}
+
+.container.narrow {
+  width: 800px;
+  padding-left: calc(50% - 400px);
+}
+
 .menu_table {
     padding-left: 10px;
     font-family: 'Roboto', sans-serif;
@@ -656,4 +682,28 @@ tbody {
 
 .info_table tr:hover {
   background-color: #f1f1f1;
+}
+
+.button_large {
+  margin-right: 10px;
+  display: inline-block;
+  font-size: 13px;
+  border-radius: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 3px;
+  height: 25px;
+  background-color: #e1e1e1;
+  text-align: center;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.button_large:hover {
+  background-color: #c1c1c1 !important;
+  cursor: pointer;
 }

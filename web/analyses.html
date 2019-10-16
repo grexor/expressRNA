@@ -1,31 +1,22 @@
 <link rel="stylesheet" href="analyses.css">
 
-<div class="content_center">
+<div class="container">
 
-  <div id='div_analyses_fixed' style='width: 1000px; position: fixed; background-color: #ffffff; margin-top: -20px; padding-top: 20px;'>
   <div class="div_header"><b>Analyses Results</b></div>
-  Search and browse alternative polyadenylation and other analyses
+  Search and browse alternative polyadenylation and other analyses<br>
 
-    <table border=0 style='width: 100%'>
-      <tr>
-        <td class="content_table" valign=top colspan=1 style='width: 100%'>
-          <div id="div_search_analyses" style='float:left; width: 300px; padding-bottom: 3px;'><textarea id='area_analyses_search'></textarea></div>
-        </td>
-        <td align=right style='min-width: 200px'>
-          <div id="div_control_analyses" style="display:none">
-            <a href="javascript:new_analysis()" class='title_link'>
-              <font style="font-size: 13px;"><img src="media/new_analysis3.png" style='height: 30px; margin-top:-5px;vertical-align:middle; padding-right: 3px; opacity: 0.7'>New Analysis<font>
-              </a>
-          </div>
-        </td>
-      </tr>
-    </table>
+  <div id="div_search_analyses" style='float:left; width: 300px; padding-bottom: 3px;'><textarea id='area_analyses_search'></textarea></div>
+  <br>
 
-    <div id="table_analyses_header"></div>
+  <div id="div_control_analyses" style="display:none" class='float-right'>
+    <a href="javascript:new_analysis()" class='title_link'>
+      <font style="font-size: 13px;"><img src="media/new_analysis3.png" style='height: 30px; margin-top:-5px;vertical-align:middle; padding-right: 3px; opacity: 0.7'>New Analysis<font>
+      </a>
+  </div>
 
-    </div>
-
-    <div id="table_analyses"></div>
+  <br>
+  <div id="table_analyses_header"></div>
+  <div id="table_analyses"></div>
 
 </div>
 

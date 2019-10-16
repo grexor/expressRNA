@@ -109,7 +109,7 @@ function display_analysis_rnamap(div_name, site_type, pair_type, clip_index) {
   post_data["pair_type"] = pair_type;
   post_data["clip_index"] = clip_index;
   $.post('/expressrna_gw/index.py', post_data)
-      .success(function(result) {
+      .done(function(result) {
           data = $.parseJSON(result);
           if (data["status"]=="no results")
             return;
@@ -158,7 +158,7 @@ function display_analysis_rnamap(div_name, site_type, pair_type, clip_index) {
             $("#btn_analysis_target").show();
           }
       })
-      .error(function(){
+      .fail(function(){
           $("body").removeClass("waiting");
   })
 }
@@ -232,7 +232,7 @@ function display_analysis_heat(div_name, site_type, pair_type, reg, clip_index) 
   post_data["reg"] = reg;
   post_data["clip_index"] = clip_index;
   $.post('/expressrna_gw/index.py', post_data)
-      .success(function(result) {
+      .done(function(result) {
         data = $.parseJSON(result);
         if (data["status"]=="no results")
           return;
@@ -266,7 +266,7 @@ function display_analysis_heat(div_name, site_type, pair_type, reg, clip_index) 
         plot_data.colorscale = colorscaleValue;
         Plotly.newPlot(div_name, [plot_data], data_layout, {displaylogo: false, displayModeBar: false});
       })
-      .error(function(){
+      .fail(function(){
   })
 }
 
@@ -277,7 +277,7 @@ function display_analysis_apamap(div_name, pair_type) {
   post_data["analysis_id"] = db["analysis"]["analysis_id"];
   post_data["pair_type"] = pair_type;
   $.post('/expressrna_gw/index.py', post_data)
-      .success(function(result) {
+      .done(function(result) {
         apamap_data = $.parseJSON(result);
         apamap_enhanced = {x:apamap_data["enhanced"]["x"], y:apamap_data["enhanced"]["y"], text: apamap_data["enhanced"]["gene_id"], mode: 'markers', type: 'scatter', name: 'Enhanced: ' + apamap_data["enhanced"]["x"].length, marker: { size: 6, color: "#ff6961" }};
         apamap_repressed = {x:apamap_data["repressed"]["x"], y:apamap_data["repressed"]["y"], text: apamap_data["repressed"]["gene_id"], mode: 'markers', type: 'scatter', name: 'Repressed: ' + apamap_data["repressed"]["x"].length, marker: { size: 6, color: "#779ecb" }};
@@ -323,7 +323,7 @@ function display_analysis_apamap(div_name, pair_type) {
         $("body").removeClass("waiting");
 
       })
-      .error(function(){
+      .fail(function(){
           $("body").removeClass("waiting");
   })
 }
@@ -394,7 +394,7 @@ function display_analysis_apamap(div_name, pair_type) {
     post_data["pair_type"] = db["analysis"]["pair_type"]
     post_data["clip_index"] = db["analysis"]["clip_index"]
     $.post('/expressrna_gw/index.py', post_data)
-        .success(function(result) {
+        .done(function(result) {
             data = $.parseJSON(result);
             db["analysis"]["query"] = data;
             if (db["analysis"]["analysis_module"]==undefined)
@@ -508,7 +508,7 @@ function display_analysis_apamap(div_name, pair_type) {
               $("#lbl_analysis_status").html('<b><font color=#00aa00>Analysis Status: complete</font></b>');
             }
         })
-        .error(function(){
+        .fail(function(){
     });
   }
 
@@ -517,7 +517,7 @@ function display_analysis_apamap(div_name, pair_type) {
     post_data["action"] = "get_analysis_status";
     post_data["analysis_id"] = db["analysis"]["analysis_id"];
     $.post('/expressrna_gw/index.py', post_data)
-        .success(function(result) {
+        .done(function(result) {
           if (result=="processing") {
             $("#lbl_analysis_status").html('<b><font color=#aa0000>Analysis Status: processing</font></b><img src=media/spinner.gif style="height: 16px; margin-top:-3px;vertical-align:middle; padding-right: 3px; opacity: 0.7">')
             $('#div_analysis_download').css("opacity", "0.2");
@@ -530,7 +530,7 @@ function display_analysis_apamap(div_name, pair_type) {
             $("#lbl_analysis_status").html('<b><font color=#00aa00>Analysis Status: complete</font></b>');
           }
         })
-        .error(function(){
+        .fail(function(){
     });
   }
 
@@ -749,12 +749,12 @@ function delete_analysis_do(analysis_id) {
     post_data["email"] = google_user.getBasicProfile().getEmail();
   post_data["analysis_id"] = analysis_id;
   $.post('/expressrna_gw/index.py', post_data)
-      .success(function(result) {
+      .done(function(result) {
         search_analyses();
         open_analyses();
         update_user_usage();
       })
-      .error(function(){
+      .fail(function(){
   });
 }
 
@@ -825,11 +825,11 @@ function save_analysis(data) {
   post_data["access"] = data.access.join(",");
   post_data["owner"] = data.owner.join(",");
   $.post('/expressrna_gw/index.py', post_data)
-      .success(function(result) {
+      .done(function(result) {
         get_analysis(data.analysis_id);
         search_analyses();
       })
-      .error(function(){
+      .fail(function(){
   });
 }
 

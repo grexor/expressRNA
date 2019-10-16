@@ -87,13 +87,13 @@ function new_library_do(genome, method, seq_type) {
   post_data["method"] = method;
   post_data["seq_type"] = seq_type;
   $.post('/expressrna_gw/index.py', post_data)
-      .success(function(result) {
+      .done(function(result) {
           search_libraries(); // refresh library list
           data = $.parseJSON(result);
           open_library(data.lib_id);
           update_user_usage();
       })
-      .error(function(){
+      .fail(function(){
   })
 }
 
@@ -119,12 +119,12 @@ function search_libraries() {
   if (google_user!=undefined)
     post_data["email"] = google_user.getBasicProfile().getEmail();
   $.post('/expressrna_gw/index.py', post_data)
-      .success(function(result) {
+      .done(function(result) {
           $("body").removeClass("waiting");
           db["libraries"]["query"] = $.parseJSON(result);
           display_libraries(db["libraries"]["query"]);
       })
-      .error(function(){
+      .fail(function(){
         $("body").removeClass("waiting");
   })
 }
@@ -177,10 +177,10 @@ function display_libraries() {
   help_status = "Status of the library:<br><br>Complete: library is processed (aligned to the reference) and ready for exploration<br><font color=green>Processing</font>: library is currently processing<br><font color=red>Queued</font>: library is queued for processing<br><br>Queued libraries start processing when resources are available.";
 
   html_header = "<div style='float:left;'>"
-  html_header += "<div onclick=\"sort_libraries_by('name')\" style='user-select: none; width: 60px; text-align: center; cursor: pointer; margin-right: 15px; float: left; display: inline-block; border-radius: 5px; padding-left: 6px; padding-right: 10px; padding-top: 2px; padding-bottom: 2px; background: #e1e1e1;'>Name <div class=arrow>" + html_arrow_libraries(db["libraries"]["current_column_sort"], "name") + "</div></div>";
-  html_header += "<div onclick=\"sort_libraries_by('notes')\" style='user-select: none; width: 60px; text-align: center; cursor: pointer; margin-right: 15px; display: inline-block; border-radius: 5px; padding-left: 6px; padding-right: 10px; padding-top: 2px; padding-bottom: 2px; background: #e1e1e1;'>Notes <div class=arrow>" + html_arrow_libraries(db["libraries"]["current_column_sort"], "notes") + "</div></div>";
-  html_header += "<div onclick=\"sort_libraries_by('method')\" style='user-select: none; width: 60px; text-align: center; cursor: pointer; margin-right: 15px; display: inline-block; border-radius: 5px; padding-left: 6px; padding-right: 10px; padding-top: 2px; padding-bottom: 2px; background: #e1e1e1;'>Method <div class=arrow>" + html_arrow_libraries(db["libraries"]["current_column_sort"], "method") + "</div></div>";
-  html_header += "<div onclick=\"sort_libraries_by('lib_id')\" style='user-select: none; width: 80px; text-align: center; cursor: pointer; margin-right: 15px; display: inline-block; border-radius: 5px; padding-left: 6px; padding-right: 10px; padding-top: 2px; padding-bottom: 2px; background: #e1e1e1;'>Library ID <div class=arrow>" + html_arrow_libraries(db["libraries"]["current_column_sort"], "lib_id") + "</div></div>";
+  html_header += "<div onclick=\"sort_libraries_by('name')\" style='user-select: none; width: 80px; text-align: center; cursor: pointer; margin-right: 15px; float: left; display: inline-block; border-radius: 5px; padding-left: 6px; padding-right: 10px; padding-top: 2px; padding-bottom: 2px; background: #e1e1e1;'>Name <div class=arrow>" + html_arrow_libraries(db["libraries"]["current_column_sort"], "name") + "</div></div>";
+  html_header += "<div onclick=\"sort_libraries_by('notes')\" style='user-select: none; width: 80px; text-align: center; cursor: pointer; margin-right: 15px; display: inline-block; border-radius: 5px; padding-left: 6px; padding-right: 10px; padding-top: 2px; padding-bottom: 2px; background: #e1e1e1;'>Notes <div class=arrow>" + html_arrow_libraries(db["libraries"]["current_column_sort"], "notes") + "</div></div>";
+  html_header += "<div onclick=\"sort_libraries_by('method')\" style='user-select: none; width: 80px; text-align: center; cursor: pointer; margin-right: 15px; display: inline-block; border-radius: 5px; padding-left: 6px; padding-right: 10px; padding-top: 2px; padding-bottom: 2px; background: #e1e1e1;'>Method <div class=arrow>" + html_arrow_libraries(db["libraries"]["current_column_sort"], "method") + "</div></div>";
+  html_header += "<div onclick=\"sort_libraries_by('lib_id')\" style='user-select: none; width: 100px; text-align: center; cursor: pointer; margin-right: 15px; display: inline-block; border-radius: 5px; padding-left: 6px; padding-right: 10px; padding-top: 2px; padding-bottom: 2px; background: #e1e1e1;'>Library ID <div class=arrow>" + html_arrow_libraries(db["libraries"]["current_column_sort"], "lib_id") + "</div></div>";
   html_header += "</div>";
 
   html_header += "<div>" + make_libraries_pagination_html() + "</div>"
@@ -194,7 +194,7 @@ function display_libraries() {
 
   $("#table_libraries_header").html(html_header);
 
-  html = "<div style='padding-top: 150px'>";
+  html = "";
 
   for (var i=0; i<Math.min(100, temp.length); i++) {
       lib_id = temp[i].lib_id;
@@ -219,11 +219,11 @@ function display_libraries() {
       html += "</div>";
   }
 
-  html += "</div>";
+  html += "";
 
   $("#table_libraries").html(html);
   $("#select_libraries_pages option[value="+db["libraries"]["records_per_page"]+"]").prop('selected', true);
-  tippy('.btn', {theme: 'light', interactive: true});
+  tippy('.etippy', {theme: 'light', interactive: true});
 }
 
 function clear_selection() {
@@ -271,7 +271,7 @@ function libraries_change_page_items(element) {
   search_libraries();
 }
 
-tippy('.btn', {theme: 'light', interactive: true});
+tippy('.etippy', {theme: 'light', interactive: true});
 
 function libraries_tags_reinit() {
   $('#area_libraries_search').tagEditor('destroy');
@@ -310,4 +310,4 @@ function add_libraries_filter(filter) {
 
 libraries_tags_reinit();
 
-tippy('.btn', {theme: 'light', interactive: true});
+tippy('.etippy', {theme: 'light', interactive: true});

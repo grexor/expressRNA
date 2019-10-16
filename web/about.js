@@ -23,4 +23,4 @@ $.ajax({
           $("#lbl_commits").html(data);
   });
 
-tippy('.btn', {theme: 'light', interactive: true});
+tippy('.etippy', {theme: 'light', interactive: true});

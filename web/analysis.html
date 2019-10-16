@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="analysis.css">
 
-<div class="content_center">
+<div class="container">
       <div id="btn_analysis_delete" style="display:none; float: right;"><a href="javascript:delete_analysis();"><img src="media/delete.png" height=18 style="height: 16px; margin-top:-3px;vertical-align:middle; padding-right: 3px; opacity: 0.7">Delete Analysis</a></div>
       <div id="btn_analysis_edit" style="padding-right: 10px; display:none; float: right;"><a href="javascript:edit_analysis();"><img src="media/edit.png" height=18 style="height: 16px; margin-top:-3px;vertical-align:middle; padding-right: 3px; opacity: 0.7">Edit Analysis</a></div>
 
@@ -60,38 +60,42 @@
       <div id="analysis_apamap_title" style="width: 100%; align: center; text-align: center; margin: auto; font-size: 13px; color: #777777;"></div>
       <div id="div_analysis_apamap" style="width: 100%; height: 300;"></div>
 
-      <table align=center border=0 class=comps_menu style="border-spacing: 10px 0px;">
-        <tr>
-          <td id="btn_analysis_es" onclick="javascript:open_analysis_div('es');" class="unselectable">
-            <img src="media/icon_es.png" height=16px style="margin-top:-4px; padding-right: 2px; vertical-align:middle">
-            Setup
-          </td>
-          <td id="btn_analysis_atlas" onclick="javascript:open_analysis_div('atlas');" class="unselectable">
-            <img src="media/icon_atlas.png" height=16px style="margin-top:-4px; padding-right: 2px; vertical-align:middle">
-            Atlas
-          </td>
-          <td id="btn_analysis_target" onclick="javascript:open_analysis_div('target');" style="display: none;" class="unselectable">
-            <img src="media/icon_target.png" height=16px style="margin-top:-4px; padding-right: 2px; vertical-align:middle">
-            Targets
-          </td>
-          <td id="btn_analysis_splicing" onclick="javascript:open_analysis_div('splicing');" style="display:none;" class="unselectable">
-            <img src="media/splicing.png" height=16px style="margin-top:-4px; padding-right: 2px; vertical-align:middle">
-            Splicing
-          </td>
-          <td id="btn_analysis_rna" onclick="javascript:open_analysis_div('rna');" style="display:none;" class="unselectable">
-            <img src="media/icon_rnamotif.png" height=16px style="margin-top:-4px; padding-right: 2px; vertical-align:middle">
-            RNAmotifs2
-          </td>
-          <td id="btn_analysis_go" onclick="javascript:open_analysis_div('go');" style="display:none;" class="unselectable">
-            <img src="media/icon_go.png" height=16px style="margin-top:-4px; padding-right: 2px; vertical-align:middle">
-            GO analysis
-          </td>
-          <td id="btn_analysis_download" onclick="javascript:open_analysis_div('download');" class="unselectable">
-            <img src="media/icon_download.png" height=16px style="margin-top:-4px; padding-right: 2px; vertical-align:middle">
-            Results
-          </td>
-        </tr>
-      </table>
+
+      <center>
+      <div id="btn_analysis_es" class='button_large' onclick="javascript:open_analysis_div('es');">
+        <img src="media/icon_es.png" height=16px style="margin-top:-4px; padding-right: 2px; vertical-align:middle">
+        Setup
+      </div>
+
+      <div id="btn_analysis_atlas" class='button_large' onclick="javascript:open_analysis_div('atlas');">
+        <img src="media/icon_atlas.png" height=16px style="margin-top:-4px; padding-right: 2px; vertical-align:middle">
+        Atlas
+      </div>
+
+      <div id="btn_analysis_target" class='button_large' onclick="javascript:open_analysis_div('target');">
+        <img src="media/icon_target.png" height=16px style="margin-top:-4px; padding-right: 2px; vertical-align:middle">
+        Targets
+      </div>
+
+      <div id="btn_analysis_splicing" class='button_large' onclick="javascript:open_analysis_div('splicing');">
+        <img src="media/splicing.png" height=16px style="margin-top:-4px; padding-right: 2px; vertical-align:middle">
+        Splicing
+      </div>
+
+      <div id="btn_analysis_rna" class='button_large' onclick="javascript:open_analysis_div('rna');">
+        <img src="media/icon_rnamotif.png" height=16px style="margin-top:-4px; padding-right: 2px; vertical-align:middle">
+        RNAmotifs2
+      </div>
+
+      <div id="btn_analysis_go" class='button_large' onclick="javascript:open_analysis_div('go');">
+        <img src="media/icon_go.png" height=16px style="margin-top:-4px; padding-right: 2px; vertical-align:middle">
+        GO analysis
+      </div>
+
+      <div id="btn_analysis_download" class='button_large' onclick="javascript:open_analysis_div('download');">
+        <img src="media/icon_download.png" height=16px style="margin-top:-4px; padding-right: 2px; vertical-align:middle">
+        Results
+      </div>
 
       <div class="div_analysis_es" id="div_analysis_es">
       </div>

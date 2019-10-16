@@ -1,6 +1,6 @@
 function open_help() {
   $("body").removeClass("waiting");
-  menu_select("menu_help");
+  menu_select("menu_info");
   hide_all();
   $("#content_help").show();
   add_history({"action":"help"}, "index.html?action=help");
@@ -25,7 +25,7 @@ function open_libraries() {
 
 function open_profile() {
   $("body").removeClass("waiting");
-  menu_select("menu_profile");
+  menu_select("btn_signout");
   add_history("profile", "", "index.html?action=profile")
   refetch_user_tickets();
   hide_all();
@@ -36,7 +36,7 @@ function open_profile() {
 function open_about() {
   $("body").removeClass("waiting");
   hide_all();
-  menu_select("menu_about");
+  menu_select("menu_info");
   $("#content_about").show();
   add_history({"action":"about"}, "index.html?action=about");
 }
@@ -56,17 +56,53 @@ function open_info() {
   $("#content_info").show();
 }
 
+function open_news_blog() {
+  $("body").removeClass("waiting");
+  hide_all();
+  menu_select("menu_info");
+  $("#content_news_blog").show();
+  add_history({"action":"newsblog"}, "index.html?action=newsblog");
+}
+
+function open_contributors() {
+  $("body").removeClass("waiting");
+  hide_all();
+  menu_select("menu_info");
+  $("#content_contributors").show();
+  add_history({"action":"contributors"}, "index.html?action=contributors");
+}
+
+function open_server_stats() {
+  $("body").removeClass("waiting");
+  hide_all();
+  menu_select("menu_info");
+  $("#content_server_stats").show();
+  add_history({"action":"server_stats"}, "index.html?action=server_stats");
+  show_stats_experiments();
+}
+
+function open_contact() {
+  $("body").removeClass("waiting");
+  hide_all();
+  menu_select("menu_info");
+  $("#content_contact").show();
+  add_history({"action":"contact"}, "index.html?action=contact");
+}
+
 function hide_all() {
   $("#content_about").hide();
   $("#content_profile").hide();
   $("#content_help").hide();
-  $("#content_info").hide();
   $("#content_team").hide();
   $("#content_analyses").hide();
   $("#content_libraries").hide();
   $("#content_library").hide();
   $("#content_analysis").hide();
   $("#content_licence").hide();
+  $("#content_news_blog").hide();
+  $("#content_contributors").hide();
+  $("#content_server_stats").hide();
+  $("#content_contact").hide();
 }
 
 function open_library(library_id, library_module) {
