@@ -55,11 +55,13 @@ function adjust_analysis_cbutton() {
 function search_analyses() {
   $("body").addClass("waiting");
   $("#label_search_analyses").show();
+
   try {
-    lbl_search = String($('#area_analyses_search').tagEditor('getTags')[0].tags.join("|||"));
+    lbl_search = String($("#tags_analyses_search").tagsinput('items').join("|||"));
   } catch (err) {
     lbl_search = "";
   }
+
   $("#icon_analyses").attr("src", "media/comparisons.png");
   $("#div_analyses").attr("class", "title_font_selected");
   post_data = {};

@@ -101,8 +101,16 @@ function search_libraries() {
   $("body").addClass("waiting");
   $("#label_search_libraries").show();
 
+  /*
   try {
     lbl_search = String($('#area_libraries_search').tagEditor('getTags')[0].tags.join("|||"));
+  } catch (err) {
+    lbl_search = "";
+  }
+  */
+
+  try {
+    lbl_search = String($("#tags_libraries_search").tagsinput('items').join("|||"));
   } catch (err) {
     lbl_search = "";
   }
@@ -204,7 +212,7 @@ function display_libraries() {
       notes = temp[i].notes;
       notes_search = temp[i].notes_search;
       last_change = format_date_time(new Date(temp[i].last_change));
-      library_id_descriptive = lib_id;
+      library_id_descriptive = "<b>" + lib_id + "</b>";
       html += "<div class=div_library_result>";
       html += "<div style='color: #009900;'><img src='media/icon_data.png' style='height:12px; padding-right: 3px;'><a href=\"javascript:open_library('" + lib_id + "', 'ex');\">" + library_id_descriptive + "</a></div>"
       html += "<div style='padding-left: 15px;'>";
