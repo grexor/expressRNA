@@ -16,25 +16,25 @@ function new_library() {
   }
 
   html = "<b>New Library</b><br>";
-  html += "Would you like to create a new library, a place where you can upload your experiments?" + "<br>";
+  html += "<div style='font-size: 13px'>Create new library: a container for your experiments sequence data</div>";
 
-  genomes_html = "<select onchange='adjust_library_cbutton();' id='select_genome' name='select_genome' size=7 style='margin-left: 2px; width: 400px; font-size: 12px; outline: none;'>";
+  genomes_html = "<select data-placeholder='Genome reference assembly and annotation (click to select)' onchange='adjust_library_cbutton();' id='select_genome' name='select_genome' size=7 style='margin-left: 2px; width: 450px; outline: none;'>";
   for (var genome in genomes)
-      genomes_html += "<option value='" + genome + "'>" + genomes[genome][1] + "</option>";
+      genomes_html += "<option style='font-size: 12px;' value='" + genome + "'>" + genomes[genome][1] + "</option>";
   genomes_html += "</select>";
 
-  methods_html = "<select onchange='adjust_library_cbutton();' id='select_method' name='select_method' size=10 style='margin-left: 2px; font-size: 12px; outline: none; width:400px'>";
+  methods_html = "<select data-placeholder='Sequencing protocol (click and select)' onchange='adjust_library_cbutton();' id='select_method' name='select_method' size=10 style='margin-left: 2px; font-size: 12px; outline: none; width:400px'>";
   for (var method in methods)
-      methods_html += "<option value='" + method + "'>" + methods[method][1] + "</option>";
+      methods_html += "<option style='font-size: 12px;' value='" + method + "'>" + methods[method][1] + "</option>";
   methods_html += "</select>";
 
   seq_type_html = "";
-  seq_type_html += "<label><input type='radio' name='seq_type' value='single' checked>Single-end</label> &nbsp;&nbsp;&nbsp;";
-  seq_type_html += "<label><input type='radio' name='seq_type' value='paired'>Paired-end</label><br>";
+  seq_type_html += "<label><input type='radio' style='margin-right: 5px;' name='seq_type' value='single' checked>Single-end sequencing</label>&nbsp;&nbsp;&nbsp;";
+  seq_type_html += "<label><input type='radio' style='margin-right: 5px;' name='seq_type' value='paired'>Paired-end sequencing</label><br>";
 
-  html += "<div style='padding-top: 3px; padding-left: 3px; font-size: 12px;'><b>Select reference genome</b></div>" + genomes_html + "<br>";
-  html += "<br><div style='padding-top: 3px; padding-left: 3px; font-size: 12px;'><b>Select library method</b></div>" + methods_html + "<br>";
-  html += "<br><div style='padding-top: 3px; padding-left: 3px; font-size: 12px;'><b>Select sequencing type</b></div>" + seq_type_html;
+  html += "<br>" + genomes_html + "<br>";
+  html += "<br>" + methods_html + "<br>";
+  html += "<br>" + seq_type_html;
 
   vex.dialog.open({
       unsafeMessage: html,
@@ -44,6 +44,8 @@ function new_library() {
       ],
       afterOpen: function(event) {
         setTimeout(adjust_library_cbutton, 1); // this trick somehow works, otherwise the buttons are not yet in DOM
+        $("#select_genome").chosen();
+        $("#select_method").chosen();
       },
       callback: function (data) {
           if (!data) {
