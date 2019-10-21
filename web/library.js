@@ -984,7 +984,7 @@ var layout_ep = {
   },
   xaxis: {
     //range: [-200, 200],
-    title: 'experiment id',
+    title: 'experiment',
     titlefont: {
             family: 'Arial',
             size: 12,
@@ -995,6 +995,9 @@ var layout_ep = {
             size: 11,
             color: '#7f7f7f'
     },
+    tickmode: "array",
+    tickvals: [1,2,3,4],
+    ticktext: ['a', 'b', 'c', 'd'],
     zerolinecolor:'#cc0000',
     hoverformat: '+f',
   },
@@ -1046,9 +1049,14 @@ function get_ep(initialize="no") {
         for (var i=0; i<data.length; i++) {
           x = [];
           y = [];
+          x_labels = [];
           for (var j=2; j<data[i].length; j++) {
             y.push(Number(data[i][j]))
             x.push(j-1)
+            if (library.experiments[j-1].condition!=undefined) {
+              x_labels.push(library.experiments[j-1].condition);
+            } else
+              x_labels.push(j-1);
           }
           gene_name = data[i][0];
           if (data[i][1]!="")
@@ -1057,6 +1065,8 @@ function get_ep(initialize="no") {
           gene_names.push(gene_name);
           traces.push(trace);
         }
+        layout_ep["xaxis"]["tickvals"] = x;
+        layout_ep["xaxis"]["ticktext"] = x_labels;
         Plotly.newPlot('div_ep1', traces, layout_ep, { displayModeBar: false });
         if (initialize=="yes")
             set_ep_tags(gene_names.join("|||"));

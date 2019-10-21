@@ -353,15 +353,14 @@ function display_analysis_apamap(div_name, pair_type) {
     $("#div_analysis_" + analysis_module).show();
     $("#btn_analysis_" + analysis_module).css("background-color", "#c1c1c1");
     add_history({"action":"analysis", "analysis_id":db["analysis"]["analysis_id"], "module":analysis_module, "pair_type":db["analysis"]["pair_type"]}, "index.html?action=analysis&analysis_id=" + db["analysis"]["analysis_id"] + "&module="+analysis_module+"&pair_type="+db["analysis"]["pair_type"]);
-
   }
 
   function open_analysis_pair_type(t_pair_type) {
-    $("#btn_same").removeClass("selected");
-    $("#btn_skipped").removeClass("selected");
-    $("#btn_composite").removeClass("selected");
-    $("#btn_combined").removeClass("selected");
-    $("#btn_"+t_pair_type).addClass("selected");
+    $("#btn_same").css("background-color", "#e1e1e1");
+    $("#btn_skipped").css("background-color", "#e1e1e1");
+    $("#btn_composite").css("background-color", "#e1e1e1");
+    $("#btn_combined").css("background-color", "#e1e1e1");
+    $("#btn_"+t_pair_type).css("background-color", "#c1c1c1");
     db["analysis"]["pair_type"] = t_pair_type;
     get_analysis(db["analysis"]["analysis_id"], db["analysis"]["pair_type"]);
   }
@@ -406,12 +405,8 @@ function display_analysis_apamap(div_name, pair_type) {
                 $("#btn_analysis_delete").show();
                 $("#btn_analysis_edit").show();
             }
-            $("#btn_same").removeClass("selected");
-            $("#btn_skipped").removeClass("selected");
-            $("#btn_composite").removeClass("selected");
-            $("#btn_combined").removeClass("selected");
-            $("#btn_"+db["analysis"]["pair_type"]).addClass("selected");
 
+            $("#btn_"+pair_type).css("background-color", "#c1c1c1");
             open_analysis_div(db["analysis"]["analysis_module"]);
 
             $("#lbl_analysis_id").html(data.comps_id);
@@ -421,7 +416,7 @@ function display_analysis_apamap(div_name, pair_type) {
             $("#lbl_analysis_method").html(data.method_desc);
 
             if (data.CLIP.length>0) {
-              clip_selector = '<form style="height: 5px;"><b>iCLIP:</b> <select id=clip_selector style="width:300px;" onchange="clip_analysis_selector_change();">';
+              clip_selector = '<br><form style="height: 5px;"><b>iCLIP:</b>&nbsp;<select id=clip_selector style="width:300px;" onchange="clip_analysis_selector_change();">';
               for (var i=0; i<data.CLIP.length; i++)
               {
                 sel = "";
@@ -443,6 +438,7 @@ function display_analysis_apamap(div_name, pair_type) {
               $("#btn_analysis_splicing").hide();
             }
             $("#lbl_analysis_comps_notes").html(data.notes);
+            $("#clip_selector").chosen();
 
             comps_data = jQuery.extend(true, {}, data);
 
