@@ -110,10 +110,10 @@
 
                 if (o.maxTags && ed.data('tags').length >= o.maxTags) { ed.find('input').blur(); return false; }
 
-                blur_result = true
-                $('input:focus', ed).blur();
-                if (!blur_result) return false;
-                blur_result = true
+                //blur_result = true
+                //$('input:focus', ed).blur();
+                //if (!blur_result) return false;
+                //blur_result = true
 
                 // always remove placeholder on click
                 $('.placeholder', ed).remove();

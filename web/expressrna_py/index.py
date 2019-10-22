@@ -104,9 +104,9 @@ db["genomes"]["hg19"]["link_assembly"] = "ftp://ftp.ensembl.org/pub/release-75/f
 db["genomes"]["hg19"]["link_annotation"] = "ftp://ftp.ensembl.org/pub/release-75/gtf/homo_sapiens/Homo_sapiens.GRCh37.75.gtf.gz"
 
 db["genomes"]["hg38"] = {}
-db["genomes"]["hg38"]["desc"] = "<i>Homo sapiens</i>, Assembly: <a href='%s' target=_new'>hg38<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>, Annotation: <a href='%s' target=_new>GTF Ensembl 90<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>";
-db["genomes"]["hg38"]["link_assembly"] = "ftp://ftp.ensembl.org/pub/release-90/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz"
-db["genomes"]["hg38"]["link_annotation"] = "ftp://ftp.ensembl.org/pub/release-90/gtf/homo_sapiens/Homo_sapiens.GRCh38.90.chr.gtf.gz"
+db["genomes"]["hg38"]["desc"] = "<i>Homo sapiens</i>, Assembly: <a href='%s' target=_new'>hg38<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>, Annotation: <a href='%s' target=_new>GTF Ensembl 98<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>";
+db["genomes"]["hg38"]["link_assembly"] = "ftp://ftp.ensembl.org/pub/release-98/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz"
+db["genomes"]["hg38"]["link_annotation"] = "ftp://ftp.ensembl.org/pub/release-98/gtf/homo_sapiens/Homo_sapiens.GRCh38.98.chr.gtf.gz"
 
 db["genomes"]["mm10"] = {}
 db["genomes"]["mm10"]["desc"] = "<i>Mus musculus</i>, Assembly: <a href='%s' target=_new'>mm10<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>, Annotation: <a href='%s' target=_new>GTF Ensembl 90<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>";
@@ -584,8 +584,14 @@ class TableClass():
         result = []
         res = []
         if genes!=None:
-            genes = "\|".join(genes.split(","))
-            res, _ = pybio.utils.Cmd("grep -i '%s' %s" % (genes, fname)).run()
+            parsed_genes = []
+            genes = genes.split("|||")
+            for gene in genes:
+                gene = gene.split(", ")
+                gene = gene[0]
+                parsed_genes.append(gene)
+            parsed_genes = '|'.join(parsed_genes)
+            res, _ = pybio.utils.Cmd("grep -iE '%s' %s" % (parsed_genes, fname)).run()
             res = res.split("\n")[:-1]
         if initialize=="yes":
             res, _ = pybio.utils.Cmd("head -n 6 %s" % (fname)).run()
@@ -610,7 +616,7 @@ class TableClass():
             line = line.split("\t")
             if len(line)<2:
                 continue
-            result.append(line[1]+", " + line[0])
+            result.append(line[0]+", " + line[1])
         result = self.sort_input_results(kw, result)
         return json.dumps({"keywords":result[:30]})
 

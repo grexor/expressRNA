@@ -20,7 +20,7 @@ var polyadb_help_dic = {}
 polyadb_help_dic["hg19_polyasite"] = "To determine polyA site usage, polyAsite hg19 atlas was used and the aligned reads from the experiments were assigned to the given polyA site loci. Explore more at <a href=http://polyasite.unibas.ch/#download target=_new>http://polyasite.unibas.ch</a>."
 
 genomes = {};
-genomes["hg38"] = ["hg19", "Homo sapiens, hg38, Ensembl 90"]
+genomes["hg38"] = ["hg38", "Homo sapiens, hg38, Ensembl 98"]
 genomes["hg19"] = ["hg19", "Homo sapiens, hg19, Ensembl 75"]
 genomes["mm10"] = ["mm10", "Mus musculus, mm10, Ensembl 90"]
 genomes["mm9"] = ["mm9", "Mus musculus, mm9, Ensembl 67"]

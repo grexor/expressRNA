@@ -34,7 +34,7 @@
 .tag-editor .tag-editor-delete { background: #e0eaf1; cursor: pointer; border-radius: 0 2px 2px 0; padding-left: 3px; padding-right: 4px; }
 .tag-editor .tag-editor-delete i { line-height: 20px; display: inline-block; }
 .tag-editor .tag-editor-delete i:before { font-size: 16px; color: #8ba7ba; content: "×"; font-style: normal; }
-.tag-editor .tag-editor-delete:hover i:before { color: #d65454; }
+.tag-editor .tag-editor-delete:hover i:before { color: #d65454 !important; }
 .tag-editor .tag-editor-tag.active+.tag-editor-delete, .tag-editor .tag-editor-tag.active+.tag-editor-delete i { visibility: hidden; cursor: text; }
 
 .tag-editor .tag-editor-tag.active { background: none !important; }
@@ -53,7 +53,14 @@
 .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus {
   background: #e0eaf1 !important;
 }
+
 .ui-helper-hidden-accessible { display: none; }
+
 .ui-menu-item:hover {
   background: #e0eaf1 !important;
+}
+
+.ui-menu-item .ui-menu-item-wrapper.ui-state-active {
+    background: #6693bc !important;
+    color: #ffffff !important;
 }

@@ -50,6 +50,7 @@ function edit_library() {
       callback: function (data) {
           if (!data) {
           } else {
+            console.log("save library");
             library.name = data.name;
             if (data.notes!=undefined) {
               library.notes = data.notes.replace(/\r\n|\r|\n/g,"<br>");
@@ -344,6 +345,7 @@ function adjust_library_ubutton(sw) {
   }
 
   function get_library(library_id) {
+    library_tags_reinit();
     db["library"]["library_id"] = library_id;
     $("body").addClass("waiting");
     try  {
@@ -422,7 +424,7 @@ function adjust_library_ubutton(sw) {
               db["library"]["library_module"] = "ex";
             open_library_div(db["library"]["library_module"]);
             get_library_status();
-            get_ep(initialize="yes");
+            //get_ep(initialize="yes");
 
         })
         .fail(function(){
@@ -759,21 +761,17 @@ function edit_experiment(exp_id) {
     html += "<div style='font-size: 12px; color: #444444;'>Please select the genome assembly and annotation of your library.</div>"
     if (library.genome!="")
       html += "<div style='font-size: 12px; color: #942020;'>Please be aware that if you change the genome of the library, all experiments will be re-mapped to the newly selected genome (can take some time).</div>"
-    genomes_html = "<select id='select_genome' name='select_genome' size=10 style='margin-left: 2px; width: 400px; font-size: 12px; outline: none;'>";
+    html += "<b>Select genome</b><br>"
+    html += "<select id='select_genome_edit' name='select_genome_edit' size=10 style='margin-left: 2px; width: 400px; font-size: 12px; outline: none;'>";
     for (var genome in genomes) {
       if (library.genome==genome)
-        genomes_html += "<option selected value='" + genome + "'>" + genomes[genome][1] + "</option>";
+        html += "<option selected value='" + genome + "'>" + genomes[genome][1] + "</option>";
       else
-        genomes_html += "<option value='" + genome + "'>" + genomes[genome][1] + "</option>";
+        html += "<option value='" + genome + "'>" + genomes[genome][1] + "</option>";
     }
-    genomes_html += "</select>";
+    html += "</select>";
     vex.dialog.open({
         unsafeMessage: html,
-        input: [
-            '<table style="font-size: inherit; font-weight: 200; font-family: \"Helvetica Neue\", sans-serif; color: #444;" border=0><tr><td valign=top>',
-            '<b>Available Genomes</b>&nbsp;&nbsp;&nbsp;<div align="left" style="min-width: 120px; padding-top: 7px; font-size: 12px !important; font-weight: 200; font-family: \"Helvetica Neue\", sans-serif; color: #444; align:right; background-color: #FFFFFF; user-select: none !important; margin-top: 3px;">' + genomes_html + '</div>',
-            '</td></tr></table>',
-        ].join(''),
         buttons: [
             $.extend({}, vex.dialog.buttons.YES, { text: 'Select' }),
             $.extend({}, vex.dialog.buttons.NO, { text: 'Cancel' })
@@ -781,9 +779,12 @@ function edit_experiment(exp_id) {
         callback: function (data) {
             if (!data) {
             } else {
-              library.genome = $('#select_genome').find(":selected").val();
+              library.genome = $('#select_genome_edit').find(":selected").val();
               save_library(library);
             }
+        },
+        afterOpen: function(event) {
+          $("#select_genome_edit").chosen();
         }
     })
   }
@@ -794,21 +795,17 @@ function edit_experiment(exp_id) {
     html += "<div style='font-size: 12px; color: #444444;'>Please select the sequencing method / protocol of your library.</div>"
     if (library.method!="")
       html += "<div style='font-size: 12px; color: #942020;'>Please be aware that if you change the method of the library, the experiments (in some cases, like Nanopore) will be re-mapped to the reference genome, which can take some time.</div>"
-    methods_html = "<select id='select_method' name='select_method' size=10 style='margin-left: 2px; font-size: 12px; outline: none; width:400px'>";
+    html += "<b>Select method</b><br>"
+    html += "<select id='select_method' name='select_method' size=10 style='margin-left: 2px; font-size: 12px; outline: none; width:400px'>";
     for (var method in methods) {
       if (library.method==method)
-        methods_html += "<option selected value='" + method + "'>" + methods[method][1] + "</option>";
+        html += "<option style='font-size: 12px;' selected value='" + method + "'>" + methods[method][1] + "</option>";
       else
-        methods_html += "<option value='" + method + "'>" + methods[method][1] + "</option>";
+        html += "<option style='font-size: 12px;' value='" + method + "'>" + methods[method][1] + "</option>";
     }
-    methods_html += "</select>";
+    html += "</select>";
     vex.dialog.open({
         unsafeMessage: html,
-        input: [
-            '<table style="font-size: inherit; font-weight: 200; font-family: \"Helvetica Neue\", sans-serif; color: #444;" border=0><tr><td valign=top>',
-            '<b>Available Methods</b>&nbsp;&nbsp;&nbsp;<div align="left" style="min-width: 120px; padding-top: 7px; font-size: 12px !important; font-weight: 200; font-family: \"Helvetica Neue\", sans-serif; color: #444; align:right; background-color: #FFFFFF; user-select: none !important; margin-top: 3px;">' + methods_html + '</div>',
-            '</td></tr></table>',
-        ].join(''),
         buttons: [
             $.extend({}, vex.dialog.buttons.YES, { text: 'Select' }),
             $.extend({}, vex.dialog.buttons.NO, { text: 'Cancel' })
@@ -819,6 +816,9 @@ function edit_experiment(exp_id) {
               library.method = $('#select_method').find(":selected").val();
               save_library(library);
             }
+        },
+        afterOpen: function(event) {
+          $("#select_method").chosen();
         }
     })
   }
@@ -974,7 +974,7 @@ var layout_ep = {
   margin: {
     l: 50,
     r: 25,
-    b: 35,
+    b: 75,
     t: 15
   },
   font: {
@@ -1018,7 +1018,6 @@ var layout_ep = {
     // https://github.com/mbostock/d3/wiki/Formatting#numbers
     hoverformat: '+.2f', // show mouse over values with 2 decimal precisions
   },
-  width: 900,
   height: 300,
   paper_bgcolor: '#ffffff',
   plot_bgcolor: '#ffffff',
@@ -1039,7 +1038,7 @@ function get_ep(initialize="no") {
   post_data["lib_id"] = library.lib_id;
   post_data["initialize"] = initialize;
   try {
-    post_data["genes"] = String($('#area_genes_search').tagEditor('getTags')[0].tags.join(","));
+    post_data["genes"] = String($('#area_genes_search').tagEditor('getTags')[0].tags.join("|||"));
   } catch (err) { }
   $.post('/expressrna_gw/index.py', post_data)
       .done(function(result) {
@@ -1053,10 +1052,17 @@ function get_ep(initialize="no") {
           for (var j=2; j<data[i].length; j++) {
             y.push(Number(data[i][j]))
             x.push(j-1)
-            if (library.experiments[j-1].condition!=undefined) {
-              x_labels.push(library.experiments[j-1].condition);
-            } else
-              x_labels.push(j-1);
+            description = [];
+            if ( (library.experiments[j-1].tissue!=undefined) && (library.experiments[j-1].tissue!="") ) {
+              description.push(library.experiments[j-1].tissue);
+            }
+            if ( (library.experiments[j-1].condition!=undefined) && (library.experiments[j-1].condition!="") ) {
+              description.push(library.experiments[j-1].condition);
+            }
+            if (description.length==0) { // nothing else? use experiment id
+              description = ["e"+(j-1)];
+            }
+            x_labels.push(description.join(", "))
           }
           gene_name = data[i][0];
           if (data[i][1]!="")

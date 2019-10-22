@@ -17,6 +17,9 @@ do
   ./node_modules/.bin/javascript-obfuscator $fname --output deploy/$fname
 done
 
+# for some reason, general.js obfuscation doesnt work
+cp general.js /home/gregor/expressrna/web/
+
 cp -r deploy/* /home/gregor/expressrna/web/
 
 cp /home/gregor/expressrna_dev/web/expressrna_py/index.py /home/gregor/expressrna/web/expressrna_py/index.py
