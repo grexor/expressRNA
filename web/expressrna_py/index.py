@@ -620,6 +620,53 @@ class TableClass():
         result = self.sort_input_results(kw, result)
         return json.dumps({"keywords":result[:30]})
 
+    def get_ep2(self):
+        lib_id = self.pars.get("lib_id", None)
+        genes = self.pars.get("genes", None)
+        initialize = self.pars.get("initialize", None)
+        #genes = "DDB_G0267242,DDB_G0267248"
+        if lib_id==None:
+            return ""
+        fname = os.path.join(apa.path.lib_folder(lib_id), "salmon", "%s_salmon.tab" % (lib_id))
+        result = []
+        res = []
+        if genes!=None:
+            parsed_genes = []
+            genes = genes.split("|||")
+            for gene in genes:
+                gene = gene.split(", ")
+                gene = gene[0]
+                parsed_genes.append(gene)
+            parsed_genes = '|'.join(parsed_genes)
+            res, _ = pybio.utils.Cmd("grep -iE '%s' %s" % (parsed_genes, fname)).run()
+            res = res.split("\n")[:-1]
+        if initialize=="yes":
+            res, _ = pybio.utils.Cmd("head -n 6 %s" % (fname)).run()
+            res = res.split("\n")[1:-1]
+        for line in res[:10]: # max results
+            line = line.split("\t")
+            result.append(line)
+        return json.dumps(result, default=dthandler)
+
+    def get_keywords_genes2(self):
+        lib_id = self.pars.get("lib_id", None)
+        kw = self.pars.get("kw", "")
+        if len(kw)<2:
+            return json.dumps([])
+        if lib_id==None:
+            return ""
+        fname = os.path.join(apa.path.lib_folder(lib_id), "salmon", "%s_salmon.tab" % (lib_id))
+        res, _ = pybio.utils.Cmd("grep -i '%s' %s" % (kw, fname)).run()
+        res = res.split("\n")
+        result = []
+        for line in res:
+            line = line.split("\t")
+            if len(line)<2:
+                continue
+            result.append(line[0]+", " + line[2])
+        result = self.sort_input_results(kw, result)
+        return json.dumps({"keywords":result[:30]})
+
     def sort_input_results(self, inputString, unsortedResults):
 
         perfect_starting_matches = []

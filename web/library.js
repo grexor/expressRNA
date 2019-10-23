@@ -346,6 +346,7 @@ function adjust_library_ubutton(sw) {
 
   function get_library(library_id) {
     library_tags_reinit();
+    library_tags_reinit2();
     db["library"]["library_id"] = library_id;
     $("body").addClass("waiting");
     try  {
@@ -1025,11 +1026,71 @@ var layout_ep = {
   showlegend: true,
 };
 
+var layout_ep2 = {
+  title: '',
+  margin: {
+    l: 50,
+    r: 25,
+    b: 75,
+    t: 15
+  },
+  font: {
+    family: 'Arial',
+    size: 9,
+    color: '#7f7f7f'
+  },
+  xaxis: {
+    //range: [-200, 200],
+    title: 'experiment',
+    titlefont: {
+            family: 'Arial',
+            size: 12,
+            color: '#7f7f7f'
+    },
+    tickfont: {
+            family: 'Arial',
+            size: 11,
+            color: '#7f7f7f'
+    },
+    tickmode: "array",
+    tickvals: [1,2,3,4],
+    ticktext: ['a', 'b', 'c', 'd'],
+    zerolinecolor:'#cc0000',
+    hoverformat: '+f',
+  },
+  yaxis: {
+    //range: [-100, 100],
+    title: 'transcript expression (TPM)',
+    titlefont: {
+            family: 'Arial',
+            size: 12,
+            color: '#7f7f7f'
+    },
+    tickfont: {
+            family: 'Arial',
+            size: 11,
+            color: '#7f7f7f'
+    },
+    //exponentformat:'e',
+    // https://github.com/mbostock/d3/wiki/Formatting#numbers
+    hoverformat: '+.2f', // show mouse over values with 2 decimal precisions
+  },
+  height: 300,
+  paper_bgcolor: '#ffffff',
+  plot_bgcolor: '#ffffff',
+  hovermode: 'closest',
+  showlegend: true,
+};
+
 
 function show_div_ep() {
   genes = String($('#area_genes_search').tagEditor('getTags')[0].tags.join(","));
   if (genes=="")
     get_ep(initialize="yes");
+
+  genes2 = String($('#area_genes_search2').tagEditor('getTags')[0].tags.join(","));
+  if (genes2=="")
+    get_ep2(initialize="yes");
 }
 
 function get_ep(initialize="no") {
@@ -1082,6 +1143,56 @@ function get_ep(initialize="no") {
   });
 }
 
+function get_ep2(initialize="no") {
+  var post_data = {};
+  post_data["action"] = "get_ep2";
+  post_data["lib_id"] = library.lib_id;
+  post_data["initialize"] = initialize;
+  try {
+    post_data["genes"] = String($('#area_genes_search2').tagEditor('getTags')[0].tags.join("|||"));
+  } catch (err) { }
+  $.post('/expressrna_gw/index.py', post_data)
+      .done(function(result) {
+        data = $.parseJSON(result);
+        traces = [];
+        gene_names = [];
+        for (var i=0; i<data.length; i++) {
+          x = [];
+          y = [];
+          x_labels = [];
+          for (var j=4; j<data[i].length; j++) {
+            y.push(Number(data[i][j]))
+            x.push(j-3)
+            description = [];
+            if ( (library.experiments[j-3].tissue!=undefined) && (library.experiments[j-3].tissue!="") ) {
+              description.push(library.experiments[j-1].tissue);
+            }
+            if ( (library.experiments[j-3].condition!=undefined) && (library.experiments[j-3].condition!="") ) {
+              description.push(library.experiments[j-3].condition);
+            }
+            if (description.length==0) { // nothing else? use experiment id
+              description = ["e"+(j-3)];
+            }
+            x_labels.push(description.join(", "))
+          }
+          gene_name = data[i][0];
+          if (data[i][2]!="")
+            gene_name += ", " + data[i][2];
+          trace = {"x":x, "y":y, "type":"scatter", "text": gene_name, "name":gene_name};
+          gene_names.push(gene_name);
+          traces.push(trace);
+        }
+        layout_ep2["xaxis"]["tickvals"] = x;
+        layout_ep2["xaxis"]["ticktext"] = x_labels;
+        Plotly.newPlot('div_ep2', traces, layout_ep2, { displayModeBar: false });
+        if (initialize=="yes")
+            set_ep_tags2(gene_names.join("|||"));
+      })
+      .fail(function(){
+        return undefined;
+  });
+}
+
 function library_tags_reinit() {
   var tag_config = {};
   tag_config["animateDelete"] = 0;
@@ -1098,8 +1209,32 @@ function library_tags_reinit() {
   $('#area_genes_search').tagEditor(tag_config);
 }
 
+function library_tags_reinit2() {
+  var tag_config = {};
+  tag_config["animateDelete"] = 0;
+  tag_config["initialTags"] = [];
+  tag_config["beforeTagSave"] = area_library_search_beforesave;
+  tag_config["beforeTagDelete"] = area_library_search_tagdelete;
+  tag_config["forceLowercase"] = false;
+  tag_config["delimiter"] = "||";
+  tag_config["placeholder"] = "Enter genes ...";
+  tag_config["onChange"] = area_library_search_changed;
+  tag_config["autocomplete"] = {delay: 0, minLength:2, source: get_genes_kw2};
+  $('#area_genes_search2').tagEditor('destroy');
+  $('#area_genes_search2').val("");
+  $('#area_genes_search2').tagEditor(tag_config);
+}
+
 function get_genes_kw(request, response) {
   jQuery.get("/expressrna_gw/index.py", {kw: request.term, lib_id: library.lib_id, action: "get_keywords_genes"},
+    function (data) {
+              keywords_data = $.parseJSON(data);
+              response(keywords_data["keywords"]);
+  })
+}
+
+function get_genes_kw2(request, response) {
+  jQuery.get("/expressrna_gw/index.py", {kw: request.term, lib_id: library.lib_id, action: "get_keywords_genes2"},
     function (data) {
               keywords_data = $.parseJSON(data);
               response(keywords_data["keywords"]);
@@ -1121,6 +1256,17 @@ function area_library_search_tagdelete(field, editor, tags, val) {
   search_library_with(new_tags.join("|||"));
 }
 
+function area_library_search_beforesave2() {
+}
+
+function area_library_search_tagdelete2(field, editor, tags, val) {
+  var new_tags = tags;
+  var index = new_tags.indexOf(val);
+  if (index > -1)
+    new_tags.splice(index, 1);
+  search_library_with2(new_tags.join("|||"));
+}
+
 function search_library_with(tags) {
   var tag_config = {};
   tag_config["animateDelete"] = 0;
@@ -1140,6 +1286,42 @@ function search_library_with(tags) {
   get_ep();
 }
 
+function area_library_search_beforesave() {
+}
+
+function area_library_search_changed(field, editor, tags) {
+  get_ep();
+}
+
+function area_library_search_changed2(field, editor, tags) {
+  get_ep2();
+}
+
+function area_library_search_tagdelete(field, editor, tags, val) {
+  var new_tags = tags;
+  var index = new_tags.indexOf(val);
+  if (index > -1)
+    new_tags.splice(index, 1);
+  search_library_with(new_tags.join("|||"));
+}
+
+function search_library_with2(tags) {
+  var tag_config = {};
+  tag_config["animateDelete"] = 0;
+  tag_config["initialTags"] = tags.split("|||");
+  tag_config["beforeTagSave"] = area_library_search_beforesave2;
+  tag_config["beforeTagDelete"] = area_library_search_tagdelete2;
+  tag_config["forceLowercase"] = false;
+  tag_config["delimiter"] = "||";
+  tag_config["placeholder"] = "Enter genes ...";
+  tag_config["onChange"] = area_library_search_changed2;
+  tag_config["autocomplete"] = {delay: 0, minLength:2, source: get_genes_kw2};
+  $('#area_genes_search2').tagEditor('destroy');
+  $('#area_genes_search2').val("");
+  $('#area_genes_search2').tagEditor(tag_config);
+  get_ep2();
+}
+
 function set_ep_tags(tags) {
   var tag_config = {};
   tag_config["animateDelete"] = 0;
@@ -1154,7 +1336,22 @@ function set_ep_tags(tags) {
   $('#area_genes_search').tagEditor('destroy');
   $('#area_genes_search').val("");
   $('#area_genes_search').tagEditor(tag_config);
-  //$('#area_genes_search').tagEditor({initialTags: tags.split("|||"), beforeTagSave: area_library_search_beforesave, beforeTagDelete: area_library_search_tagdelete, forceLowercase: false, delimiter: "||", placeholder: 'Enter genes ...', onChange: area_library_search_changed});
+}
+
+function set_ep_tags2(tags) {
+  var tag_config = {};
+  tag_config["animateDelete"] = 0;
+  tag_config["initialTags"] = tags.split("|||");
+  tag_config["beforeTagSave"] = area_library_search_beforesave2;
+  tag_config["beforeTagDelete"] = area_library_search_tagdelete2;
+  tag_config["forceLowercase"] = false;
+  tag_config["delimiter"] = "||";
+  tag_config["placeholder"] = "Enter genes ...";
+  tag_config["onChange"] = area_library_search_changed;
+  tag_config["autocomplete"] = {delay: 0, minLength:2, source: get_genes_kw2};
+  $('#area_genes_search2').tagEditor('destroy');
+  $('#area_genes_search2').val("");
+  $('#area_genes_search2').tagEditor(tag_config);
 }
 
 function add_library_filter(filter) {
