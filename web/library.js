@@ -1165,7 +1165,7 @@ function get_ep2(initialize="no") {
             x.push(j-3)
             description = [];
             if ( (library.experiments[j-3].tissue!=undefined) && (library.experiments[j-3].tissue!="") ) {
-              description.push(library.experiments[j-1].tissue);
+              description.push(library.experiments[j-3].tissue);
             }
             if ( (library.experiments[j-3].condition!=undefined) && (library.experiments[j-3].condition!="") ) {
               description.push(library.experiments[j-3].condition);
