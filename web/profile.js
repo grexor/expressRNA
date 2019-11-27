@@ -76,8 +76,8 @@ function display_user_tickets(tickets) {
   help1 = "Important only for expressRNA ticket tracking";
   help2 = "If this is empty, the ticket did not start processing yet";
   help3 = "";
-  html += "<td><font color=gray><b>Ticket ID</b></font><font class='btn' title='" + help1 + "'><img src=media/help.png style='height: 15px; margin-top:-2px;vertical-align:middle; padding-left: 3px;'></font></td>";
-  html += "<td class=nowrap><font color=gray><b>Date Added</b></font></td>";
+  html += "<td valign=middle class=nowrap><font color=gray><b>Ticket ID</b></font><font class='btn' title='" + help1 + "'><img src=media/help.png style='height: 15px; margin-top:-2px;vertical-align:middle;'></font></td>";
+  html += "<td valign=middle class=nowrap><font color=gray><b>Date Added</b></font></td>";
   html += "<td class=nowrap><font color=gray><b>Date Started</b></font><font class='btn' title='" + help2+ "'><img src=media/help.png style='height: 15px; margin-top:-2px;vertical-align:middle; padding-left: 3px;'></font></td>";
   html += "<td class=nowrap><font color=gray><b>Date Finished</b></font></td>";
   html += "<td class=nowrap><font color=gray><b>Processing Time</b></font></td>";

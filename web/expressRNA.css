@@ -541,7 +541,7 @@ tbody {
   border: 1px solid #dddddd;
   padding-left: 10px;
   padding-right: 10px;
-  vertical-align: top;
+  vertical-align: middle;
 }
 
 .es_table td a {
