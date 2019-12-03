@@ -188,7 +188,8 @@ class TableClass():
         return pars
 
     def version(self):
-        return "expressRNA v1.0 %s" % datetime.datetime.now()
+        output = "expressRNA v1.0 %s" % datetime.datetime.now()
+        return self.return_string("expressRNA v1.0 %s" % datetime.datetime.now())
 
     # find is case insensitive, replace is case sensitive (doesn't change the original text)
     # wraps s1 with up and down -> up + s1 + down, and replaces the construct in text
@@ -298,7 +299,7 @@ class TableClass():
             if chk_upload_email=="on":
                 self.add_ticket(email, "/home/gregor/expressrna.sendemail %s '%s'" % (email, "Dear %s,\n\nyour experiment e%s (library %s) has been mapped and processed now, you can access it here:\n\nhttp://expressrna.org/index.html?action=library&library_id=%s\n\nThank you,\nexpressRNA" % (email, exp_id, lib_id, lib_id)), "email processing done for e%s (library %s)" % (exp_id, lib_id))
             """
-        return "done"
+        return self.return_string("done")
 
     def send_email(self, address_to, subject, message):
         server = smtplib.SMTP_SSL('smtp.googlemail.com', 465)
@@ -329,14 +330,15 @@ class TableClass():
         for rec in q:
             result['data'].append(rec.get_json())
         result['records'] = len(result['data'])
-        return str(json.dumps(result))
+        return self.return_string(str(json.dumps(result)))
 
     def get_analysis_status(self):
         analysis_id = self.pars.get("analysis_id", None)
         if analysis_id!=None:
             analysis = apa.comps.Comps(analysis_id)
-            return analysis.status
-        return ""
+            output = analysis.status
+            return self.return_string(analysis.status)
+        return self.return_string("")
 
     def list_analysis(self):
         """
@@ -406,7 +408,7 @@ class TableClass():
         if sort_order=="desc":
             result.reverse()
         result = result[current_page * records_per_page: current_page * records_per_page + records_per_page]
-        return json.dumps({"data":result, "count":count}, default=dthandler)
+        return self.return_string(json.dumps({"data":result, "count":count}, default=dthandler))
 
     def list_libraries(self):
         """
@@ -467,7 +469,7 @@ class TableClass():
         if sort_order=="desc":
             result.reverse()
         result = result[current_page * records_per_page: current_page * records_per_page + records_per_page]
-        return json.dumps({"data":result, "count":count}, default=dthandler)
+        return self.return_string(json.dumps({"data":result, "count":count}, default=dthandler))
 
     def remove_links(self, text):
         pattern =r'<(a|/a).*?>'
@@ -511,7 +513,7 @@ class TableClass():
 
         comps_id = self.pars.get("comps_id", None)
         if comps_id==None:
-            return "empty"
+            return self.return_string("empty")
         comps = apa.comps.Comps(comps_id)
         email = self.pars.get("email", "public")
         pair_type = self.pars.get("pair_type", "same")
@@ -571,7 +573,7 @@ class TableClass():
                     else:
                         go["%s_%s_%s_%s" % (reg_type, site_type, pair_type, aspect)] = []
         r["go"] = go
-        return json.dumps(r, default=dthandler)
+        return self.return_string(json.dumps(r, default=dthandler))
 
     def get_ep(self):
         lib_id = self.pars.get("lib_id", None)
@@ -579,7 +581,7 @@ class TableClass():
         initialize = self.pars.get("initialize", None)
         #genes = "DDB_G0267242,DDB_G0267248"
         if lib_id==None:
-            return ""
+            return self.return_string("")
         fname = os.path.join(apa.path.lib_folder(lib_id), "%s_gene_expression_cpm.tab" % (lib_id))
         result = []
         res = []
@@ -599,7 +601,7 @@ class TableClass():
         for line in res[:10]: # max results
             line = line.split("\t")
             result.append(line)
-        return json.dumps(result, default=dthandler)
+        return self.return_string(json.dumps(result, default=dthandler))
 
     def get_keywords_genes(self):
         lib_id = self.pars.get("lib_id", None)
@@ -618,7 +620,10 @@ class TableClass():
                 continue
             result.append(line[0]+", " + line[1])
         result = self.sort_input_results(kw, result)
-        return json.dumps({"keywords":result[:30]})
+        return self.return_string(json.dumps({"keywords":result[:30]}))
+
+    def return_string(self, cont):
+        return bytes(cont, encoding = 'utf-8')
 
     def get_ep2(self):
         lib_id = self.pars.get("lib_id", None)
@@ -626,7 +631,7 @@ class TableClass():
         initialize = self.pars.get("initialize", None)
         #genes = "DDB_G0267242,DDB_G0267248"
         if lib_id==None:
-            return ""
+            return self.return_string("")
         fname = os.path.join(apa.path.lib_folder(lib_id), "salmon", "%s_salmon.tab" % (lib_id))
         result = []
         res = []
@@ -646,15 +651,15 @@ class TableClass():
         for line in res[:10]: # max results
             line = line.split("\t")
             result.append(line)
-        return json.dumps(result, default=dthandler)
+        return self.return_string(json.dumps(result, default=dthandler))
 
     def get_keywords_genes2(self):
         lib_id = self.pars.get("lib_id", None)
         kw = self.pars.get("kw", "")
         if len(kw)<2:
-            return json.dumps([])
+            return self.return_string(json.dumps([]))
         if lib_id==None:
-            return ""
+            return self.return_string("")
         fname = os.path.join(apa.path.lib_folder(lib_id), "salmon", "%s_salmon.tab" % (lib_id))
         res, _ = pybio.utils.Cmd("grep -i '%s' %s" % (kw, fname)).run()
         res = res.split("\n")
@@ -665,7 +670,7 @@ class TableClass():
                 continue
             result.append(line[0]+", " + line[2])
         result = self.sort_input_results(kw, result)
-        return json.dumps({"keywords":result[:30]})
+        return self.return_string(json.dumps({"keywords":result[:30]}))
 
     def sort_input_results(self, inputString, unsortedResults):
 
@@ -752,7 +757,7 @@ class TableClass():
 
         comps_id = self.pars.get("comps_id", None)
         if comps_id==None:
-            return "empty"
+            return self.return_string("empty")
         comps = apa.comps.Comps(comps_id)
         email = self.pars.get("email", "public")
         pair_type = self.pars.get("pair_type", "same")
@@ -784,14 +789,14 @@ class TableClass():
                     else:
                         go["%s_%s_%s_%s" % (reg_type, site_type, pair_type, aspect)] = []
         r["go"] = go
-        return json.dumps(r, default=dthandler)
+        return self.return_string(json.dumps(r, default=dthandler))
 
     def get_library_status(self):
         lib_id = self.pars.get("lib_id", None)
         if lib_id!=None:
             lib = apa.annotation.Library(lib_id)
-            return lib.status
-        return ""
+            return self.return_string(lib.status)
+        return self.return_string("")
 
     def get_library(self):
 
@@ -815,7 +820,7 @@ class TableClass():
         stats = read_stats(library_id)
         library = apa.annotation.libs.get(library_id, None)
         if library==None:
-            return "empty"
+            return self.return_string("empty")
         email = self.pars.get("email", "public")
         library_folder = os.path.join(apa.path.data_folder, library_id)
         r = {}
@@ -843,7 +848,7 @@ class TableClass():
             exp_data["lib_id"] = library_id
             experiments[int(exp_id)] = exp_data
         r["experiments"] = experiments
-        return json.dumps(r, default=dthandler)
+        return self.return_string(json.dumps(r, default=dthandler))
 
     def save_library(self):
         apa.annotation.init()
@@ -852,9 +857,9 @@ class TableClass():
         library = apa.annotation.libs.get(lib_id, None)
         email = self.pars.get("email", "public")
         if (email=="public"):
-            return json.dumps(r, default=dthandler)
+            return self.return_string(json.dumps(r, default=dthandler))
         if (email not in library.owner) and email!="gregor.rot@gmail.com":
-            return json.dumps(r, default=dthandler)
+            return self.return_string(json.dumps(r, default=dthandler))
         library.name = self.pars.get("name", "")
         library.notes = self.pars.get("notes", "")
         library.tags = self.pars.get("tags", "")
@@ -867,7 +872,7 @@ class TableClass():
         library.experiments = json.loads(self.pars["experiments"])
         library.save()
         r = {"status":"success"}
-        return json.dumps(r, default=dthandler)
+        return self.return_string(json.dumps(r, default=dthandler))
 
     def save_analysis(self):
         apa.annotation.init()
@@ -876,7 +881,7 @@ class TableClass():
         analysis = apa.comps.Comps(analysis_id)
         email = self.pars.get("email", "public")
         if (email=="public"):
-            return json.dumps(r, default=dthandler)
+            return self.return_string(json.dumps(r, default=dthandler))
         #if (email not in library.owner) and email!="gregor.rot@gmail.com":
         #    return json.dumps(r, default=dthandler)
         analysis.name = self.pars.get("name", "")
@@ -885,7 +890,7 @@ class TableClass():
         analysis.owner = self.pars.get("owner", "").split(",")
         analysis.save()
         r = {"status":"success"}
-        return json.dumps(r, default=dthandler)
+        return self.return_string(json.dumps(r, default=dthandler))
 
     def new_library(self):
         def new_lib_id():
@@ -910,7 +915,7 @@ class TableClass():
         seq_type = self.pars.get("seq_type", "")
         if email=="public":
             r = {"status":"fail"}
-            return json.dumps(r, default=dthandler)
+            return self.return_string(json.dumps(r, default=dthandler))
         lib_id = new_lib_id()
         lib_folder = os.path.join(apa.path.data_folder, lib_id)
         os.makedirs(lib_folder)
@@ -922,50 +927,50 @@ class TableClass():
         library.access = [email]
         library.save()
         r = {"status":"success", "lib_id":lib_id}
-        return json.dumps(r, default=dthandler)
+        return self.return_string(json.dumps(r, default=dthandler))
 
     def delete_library(self):
         apa.annotation.init()
         email = self.check_login(self.pars.get("email", "public"))
         if email=="public":
             r = {"status":"fail"}
-            return json.dumps(r, default=dthandler)
+            return self.return_string(json.dumps(r, default=dthandler))
         lib_id = self.pars.get("library_id", None)
         if lib_id==None:
             r = {"status":"fail"}
-            return json.dumps(r, default=dthandler)
+            return self.return_string(json.dumps(r, default=dthandler))
         if len(lib_id)<=6:
             r = {"status":"fail"}
-            return json.dumps(r, default=dthandler)
+            return self.return_string(json.dumps(r, default=dthandler))
         library = apa.annotation.libs[lib_id]
         if (email not in library.owner):
             r = {"status":"fail"}
-            return json.dumps(r, default=dthandler)
+            return self.return_string(json.dumps(r, default=dthandler))
         lib_folder = os.path.join(apa.path.data_folder, lib_id)
         if lib_folder.startswith("/home/gregor/apa/data.apa/") and len(lib_folder)>(len("/home/gregor/apa/data.apa/")+6):
             if os.path.exists(lib_folder):
                 shutil.rmtree(lib_folder)
         r = {"status":"success", "lib_id":lib_id}
-        return json.dumps(r, default=dthandler)
+        return self.return_string(json.dumps(r, default=dthandler))
 
     def delete_experiment(self):
         apa.annotation.init()
         email = self.check_login(self.pars.get("email", "public"))
         if email=="public":
             r = {"status":"fail"}
-            return json.dumps(r, default=dthandler)
+            return self.return_string(json.dumps(r, default=dthandler))
         lib_id = self.pars.get("lib_id", None)
         exp_id = self.pars.get("exp_id", None)
         if lib_id==None:
             r = {"status":"fail"}
-            return json.dumps(r, default=dthandler)
+            return self.return_string(json.dumps(r, default=dthandler))
         if len(lib_id)<=6 or exp_id==None:
             r = {"status":"fail"}
-            return json.dumps(r, default=dthandler)
+            return self.return_string(json.dumps(r, default=dthandler))
         library = apa.annotation.libs[lib_id]
         if (email not in library.owner):
             r = {"status":"fail"}
-            return json.dumps(r, default=dthandler)
+            return self.return_string(json.dumps(r, default=dthandler))
         lib_folder = os.path.join(apa.path.data_folder, lib_id)
         exp_folder = os.path.join(apa.path.data_folder, lib_id, "e"+exp_id)
         if lib_folder.startswith("/home/gregor/apa/data.apa/") and len(lib_folder)>(len("/home/gregor/apa/data.apa/")+6):
@@ -974,7 +979,7 @@ class TableClass():
         del library.experiments[int(exp_id)]
         library.save()
         r = {"status":"success", "lib_id":lib_id}
-        return json.dumps(r, default=dthandler)
+        return self.return_string(json.dumps(r, default=dthandler))
 
     def new_analysis(self):
         def new_analysis_id():
@@ -996,7 +1001,7 @@ class TableClass():
         email = self.check_login(self.pars.get("email", "public"))
         if email=="public":
             r = {"status":"fail"}
-            return json.dumps(r, default=dthandler)
+            return self.return_string(json.dumps(r, default=dthandler))
         analysis_name = self.pars.get("analysis_name", "")
         analysis_type = self.pars.get("analysis_type", "")
         analysis_genome = self.pars.get("genome", "")
@@ -1054,31 +1059,31 @@ class TableClass():
         self.add_ticket(email, "apa.comps -comps_id %s" % (analysis_id), "process analysis %s" % (analysis_id))
 
         r = {"status":"success", "analysis_id":analysis_id}
-        return json.dumps(r, default=dthandler)
+        return self.return_string(json.dumps(r, default=dthandler))
 
     def delete_analysis(self):
         apa.annotation.init()
         email = self.check_login(self.pars.get("email", "public"))
         if email=="public":
             r = {"status":"fail"}
-            return json.dumps(r, default=dthandler)
+            return self.return_string(json.dumps(r, default=dthandler))
         analysis_id = self.pars.get("analysis_id", None)
         if analysis_id==None:
             r = {"status":"fail"}
-            return json.dumps(r, default=dthandler)
+            return self.return_string(json.dumps(r, default=dthandler))
         if len(analysis_id)<=6:
             r = {"status":"fail"}
-            return json.dumps(r, default=dthandler)
+            return self.return_string(json.dumps(r, default=dthandler))
         analysis = apa.comps.Comps(analysis_id)
         if (email not in analysis.access):
             r = {"status":"fail"}
-            return json.dumps(r, default=dthandler)
+            return self.return_string(json.dumps(r, default=dthandler))
         analysis_folder = os.path.join(apa.path.comps_folder, analysis_id)
         if analysis_folder.startswith("/home/gregor/apa/data.comps/") and len(analysis_folder)>(len("/home/gregor/apa/data.comps/")+6):
             if os.path.exists(analysis_folder):
                 shutil.rmtree(analysis_folder)
         r = {"status":"success", "analysis_id":analysis_id}
-        return json.dumps(r, default=dthandler)
+        return self.return_string(json.dumps(r, default=dthandler))
 
     def rnamap(self):
         clip_index = self.pars.get("clip_index", 0)
@@ -1087,9 +1092,9 @@ class TableClass():
         site_type = self.pars.get("site_type", "proximal")
         fname = os.path.join(apa.path.comps_folder, comps_id, "rnamap", "clip%s.%s.%s.tab" % (clip_index, pair_type, site_type))
         if os.path.exists(fname):
-            return open(fname).readline()
+            return self.return_string(open(fname).readline())
         else:
-            return json.dumps({"status":"no results"})
+            return self.return_string(json.dumps({"status":"no results"}))
 
     def rnaheat(self):
         comps_id = self.pars.get("comps_id", None)
@@ -1099,9 +1104,9 @@ class TableClass():
         site_type = self.pars.get("site_type", "proximal")
         fname = os.path.join(apa.path.comps_folder, comps_id, "rnamap", "clip%s_heat.%s.%s_%s_json.tab" % (clip_index, pair_type, site_type, reg))
         if os.path.exists(fname):
-            return open(fname).readline()
+            return self.return_string(open(fname).readline())
         else:
-            return json.dumps({"status":"no results"})
+            return self.return_string(json.dumps({"status":"no results"}))
 
     def apamap(self):
         analysis_id = self.pars.get("analysis_id", None)
@@ -1120,7 +1125,7 @@ class TableClass():
                 plot_data[data["gene_class"]]["gene_id"].append("%s: %s" % (data["gene_id"], data["gene_name"]))
             r = f.readline()
         f.close()
-        return json.dumps(plot_data)
+        return self.return_string(json.dumps(plot_data))
 
     def check_login(self, email="public"):
         conn = Session()
@@ -1158,7 +1163,7 @@ class TableClass():
             result["usertype"] = q[0].usertype
             result["libs"], result["experiments"] = self.count_ownership(q[0].email)
             result["tickets"] = self.get_tickets(email)
-        return json.dumps(result, default=dthandler)
+        return self.return_string(json.dumps(result, default=dthandler))
 
     def update_user_usage(self):
         result = {}
@@ -1166,7 +1171,7 @@ class TableClass():
         if email==None:
             return
         result["libs"], result["experiments"] = self.count_ownership(email)
-        return json.dumps(result, default=dthandler)
+        return self.return_string(json.dumps(result, default=dthandler))
 
     def get_tickets(self, email):
         tickets = []
@@ -1190,8 +1195,8 @@ class TableClass():
     def refetch_tickets(self):
         email = self.pars.get("email", None)
         if email==None:
-            return "refetch_tickets fail"
-        return json.dumps(self.get_tickets(email), default=dthandler)
+            return self.return_string("refetch_tickets fail")
+        return self.return_string(json.dumps(self.get_tickets(email), default=dthandler))
 
     # todo: parameter once=True/False
     def add_ticket(self, email, command, desc, once=True):
@@ -1212,7 +1217,7 @@ class TableClass():
     def save_login(self):
         data = self.pars.get("data", None)
         if data==None:
-            return "fail"
+            return self.return_string("fail")
         data = json.loads(data)
         conn = Session()
         q = conn.query(Users).filter(Users.email==data["email"]).all()
@@ -1220,7 +1225,7 @@ class TableClass():
             q[0].last_login = datetime.datetime.now()
             q[0].news = data["news"]
             conn.commit()
-        return "saved"
+        return self.return_string("saved")
 
     def count_ownership(self, email):
         apa.annotation.init()
@@ -1235,12 +1240,12 @@ class TableClass():
     def get_server_stats(self):
         result = {}
         result["cpu"] = psutil.cpu_percent(percpu=True)
-        return json.dumps(result, default=dthandler)
+        return self.return_string(json.dumps(result, default=dthandler))
 
     def get_server_data_stats(self):
         result = {}
         result["data"] = json.load(open(os.path.join(apa.path.data_folder, "stats.json")))
-        return json.dumps(result, default=dthandler)
+        return self.return_string(json.dumps(result, default=dthandler))
 
     def close(self):
         Session.remove()
