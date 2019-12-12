@@ -12,7 +12,7 @@ function login_ok(googleUser) {
     $("#div_user_detail").show();
     $("#tr_user_news").show();
     $("#tr_user_email").show();
-    $("#btn_signout").html('<a class="nav-link" href="javascript:open_profile();" id="link_profile">' + googleUser.getBasicProfile().getName() + '</a>');
+    $("#btn_signout").html('<a class="nav-link text-nowrap" href="javascript:open_profile();" id="link_profile"><img src=media/q.png style="height: 18px; padding-right: 5px;">' + googleUser.getBasicProfile().getName() + '</a>');
     $("#profile_note").html("");
     $("#profile_email").html(googleUser.getBasicProfile().getEmail());
     $("#profile_btn_signout").html('<img src=media/signout.png height=13 style="margin-top:-3px;vertical-align:middle; padding-right: 3px;"><a href="#" onclick="signOut();">Sign out</a>');

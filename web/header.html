@@ -14,8 +14,8 @@
         <script src="software/caret-master/jquery.caret.js" type="text/javascript" charset="utf-8"></script>
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
         <meta name="google-signin-client_id" content="791006066118-1m577h8b7nplonckttm8qtql82ijj6pc.apps.googleusercontent.com">
-        <link rel="stylesheet" href="tippy/tippy.css">
-        <script src="tippy/tippy.min.js"></script>
+        <link rel="stylesheet" href="software/tippy/tippy.css">
+        <script src="software/tippy/tippy.min.js"></script>
         <script src="general.js"></script>
         <script src="software/plotly/plotly-latest.min.js"></script>
         <script src="software/vex/dist/js/vex.combined.min.js"></script>
@@ -56,14 +56,14 @@
     <div class="collapse navbar-collapse" id="main-navigation">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link" id="menu_libraries" href="javascript:open_libraries();">Libraries</a>
+          <a class="nav-link text-nowrap" id="menu_libraries" href="javascript:open_libraries();"><img src=media/icon_data.png style='height: 18px; padding-right: 5px;'>Libraries</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" id="menu_analyses" href="javascript:open_analyses();">Analyses</a>
+          <a class="nav-link text-nowrap" id="menu_analyses" href="javascript:open_analyses();"><img src=media/comparisons.png style='height: 18px; padding-right: 5px;'>Analyses</a>
         </li>
         <li class="nav-item dropdown" style='min-width: 120px'>
-            <a class="nav-link dropdown-toggle" href="#" id="menu_info" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Information
+            <a class="nav-link text-nowrap dropdown-toggle" href="#" id="menu_info" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <img src=media/icon_atlas.png style='height: 18px; padding-right: 5px;'>Information
             </a>
             <div class="dropdown-menu" aria-labelledby="menu_info">
               <a class="dropdown-item" href="javascript:open_about();">About expressRNA</a>
@@ -79,13 +79,13 @@
 
     <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item" id='btn_signout'>
+                <li class="nav-item text-nowrap" id='btn_signout'>
                 </li>
                 <li class="nav-item">
-                    <div class="nav-link" id='btn_signin'>Login</div>
+                    <div class="nav-link text-nowrap" id='btn_signin'>Login</div>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" target=_expressrna_ideas href="https://github.com/grexor/expressRNA/issues">Ideas and Issues</a>
+                    <a class="nav-link text-nowrap" target=_expressrna_ideas href="https://github.com/grexor/expressRNA/issues"><img src=media/idea.png style='height: 18px; padding-right: 5px;'>Ideas and Issues</a>
                 </li>
             </ul>
     </div>

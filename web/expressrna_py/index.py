@@ -124,9 +124,9 @@ db["genomes"]["rn6"]["link_assembly"] = "ftp://ftp.ensembl.org/pub/release-91/fa
 db["genomes"]["rn6"]["link_annotation"] = "ftp://ftp.ensembl.org/pub/release-91/gtf/rattus_norvegicus/Rattus_norvegicus.Rnor_6.0.91.chr.gtf.gz"
 
 db["genomes"]["dm6"] = {}
-db["genomes"]["dm6"]["desc"] = "<i>Drosophila melanogaster</i>, Assembly: <a href='%s' target=_new'>dm6<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>, Annotation: <a href='%s' target=_new>GTF Ensembl 90<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>";
-db["genomes"]["dm6"]["link_assembly"] = "ftp://ftp.ensembl.org/pub/release-90/fasta/drosophila_melanogaster/dna/Drosophila_melanogaster.BDGP6.dna.toplevel.fa.gz"
-db["genomes"]["dm6"]["link_annotation"] = "ftp://ftp.ensembl.org/pub/release-90/gtf/drosophila_melanogaster/Drosophila_melanogaster.BDGP6.90.chr.gtf.gz"
+db["genomes"]["dm6"]["desc"] = "<i>Drosophila melanogaster</i>, Assembly: <a href='%s' target=_new'>dm6<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>, Annotation: <a href='%s' target=_new>GTF Ensembl 98<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>";
+db["genomes"]["dm6"]["link_assembly"] = "ftp://ftp.ensembl.org/pub/release-98/fasta/drosophila_melanogaster/dna/Drosophila_melanogaster.BDGP6.dna.toplevel.fa.gz"
+db["genomes"]["dm6"]["link_annotation"] = "ftp://ftp.ensembl.org/pub/release-98/gtf/drosophila_melanogaster/Drosophila_melanogaster.BDGP6.90.chr.gtf.gz"
 
 db["genomes"]["dd"] = {}
 db["genomes"]["dd"]["desc"] = "<i>Dictyostelium discoideum</i>, Assembly: <a href='%s' target=_new'>dd2.7<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>, Annotation: <a href='%s' target=_new>GTF Ensembl 44<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>";
@@ -151,7 +151,7 @@ db["genomes"]["tt"]["link_annotation"] = "http://www.ciliate.org/system/download
 class TableClass():
 
     def log(self, message):
-        print >> self.environ['wsgi.errors'], message
+        print(message, file=self.environ['wsgi.errors'])
 
     def __init__(self, environ, start_response):
         self.environ = environ
@@ -188,8 +188,7 @@ class TableClass():
         return pars
 
     def version(self):
-        output = "expressRNA v1.0 %s" % datetime.datetime.now()
-        return self.return_string("expressRNA v1.0 %s" % datetime.datetime.now())
+        return self.return_string("expressRNA v1.3 {datetime}".format(datetime=datetime.datetime.now()))
 
     # find is case insensitive, replace is case sensitive (doesn't change the original text)
     # wraps s1 with up and down -> up + s1 + down, and replaces the construct in text
@@ -1065,24 +1064,25 @@ class TableClass():
         apa.annotation.init()
         email = self.check_login(self.pars.get("email", "public"))
         if email=="public":
-            r = {"status":"fail"}
+            r = {"status":"fail", "message":"public email"}
             return self.return_string(json.dumps(r, default=dthandler))
         analysis_id = self.pars.get("analysis_id", None)
         if analysis_id==None:
-            r = {"status":"fail"}
+            r = {"status":"fail", "message":"no analysis id"}
             return self.return_string(json.dumps(r, default=dthandler))
-        if len(analysis_id)<=6:
-            r = {"status":"fail"}
+        if len(analysis_id)==0:
+            r = {"status":"fail", "message":"id too short"}
             return self.return_string(json.dumps(r, default=dthandler))
         analysis = apa.comps.Comps(analysis_id)
         if (email not in analysis.access):
-            r = {"status":"fail"}
+            r = {"status":"fail", "message":"no access with email"}
             return self.return_string(json.dumps(r, default=dthandler))
         analysis_folder = os.path.join(apa.path.comps_folder, analysis_id)
-        if analysis_folder.startswith("/home/gregor/apa/data.comps/") and len(analysis_folder)>(len("/home/gregor/apa/data.comps/")+6):
+        if analysis_folder.startswith("/home/gregor/apa/data.comps/") and len(analysis_folder)>(len("/home/gregor/apa/data.comps/")+1):
             if os.path.exists(analysis_folder):
                 shutil.rmtree(analysis_folder)
         r = {"status":"success", "analysis_id":analysis_id}
+        apa.annotation.init()
         return self.return_string(json.dumps(r, default=dthandler))
 
     def rnamap(self):

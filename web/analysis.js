@@ -451,6 +451,7 @@ function display_analysis_apamap(div_name, pair_type) {
             $("#link_analysis_download4").attr("href", "https://expressRNA.org/share/comps/" + db["analysis"]["analysis_id"] + "/" + db["analysis"]["analysis_id"] + ".expression_genes.tab");
             $("#link_analysis_download5").attr("href", "https://expressRNA.org/share/comps/" + db["analysis"]["analysis_id"] + "/" + db["analysis"]["analysis_id"] + ".heatmap.pdf");
             $("#link_analysis_download6").attr("href", "https://expressRNA.org/share/comps/" + db["analysis"]["analysis_id"] + "/" + db["analysis"]["analysis_id"] + ".heatmap.tab");
+            $("#link_analysis_download7").attr("href", "https://expressRNA.org/share/comps/" + db["analysis"]["analysis_id"] + "/" + db["analysis"]["analysis_id"] + ".expression_genes_norm.tab");
 
             if (data.analysis_type=="apa") {
               $("#table_apa").show();
