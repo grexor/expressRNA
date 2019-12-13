@@ -839,7 +839,6 @@ function disable_paste_format(object) {
 }
 
 function new_analysis_library() {
-
   if (Object.keys(library.experiments).length < 3) {
     html = "<b>Differential Gene Expression</b><br>";
     html += "You need at least 4 experiments to define a differential gene expression (DGE) analysis." + "<br>";
@@ -853,17 +852,21 @@ function new_analysis_library() {
     })
     return;
   }
-
   html = "<b>Differential Gene Expression Analysis</b><br>";
-  html += "Here you define new differential gene expression analysis. Please choose experiment groupA (control) and groupB (test) below." + "<br>";
-
-  html += "<textarea name='analysis_name' id='analysis_name' rows=2 style='border-radius: 5px; margin-top: 10px; outline: none; resize: none; width: 400px; font-size: 13px; color: #777777;' placeholder='Analysis name'></textarea>";
-
-  analysis_html = "<br><br>Mark (distribute) experiments into group A (control) and group B (test).<br>Minimum 2 replicates per group.<br>";
-  analysis_html += "<table border=0><tr><td>";
-  analysis_html += "<div id='comp_experiment_select'>" + make_html_experiment_select(); + "</div>";
+  html += "Here you define new differential gene expression analysis.<br>";
+  html += "<textarea name='analysis_name' onkeyup='adjust_analysis_cbutton_library()' id='analysis_name' rows=1 style='padding-left: 3px; border-radius: 3px; margin-top: 10px; margin-bottom: 10px; outline: none; resize: none; width: 520px; font-size: 13px; color: #777777;' placeholder='Analysis name'></textarea>";
+  temp = make_html_experiment_select();
+  control_html = temp[0];
+  test_html = temp[1];
+  analysis_html = "<br>Choose experiments for the control and test set (minimum 2 replicates per set)<br>";
+  analysis_html += "<table border=0 style='padding-top:8px;'>";
+  analysis_html += "<tr>";
+  analysis_html += "<td style='padding-right: 10px;' valign=top>";
+  analysis_html += "<div style='font-size: 13px;  padding-bottom: 2px; color: #555555;'>Controls</div><div id='comp_experiment_select'>" + control_html + "</div>";
   analysis_html += "</td>";
-  analysis_html += "<td style='padding-left: 10px;' valign=top><input type=button value=' Group A ' onclick='mark_experiment(\"groupA\");'><br><br><input type=button value=' Group B ' onclick='mark_experiment(\"groupB\");'></td>";
+  analysis_html += "<td valign=top>";
+  analysis_html += "<div style='font-size: 13px; padding-bottom: 2px; color: #555555;'>Test</div><div id='comp_experiment_select'>" + test_html + "</div>";
+  analysis_html += "</td>";
   analysis_html += "</tr></table>";
   html += analysis_html + "<br>";
   vex.dialog.open({
@@ -874,6 +877,8 @@ function new_analysis_library() {
       ],
       afterOpen: function(event) {
         setTimeout(adjust_analysis_cbutton_library, 1); // this trick somehow works, otherwise the buttons are not yet in DOM
+        $("#select_experiments_control").chosen({placeholder_text_multiple:"Control experiments", display_selected_options:false, display_disabled_options:false});
+        $("#select_experiments_test").chosen({placeholder_text_multiple:"Test experiments", display_selected_options:false, display_disabled_options:false});
       },
       callback: function (data) {
           if (!data) {
@@ -891,7 +896,6 @@ function new_analysis_library() {
             post_data["analysis_type"] = "dge"; // dge, apa"
             post_data["analysis_name"] = $('#analysis_name').val();
             post_data["experiments"] = JSON.stringify(library.experiments);
-
             $.post('/expressrna_gw/index.py', post_data)
                 .done(function(result) {
                   result = $.parseJSON(result);
@@ -900,28 +904,33 @@ function new_analysis_library() {
                 })
                 .fail(function(){
             });
-
           }
       }
   })
 }
 
-function mark_experiment(value) {
-  selected_array = $('#select_experiments').val();
+function mark_experiment() {
+  selected_array = $('#select_experiments_control').val();
   for (item in selected_array) {
     exp_id = selected_array[item];
-    library.experiments[exp_id].analysis_set = value;
+    library.experiments[exp_id].analysis_set = "groupA";
   }
-  $("#comp_experiment_select").html(make_html_experiment_select());
-  adjust_analysis_cbutton_library();
+  selected_array = $('#select_experiments_test').val();
+  for (item in selected_array) {
+    exp_id = selected_array[item];
+    library.experiments[exp_id].analysis_set = "groupB";
+  }
 }
 
 function make_html_experiment_select() {
-  analysis_html = "<select multiple id='select_experiments' onchange='adjust_analysis_cbutton_library()' name='select_experiments' size=" + Math.min(15, Object.keys(library.experiments).length+2) + " style='margin-left: 2px; width: 400px; font-size: 12px; outline: none; color: #777777; border-radius: 2px;'>";
+  analysis_html = "<select multiple id='select_experiments_control' onchange='adjust_analysis_cbutton_library()' name='select_experiments_control' style='max-width: 250px;'>";
+  analysis_html2 = "<select multiple id='select_experiments_test' onchange='adjust_analysis_cbutton_library()' name='select_experiments_test' style='max-width: 250px;'>";
   for (exp_id in library.experiments) {
     var exp_desc = ["exp_" + exp_id];
     for (var j=0; j<library.columns_display.length; j++) {
       column_name = library.columns_display[j][1];
+      if (column_name.indexOf("filename")!=-1)
+        continue;
       column_name_human = library.columns_display[j][0];
       column_value = library.experiments[exp_id][column_name];
       if (column_name=="method")
@@ -936,12 +945,15 @@ function make_html_experiment_select() {
     if (library.experiments[exp_id]["analysis_set"]!=undefined)
       exp_desc = library.experiments[exp_id]["analysis_set"] + " : " + exp_desc;
     analysis_html += "<option value='" + exp_id + "'>" + exp_desc + "</option>";
+    analysis_html2 += "<option value='" + exp_id + "'>" + exp_desc + "</option>";
   }
   analysis_html += "</select>";
-  return analysis_html;
+  analysis_html2 += "</select>";
+  return [analysis_html, analysis_html2];
 }
 
 function adjust_analysis_cbutton_library() {
+  mark_experiment();
   $('#btn_analysis_create').css("display", "none");
   var buttons = document.getElementsByTagName('button');
   var buttons = document.getElementsByTagName('button');
@@ -956,7 +968,7 @@ function adjust_analysis_cbutton_library() {
           if (library.experiments[exp_id].analysis_set=="groupB")
             num_groupB += 1
         }
-        if ((num_groupA>=2) && (num_groupB>=2))
+        if ((num_groupA>=2) && (num_groupB>=2) && ($('#analysis_name').val()!=""))
         {
           button.disabled = false;
           $(button).css("opacity", 1);

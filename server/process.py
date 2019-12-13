@@ -9,16 +9,16 @@ from expressrna_py.db import *
 
 while True:
     conn = Session()
-    print "expressRNA_server v1, checking for open tickets, %s" % (datetime.datetime.now())
+    print("expressRNA_server v1, checking for open tickets, %s" % (datetime.datetime.now()))
     time.sleep(1)
     q = conn.query(Tickets).filter(Tickets.date_started==None).order_by(Tickets.tid).all()
     for rec in q:
-        print "==="
+        print("===")
         try:
-            print "processing TID=%s" % rec.tid
+            print("processing TID=%s" % rec.tid)
         except:
             continue
-        print rec.command
+        print(rec.command)
         rec.date_started = datetime.datetime.now()
         rec.status = 1 # processing
         conn.commit()
@@ -27,7 +27,7 @@ while True:
         rec.status = 2 # finished done
         rec.minutes = round((rec.date_finished - rec.date_started).total_seconds() / 60.0, 2) # compute processing time in minutes
         conn.commit()
-        print "==="
-        print
+        print("===")
+        print()
         conn.flush()
     conn.close()
