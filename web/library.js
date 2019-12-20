@@ -689,17 +689,18 @@ function display_library_ge() {
 
   html += '<div class="div_header" style="color:#555555"><b>Downloads:</b> links to constructed polyA databases and gene expression tables</div>';
   polya_bed_link = config["polya_url"] + library.lib_id + ".bed.gz";
-  html += "<div style='background-color: #e1e1e1; border-radius: 3px; float:left; padding-left: 3px; padding-right: 3px; margin-right: 5px;'>PolyA database</div><div class='div_column_value'><a target=_new href='" + polya_bed_link + "'>Download polyA database</a></div>";
+  html += "<div style='background-color: #e1e1e1; border-radius: 3px; float:left; padding-left: 3px; padding-right: 3px; margin-right: 5px;'>PolyA database</div><div class='div_column_value'><a target=_new href='" + polya_bed_link + "'>PolyA Database</a></div>";
   html += "<div style='font-size: 12px; color: #555555; padding-left: 3px;'>The polyA database is constructed from all experimental data in the library. Reads are grouped depending on library method (Quantseq Reverse, Quantseq Forward, Nanopore) and thresholds are applied to estimate RNA molecule ends. The results are reported in BED format. A detailed description is available in the <a href='javascript:open_help();'>Docs section</a>.</div>";
   html += "<br><br>";
 
   polya_expression_table_link = config["data_url"] + library.lib_id + "/" + library.lib_id + "_polya_expression.tab?nocache="+nocache;
-  html += "<div style='background-color: #e1e1e1; border-radius: 3px; float:left; padding-left: 3px; padding-right: 3px; margin-right: 5px;'>PolyA Counts</div><div class='div_column_value'><a target=_new href='" + polya_expression_table_link + "'>Download polyA count table</a></div>";
+  html += "<div style='background-color: #e1e1e1; border-radius: 3px; float:left; padding-left: 3px; padding-right: 3px; margin-right: 5px;'>PolyA Counts</div><div class='div_column_value'><a target=_new href='" + polya_expression_table_link + "'>PolyA Count Table</a></div>";
   html += "<div style='font-size: 12px; color: #555555; padding-left: 3px;'>The polyA count table provides information on individual polyA site read count for each of the library experiments separately.</div>";
   html += "<br><br>";
 
   gene_expression_table_link = config["data_url"] + library.lib_id + "/" + library.lib_id + "_gene_expression.tab?nocache="+nocache;
-  html += "<div style='background-color: #e1e1e1; border-radius: 3px; float:left; padding-left: 3px; padding-right: 3px; margin-right: 5px;'>Gene Counts</div><div class='div_column_value'><a target=_new href='" + gene_expression_table_link + "'>Download gene expression table</a></div>";
+  gene_expression_table_cpm_link = config["data_url"] + library.lib_id + "/" + library.lib_id + "_gene_expression_cpm.tab?nocache="+nocache;
+  html += "<div style='background-color: #e1e1e1; border-radius: 3px; float:left; padding-left: 3px; padding-right: 3px; margin-right: 5px;'>Gene Counts</div><div class='div_column_value'><a target=_new href='" + gene_expression_table_link + "'>Gene Expression Table</a> | <a target=_new href='" + gene_expression_table_cpm_link + "'>Normalized (CPM) Gene Expression Table</a></div>";
   html += "<div style='font-size: 12px; color: #555555; padding-left: 3px;'>The gene expression table provides information on global gene expression levels. Computed with htseq-count and aligned (.bam) files from each experiment in the library.</div>";
 
   $("#div_library_ge").html(html);
@@ -1172,8 +1173,9 @@ function get_ep2(initialize="no") {
           x = [];
           y = [];
           x_labels = [];
-          for (var j=4; j<data[i].length; j++) {
-            y.push(Number(data[i][j]))
+          console.log(data[i].length);
+          for (var j=4; j<=data[i].length; j++) {
+            y.push(Number(data[i][j-1]))
             x.push(j-3)
             description = [];
             if ( (library.experiments[j-3].tissue!=undefined) && (library.experiments[j-3].tissue!="") ) {
