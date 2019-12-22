@@ -8,7 +8,7 @@ var last_lib_status = "";
 
 function edit_library() {
   html = "<b>Library Edit</b> (" + library.lib_id + ")<br>";
-  html += "<div style='font-size: 12px; color: #444444;'>Annotating your experiments is super easy, simply provide annotation fields (one per line), and also provide which fields you would like to show in the table of the experiment (some fields can remain hidden).</div>"
+  html += "<div style='font-size: 13px; color: #444444;'>Annotating your experiments: add/edit annotation fields (one per line) and select which fields you would like to show in the table of the experiment (some fields can remain hidden).</div>"
   public_library = "";
   library_access = Object.assign([], library.access); // make object copy
   var index = library_access.indexOf("public");
@@ -50,7 +50,6 @@ function edit_library() {
       callback: function (data) {
           if (!data) {
           } else {
-            console.log("save library");
             library.name = data.name;
             if (data.notes!=undefined) {
               library.notes = data.notes.replace(/\r\n|\r|\n/g,"<br>");
@@ -166,7 +165,7 @@ function upload_experiment() {
   }
 
   html = "<b>Experiment Upload</b><br>";
-  html += "Here you can upload a gzipped FASTQ (.fastq.bz2) of your experiment sequence data. You can edit the experiment annotation after the upload.<br><br>"
+  html += "Upload gzip / bzip FASTQ file of your experiment data. You can easily edit the annotation after the upload.<br><br>"
   html += "<form id='form_eu' style='outline: none !important; margin-left: -8px;' name='form_eu' method='post' action='/expressrna_gw/index.py' enctype='multipart/form-data'>";
   html += "<table border=0 style='font-size: inherit; color: #444;'>";
   html += "<tr>";
@@ -713,7 +712,7 @@ function edit_experiment(exp_id) {
     return;
   library = db["library"]["query"];
   html = "<b>Editing experiment " + exp_id + "</b> for library " + library.lib_id + "</b><br>";
-  html += "<div style='font-size: 12px; color: #444444;'>Annotating your experiment is super easy, simply enter (or copy/paste) values (one per line) for this experiment.</div>"
+  html += "<div style='font-size: 12px; color: #444444;'>Annotation fields: simply enter (or copy/paste) values (one per line) for this experiment.</div>"
   public_library = "";
   columns = [];
   columns_values = [];
@@ -1104,6 +1103,9 @@ function show_div_ep() {
   genes2 = String($('#area_genes_search2').tagEditor('getTags')[0].tags.join(","));
   if (genes2=="")
     get_ep2(initialize="yes");
+
+  $("#link_gene_table").attr("href", config["data_url"] + library.lib_id + "/" + library.lib_id + "_gene_expression_cpm.tab?nocache="+nocache);
+  $("#link_salmon_table").attr("href", config["data_url"] + library.lib_id + "/salmon/" + library.lib_id + "_salmon.tab?nocache="+nocache);
 }
 
 function get_ep(initialize="no") {
@@ -1123,24 +1125,26 @@ function get_ep(initialize="no") {
           x = [];
           y = [];
           x_labels = [];
-          for (var j=2; j<data[i].length; j++) {
-            y.push(Number(data[i][j]))
-            x.push(j-1)
+          avail_experiments = Object.keys(library.experiments);
+          for (j in avail_experiments) {
+            exp_id = avail_experiments[j];
+            y.push(Number(data[i]["e"+exp_id]))
+            x.push(exp_id)
             description = [];
-            if ( (library.experiments[j-1].tissue!=undefined) && (library.experiments[j-1].tissue!="") ) {
-              description.push(library.experiments[j-1].tissue);
+            if ( (library.experiments[exp_id].tissue!=undefined) && (library.experiments[exp_id].tissue!="") ) {
+              description.push(library.experiments[exp_id].tissue);
             }
-            if ( (library.experiments[j-1].condition!=undefined) && (library.experiments[j-1].condition!="") ) {
-              description.push(library.experiments[j-1].condition);
+            if ( (library.experiments[exp_id].condition!=undefined) && (library.experiments[exp_id].condition!="") ) {
+              description.push(library.experiments[exp_id].condition);
             }
             if (description.length==0) { // nothing else? use experiment id
-              description = ["e"+(j-1)];
+              description = ["e"+exp_id];
             }
             x_labels.push(description.join(", "))
           }
-          gene_name = data[i][0];
-          if (data[i][1]!="")
-            gene_name += ", " + data[i][1];
+          gene_name = data[i]["gene_id"];
+          if (data[i]["gene_name"]!="")
+            gene_name += ", " + data[i]["gene_name"];
           trace = {"x":x, "y":y, "type":"scatter", "text": gene_name, "name":gene_name};
           gene_names.push(gene_name);
           traces.push(trace);
@@ -1173,25 +1177,28 @@ function get_ep2(initialize="no") {
           x = [];
           y = [];
           x_labels = [];
-          console.log(data[i].length);
-          for (var j=4; j<=data[i].length; j++) {
-            y.push(Number(data[i][j-1]))
-            x.push(j-3)
+          avail_experiments = Object.keys(library.experiments);
+          for (j in avail_experiments) {
+            exp_id = avail_experiments[j];
+            y.push(Number(data[i]["e"+exp_id+"_TPM"]))
+            x.push(j)
             description = [];
-            if ( (library.experiments[j-3].tissue!=undefined) && (library.experiments[j-3].tissue!="") ) {
-              description.push(library.experiments[j-3].tissue);
+            if ( (library.experiments[exp_id].tissue!=undefined) && (library.experiments[exp_id].tissue!="") ) {
+              description.push(library.experiments[exp_id].tissue);
             }
-            if ( (library.experiments[j-3].condition!=undefined) && (library.experiments[j-3].condition!="") ) {
-              description.push(library.experiments[j-3].condition);
+            if ( (library.experiments[exp_id].condition!=undefined) && (library.experiments[exp_id].condition!="") ) {
+              description.push(library.experiments[exp_id].condition);
             }
             if (description.length==0) { // nothing else? use experiment id
-              description = ["e"+(j-3)];
+              description = ["e"+avail_experiments[j]];
             }
             x_labels.push(description.join(", "))
           }
-          gene_name = data[i][0];
-          if (data[i][2]!="")
-            gene_name += ", " + data[i][2];
+          gene_name = data[i]["transcript_id"];
+          if (data[i]["gene_id"]!="")
+            gene_name += ", " + data[i]["gene_id"];
+          if (data[i]["gene_name"]!="")
+            gene_name += ", " + data[i]["gene_name"];
           trace = {"x":x, "y":y, "type":"scatter", "text": gene_name, "name":gene_name};
           gene_names.push(gene_name);
           traces.push(trace);

@@ -245,6 +245,7 @@ class TableClass():
             self.add_ticket(email, "apa.polya.makeconfig -lib_id %s" % (lib_id), "polya make config database for library %s" % lib_id)
             self.add_ticket(email, "apa.polya -poly_id %s" % (lib_id), "polya database for library %s" % lib_id)
             self.add_ticket(email, "apa.bed.polya_expression -lib_id %s -poly_id %s" % (lib_id, lib_id), "polya expression table for library %s" % lib_id)
+            self.add_ticket(email, "apa.map.salmon -lib_id %s" % (lib_id, lib_id), "salmon for library %s" % lib_id)
             if chk_upload_email=="on":
                 self.add_ticket(email, "/home/gregor/expressrna.sendemail %s '%s'" % (email, "Dear %s,\n\nyour experiment e%s (library %s) has been mapped and processed now, you can access it here:\n\nhttp://expressrna.org/index.html?action=library&library_id=%s\n\nThank you,\nexpressRNA" % (email, exp_id, lib_id, lib_id)), "email processing done for e%s (library %s)" % (exp_id, lib_id))
         if seq_type=="paired":
@@ -578,7 +579,6 @@ class TableClass():
         lib_id = self.pars.get("lib_id", None)
         genes = self.pars.get("genes", None)
         initialize = self.pars.get("initialize", None)
-        #genes = "DDB_G0267242,DDB_G0267248"
         if lib_id==None:
             return self.return_string("")
         fname = os.path.join(apa.path.lib_folder(lib_id), "%s_gene_expression_cpm.tab" % (lib_id))
@@ -597,8 +597,11 @@ class TableClass():
         if initialize=="yes":
             res, _ = pybio.utils.Cmd("head -n 6 %s" % (fname)).run()
             res = res.split("\n")[1:-1]
+        # get header, we want values for experiments in a dictionary by experiment id
+        header, _ = pybio.utils.Cmd("head -n 1 %s" % (fname)).run()
+        header = header.split("\n")[0].split("\t")
         for line in res[:10]: # max results
-            line = line.split("\t")
+            line = dict(zip(header, line.split("\t")))
             result.append(line)
         return self.return_string(json.dumps(result, default=dthandler))
 
@@ -647,8 +650,11 @@ class TableClass():
         if initialize=="yes":
             res, _ = pybio.utils.Cmd("head -n 6 %s" % (fname)).run()
             res = res.split("\n")[1:-1]
+        # get header, we want values for experiments in a dictionary by experiment id
+        header, _ = pybio.utils.Cmd("head -n 1 %s" % (fname)).run()
+        header = header.split("\n")[0].split("\t")
         for line in res[:10]: # max results
-            line = line.split("\t")
+            line = dict(zip(header, line.split("\t")))
             result.append(line)
         return self.return_string(json.dumps(result, default=dthandler))
 

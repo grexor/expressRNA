@@ -81,17 +81,19 @@ function signOut() {
 }
 function menu_clear() {
   $("#menu_about").attr('style', '');
-  $("#menu_info").attr('style', "");
+  $("#menu_info").attr('style', '');
   $("#menu_help").attr('style', '');
   $("#menu_profile").attr('style', '');
   $("#menu_analyses").attr('style', '');
   $("#menu_libraries").attr('style', '');
   $("#btn_signout").attr('style', '');
 }
+
 function menu_select(name) {
   menu_clear();
-  $("#" + name).attr('style', 'border-bottom: 2px solid #c1c1c1; background-color: #cc5555;');
+  $("#" + name).attr('style', 'background-color: #cc5555;');
 }
+
 function add_history(data, url) {
   if (pop_state==false) {
     if (last_url!=url) {
@@ -102,6 +104,7 @@ function add_history(data, url) {
   }
   pop_state = false;
 }
+
 window.addEventListener('popstate', function(e) {
   pop_state = true;
   if (e.state==null) {

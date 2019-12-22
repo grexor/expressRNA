@@ -1,3 +1,12 @@
+function open_splash() {
+  $("body").removeClass("waiting");
+  hide_all();
+  menu_clear();
+  add_history({"action":"splash"}, "index.html?action=splash");
+  $("#content_splash").show();
+  $("#splash_intro").show();
+}
+
 function open_help() {
   $("body").removeClass("waiting");
   menu_select("menu_info");
@@ -103,6 +112,8 @@ function hide_all() {
   $("#content_contributors").hide();
   $("#content_server_stats").hide();
   $("#content_contact").hide();
+  $("#content_splash").hide();
+  $("#splash_intro").hide();
 }
 
 function open_library(library_id, library_module) {

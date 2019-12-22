@@ -31,10 +31,11 @@ function login_done(force=false) {
   $("#content_contributors").load("contributors.html?nocache="+nocache, document_loaded);
   $("#content_server_stats").load("server_stats.html?nocache="+nocache, document_loaded);
   $("#content_contact").load("contact.html?nocache="+nocache, document_loaded);
+  $("#content_splash").load("splash.html?nocache="+nocache, document_loaded);
 }
 
 function all_documents_loaded() {
-  if (loaded_documents<12) {
+  if (loaded_documents<13) {
     return;
   }
     process_login_parameters(pars["action"], pars)
@@ -67,6 +68,8 @@ function process_login_parameters(action, data) {
       open_server_stats();
   else if (action=="contact")
       open_contact();
+  else if (action=="splash")
+      open_splash();
   else
-    open_about(); // default
+    open_splash(); // default
 }

@@ -548,11 +548,11 @@ function display_analysis_apamap(div_name, pair_type) {
       html += "<td>Genome-wide list of polyA sites used to compute the signal by clustering aligned reads around polyA sites.</td>";
       if (polyadb_help==undefined) {
         polyadb_help = "To determine polyA site usage, a novel polyA database (atlas) was constructed from the set of experiments used in the analysis or a broader set from the entire data library. Check which experiments were used in the <a href=https://expressRNA.org/share/polya/" + data["polya_db"] + ".config target=_new>" + data["polya_db"] + " database config file</a> for this analysis."
-        polyadb_help = "<font color='darkgreen' class='btn' title='" + polyadb_help + "'><img src=media/help.png style='height: 15px; margin-top:-2px;vertical-align:middle; padding-left: 3px;'></font>";
-        html += "<td><a href='https://www.expressrna.org/share/polya/" + data["polya_db"] + ".bed.gz' target=_new>" + data["polya_db"] + "</a>" + polyadb_help + "</td></tr>";
+        polyadb_help = "<font color='darkgreen' class='btn' title='" + polyadb_help + "'><img src=media/help.png style='height: 15px; margin-top:-2px;vertical-align:middle;'></font>";
+        html += "<td class=nowrap><a href='https://www.expressrna.org/share/polya/" + data["polya_db"] + ".bed.gz' target=_new>" + data["polya_db"] + "</a>" + polyadb_help + "</td></tr>";
       } else {
-        polyadb_help = "<font color='darkgreen' class='btn' title='" + polyadb_help + "'><img src=media/help.png style='height: 15px; margin-top:-2px;vertical-align:middle; padding-left: 3px;'></font>";
-        html += "<td><a href='https://www.expressrna.org/share/polya/" + data["polya_db"] + ".bed.gz' target=_new>" + data["polya_db"] + "</a>" + polyadb_help + "</td></tr>";
+        polyadb_help = "<font color='darkgreen' class='btn' title='" + polyadb_help + "'><img src=media/help.png style='height: 15px; margin-top:-2px;vertical-align:middle;'></font>";
+        html += "<td class=nowrap><a href='https://www.expressrna.org/share/polya/" + data["polya_db"] + ".bed.gz' target=_new>" + data["polya_db"] + "</a>" + polyadb_help + "</td></tr>";
       }
 
       html += "<tr><td class=nowrap>APA site selection</td>";
