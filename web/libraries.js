@@ -200,7 +200,7 @@ function display_libraries() {
     num_experiments += temp[i].num_experiments;
   }
 
-  html_header += "<div style='font-size=11px; padding-top: 10px; padding-bottom: 5px;'>Displaying " + Math.min(temp.length, 100) + " of " + db["libraries"]["query"].count + " libraries. Displayed libraries contain " + num_experiments + " experiments</div>";
+  html_header += "<div style='font-size=11px; padding-top: 10px; padding-bottom: 5px;'>Displaying " + Math.min(temp.length, 100) + " of " + db["libraries"]["query"].count + " libraries. Displayed libraries store " + num_experiments + " experiments.</div>";
 
   $("#table_libraries_header").html(html_header);
 
@@ -214,7 +214,7 @@ function display_libraries() {
       notes = temp[i].notes;
       notes_search = temp[i].notes_search;
       last_change = format_date_time(new Date(temp[i].last_change));
-      library_id_descriptive = "<b>" + lib_id + "</b>";
+      library_id_descriptive = "<b>" + lib_id + "</b>" + ", stores <b>" + temp[i].num_experiments + " experiments</b>";
       html += "<div class=div_library_result>";
       html += "<div style='color: #009900;'><img src='media/icon_data.png' style='height:12px; padding-right: 3px;'><a href=\"javascript:open_library('" + lib_id + "', 'ex');\">" + library_id_descriptive + "</a></div>"
       html += "<div style='padding-left: 15px;'>";
