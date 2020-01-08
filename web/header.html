@@ -37,6 +37,11 @@
         <link href="software/chosen/chosen.css" rel="stylesheet" type="text/css">
         <script src="software/chosen/chosen.jquery.js"></script>
 
+        <link href="/software/fontawesome/css/all.css" rel="stylesheet">
+        <script defer src="/software/fontawesome/js/all.js"></script>
+
+        <script src="https://js.stripe.com/v3/"></script>
+
     </head>
 
     <script>vex.defaultOptions.className = 'vex-theme-flat-attack'</script>
@@ -56,22 +61,22 @@
     <div class="collapse navbar-collapse" id="main-navigation">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link text-nowrap" id="menu_libraries" href="javascript:open_libraries();"><img src=media/icon_data.png style='height: 18px; padding-right: 5px;'>Libraries</a>
+          <a class="nav-link text-nowrap" id="menu_libraries" href="javascript:open_libraries();"><i class="fas fa-server"></i>&nbsp;Libraries</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-nowrap" id="menu_analyses" href="javascript:open_analyses();"><img src=media/comparisons.png style='height: 18px; padding-right: 5px;'>Analyses</a>
+          <a class="nav-link text-nowrap" id="menu_analyses" href="javascript:open_analyses();"><i class="fas fa-brain"></i>&nbsp;Analyses</a>
         </li>
         <li class="nav-item dropdown" style='min-width: 120px'>
             <a class="nav-link text-nowrap dropdown-toggle" href="#" id="menu_info" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <img src=media/icon_atlas.png style='height: 18px; padding-right: 5px;'>Information
+              <i class="fas fa-rss"></i>&nbsp;Information
             </a>
             <div class="dropdown-menu" aria-labelledby="menu_info">
-              <a class="dropdown-item" href="javascript:open_about();">About expressRNA</a>
-              <a class="dropdown-item" href="javascript:open_news_blog();">Blog and News</a>
-              <a class="dropdown-item" href="javascript:open_help();">Documentation</a>
-              <a class="dropdown-item" href="javascript:open_contributors();">Contributors</a>
-              <a class="dropdown-item" href="javascript:open_server_stats();">Server Statistics</a>
-              <a class="dropdown-item" href="javascript:open_contact();">Contact</a>
+              <a class="dropdown-item" href="javascript:open_about();"><i class="far fa-address-card"></i>&nbsp;About expressRNA</a>
+              <a class="dropdown-item" href="javascript:open_news_blog();"><i class="fas fa-blog"></i>&nbsp;Blog</a>
+              <a class="dropdown-item" href="javascript:open_help();"><i class="fas fa-book"></i>&nbsp;Documentation</a>
+              <a class="dropdown-item" href="javascript:open_contributors();"><i class="fas fa-hand-spock"></i>&nbsp;Contributors</a>
+              <a class="dropdown-item" href="javascript:open_server_stats();"><i class="far fa-chart-bar"></i>&nbsp;Server Statistics</a>
+              <a class="dropdown-item" href="javascript:open_contact();"><i class="far fa-envelope-open"></i>&nbsp;Contact</a>
             </div>
         </li>
       </ul>
@@ -85,7 +90,8 @@
                     <div class="nav-link text-nowrap" id='btn_signin'>Login</div>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-nowrap" target=_expressrna_ideas href="https://github.com/grexor/expressRNA/issues"><img src=media/idea.png style='height: 18px; padding-right: 5px;'>Ideas and Issues</a>
+                    <a class="nav-link text-nowrap" target=_expressrna_ideas href="https://github.com/grexor/expressRNA/issues">
+                    <i class="fas fa-lightbulb"></i>&nbsp;Ideas and Issues</a>
                 </li>
             </ul>
     </div>

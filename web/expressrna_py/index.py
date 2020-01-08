@@ -18,6 +18,9 @@ import re
 import shutil
 from operator import itemgetter
 
+import stripe
+stripe.api_key = 'sk_test_1iVkPyJIyvEOzGfTIwNj978V00foajlMFx'
+
 db = {}
 db["methods"] = {}
 db["methods"][""] = {"desc": "not selected"}
@@ -1203,6 +1206,26 @@ class TableClass():
         if email==None:
             return self.return_string("refetch_tickets fail")
         return self.return_string(json.dumps(self.get_tickets(email), default=dthandler))
+
+    def purchase_support(self):
+        email = self.pars.get("email", None)
+        product = self.pars.get("product", None)
+        if email==None or product==None:
+            return self.return_string("purchase_support fail")
+        stripe_session = stripe.checkout.Session.create(
+          payment_method_types=['card'],
+          customer_email=email,
+          line_items=[{
+            'name': '1h bioinformatics support',
+            'description': '1h for bioinformatics analysis of you datasets',
+            'amount': 5000,
+            'currency': 'chf',
+            'quantity': 1,
+          }],
+          success_url='https://expressRNA.org/1hsuccess?session_id={CHECKOUT_SESSION_ID}',
+          cancel_url='https://expressRNA.org/1hcancel',
+        )
+        return self.return_string(json.dumps(stripe_session, default=dthandler))
 
     # todo: parameter once=True/False
     def add_ticket(self, email, command, desc, once=True):

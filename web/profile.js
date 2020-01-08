@@ -11,6 +11,35 @@ if (email!="public") {
   $("#tr_user_email").hide();
 }
 
+function purchase_1h() {
+  post_data = {};
+  post_data["action"] = "purchase_support";
+  if (google_user==undefined) {
+    return;
+  }
+  post_data["email"] = google_user.getBasicProfile().getEmail();
+  post_data["product"] = "1h";
+  $.post('/expressrna_gw/index.py', post_data)
+      .done(function(result) {
+        data = $.parseJSON(result);
+        console.log(data.id);
+        var stripe = Stripe('pk_test_r1L5jbo8b0Tpud5w2Fq3gtOp00z3betYb1');
+        stripe.redirectToCheckout({
+          // Make the id field from the Checkout Session creation API response
+          // available to this file, so you can provide it as parameter here
+          // instead of the {{CHECKOUT_SESSION_ID}} placeholder.
+          sessionId: data.id
+        }).then(function (result) {
+          // If `redirectToCheckout` fails due to a browser or network
+          // error, display the localized error message to your customer
+          // using `result.error.message`.
+        });
+      })
+      .fail(function(){
+  });
+
+}
+
 function user_news_click() {
   db["user"]["news"] = !db["user"]["news"];
   save_user_data();
