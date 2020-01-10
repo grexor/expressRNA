@@ -31,7 +31,7 @@ function show_stats_experiments() {
   $.post('/expressrna_gw/index.py', post_data)
       .done(function(result) {
         data = $.parseJSON(result);
-
+        $("#stats_date").html(" (updated " + data["data"]["date"] + ")");
         $("#div_stats_experiments").html("");
         var table_stats_experiments = "<table border=0 style='font-size: 12px; color: #555555;'>";
         var pie_data = [];
