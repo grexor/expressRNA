@@ -1,4 +1,4 @@
-import urllib2
+from urllib.request import urlopen
 import json
 import datetime
 from operator import itemgetter, attrgetter, methodcaller
@@ -6,7 +6,7 @@ import config
 import os
 
 def populate_commits(url, repo):
-    data = urllib2.urlopen(url).read()
+    data = urlopen(url).read()
     data = json.loads(data)
     for i in range(10):
       data[i]["repo"] = repo
