@@ -22,7 +22,6 @@ function purchase_1h() {
   $.post('/expressrna_gw/index.py', post_data)
       .done(function(result) {
         data = $.parseJSON(result);
-        console.log(data.id);
         var stripe = Stripe('pk_test_r1L5jbo8b0Tpud5w2Fq3gtOp00z3betYb1');
         stripe.redirectToCheckout({
           // Make the id field from the Checkout Session creation API response
