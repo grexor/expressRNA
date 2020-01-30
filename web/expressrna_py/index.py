@@ -402,7 +402,7 @@ class TableClass():
                         r["method_search"] = self.replace_ignorecase(term, "<div style='display: inline; font-weight: bold; color: #FF0000'>", "</div>", self.remove_links(r["method_search"]))
                     if r["genome_search"]!="not selected":
                         r["genome_search"] = self.replace_ignorecase(term, "<div style='display: inline; font-weight: bold; color: #FF0000'>", "</div>", self.remove_links(r["genome_search"]))
-            if (email in comps.access) or ("public" in comps.access):
+            if (email in comps.access) or ("public" in comps.access) or (email in "gregor.rot@gmail.com"):
                 if include_analysis:
                     result.append(r)
 

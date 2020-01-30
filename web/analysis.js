@@ -461,6 +461,7 @@ function display_analysis_apamap(div_name, pair_type) {
               $("#row_apa_switch_download").show();
               $("#row_apausage_download").show();
               $("#row_apaheat_download").show();
+              $("#div_pair_type").show();
               display_analysis_go(comps_data.go);
               display_analysis_rnamap("analysis_proximal", "proximal", db["analysis"]["pair_type"], db["analysis"]["clip_index"]);
               display_analysis_rnamap("analysis_distal", "distal", db["analysis"]["pair_type"], db["analysis"]["clip_index"]);
@@ -496,6 +497,7 @@ function display_analysis_apamap(div_name, pair_type) {
               $("#row_apa_switch_download").hide();
               $("#row_apausage_download").hide();
               $("#row_apaheat_download").hide();
+              $("#div_pair_type").hide();
             }
 
             if (db["analysis"]["query"].status=="processing") {

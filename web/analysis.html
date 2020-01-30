@@ -16,24 +16,25 @@
       <br>
       <div id="lbl_analysis_status" style="font-weight: 100; padding-left:5px; padding-bottom: 10px;"></div>
 
-      <div id="btn_same" class='button_small' onclick="javascript:open_analysis_pair_type('same');">
-        same-exon
+      <div id='div_pair_type'>
+        <div id="btn_same" class='button_small' onclick="javascript:open_analysis_pair_type('same');">
+          same-exon
+        </div>
+
+        <div id="btn_composite" class='button_small' onclick="javascript:open_analysis_pair_type('composite');">
+          composite-exon
+        </div>
+
+        <div id="btn_skipped" class='button_small' onclick="javascript:open_analysis_pair_type('skipped');">
+          skipped-exon
+        </div>
+
+        <div id="btn_combined" class='button_small' onclick="javascript:open_analysis_pair_type('combined');">
+          combined
+        </div>
+
+        <font color="darkgreen" class="btn" title="Based on the loci of the proximal and distal polyA sites, this is either:<br><br><img src='media/pair_type.png' width=360><br><br>For details, please see <a href='http://www.cell.com/action/showImagesData?pii=S2211-1247%2817%2930522-3' target=_fig2>Rot et al. (2017), Figure 2</a>."><img src=media/help.png style='height: 15px; margin-top:-2px;vertical-align:middle; padding-left: 3px;'></font>
       </div>
-
-      <div id="btn_composite" class='button_small' onclick="javascript:open_analysis_pair_type('composite');">
-        composite-exon
-      </div>
-
-      <div id="btn_skipped" class='button_small' onclick="javascript:open_analysis_pair_type('skipped');">
-        skipped-exon
-      </div>
-
-      <div id="btn_combined" class='button_small' onclick="javascript:open_analysis_pair_type('combined');">
-        combined
-      </div>
-
-      <font color="darkgreen" class="btn" title="Based on the loci of the proximal and distal polyA sites, this is either:<br><br><img src='media/pair_type.png' width=360><br><br>For details, please see <a href='http://www.cell.com/action/showImagesData?pii=S2211-1247%2817%2930522-3' target=_fig2>Rot et al. (2017), Figure 2</a>."><img src=media/help.png style='height: 15px; margin-top:-2px;vertical-align:middle; padding-left: 3px;'></font>
-
 
       <div id="div_analysis_clip" style="display: none;">
         <div id="lbl_analysis_clip" style="font-weight: 300; padding-left:20px; padding-bottom: 10px;"></div>
