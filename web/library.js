@@ -639,7 +639,7 @@ function display_library_experiments2(experiments) {
         column_value = "&nbsp;";
       html += "<td class='exp_row'><div class='div_column_value'>" + column_value + "</div></td>";
     }
-    if ( (experiments[exp_id].stats[0]!="") && (experiments[exp_id].stats[0]!=0)) {
+    if (experiments[exp_id].stats[0]!="") {
       map_text = experiments[exp_id].stats[0] + "M reads; " + experiments[exp_id].stats[1] + "%";
       map_width = Math.min(100, Number(experiments[exp_id].stats[1]).toFixed(0)) + "%";
       html += "<td class='exp_row' style='z-index: -2;'><div style='position: relative;'><div style='z-index: 2000; border: 1px solid #eeeeee; width: 130px; text-align: center; margin-bottom: 2px; padding-left: 3px; padding-right: 3px; border-radius: 3px; font-size: 11px;'>" + map_text + "</div><div style='width: " + map_width + "; text-align: center; height: 100%; border-radius: 3px; background-color: #e1e1e1; font-size: 10px; position: absolute; top: 0px; left: 0px; z-index: -5;'>&nbsp;</div></div></td>";
