@@ -38,7 +38,7 @@ function edit_library() {
           '</td></tr></table>',
           '<table style="font-size: inherit; font-weight: 200; font-family: \"Helvetica Neue\", sans-serif; color: #444;" border=0><tr><td valign=top width=270>',
           'Allow access to:<textarea style="margin-top: 3px;" name="access" rows=3 placeholder="Enter one e-mail per line">' + library_access.join("\n") + '</textarea>',
-          '<input type=checkbox ' + public_library + ' id="lib_public" name="lib_public"><label class=unselectable for="lib_public">Make Library Public (visible to everyone)</label>',
+          '<input type=checkbox ' + public_library + ' id="lib_public" name="lib_public"><label class=unselectable for="lib_public">&nbsp;Make Library Public (visible to everyone)</label>',
           '</td><td valign=top width=270>',
           'Owners (can edit):<textarea style="margin-top: 3px;" name="owner" rows=3 placeholder="Enter one e-mail per line">' + library_owner.join("\n") + '</textarea>',
           '</td></tr></table>',
