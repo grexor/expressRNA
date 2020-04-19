@@ -112,9 +112,9 @@ db["genomes"]["hg38"]["link_assembly"] = "ftp://ftp.ensembl.org/pub/release-98/f
 db["genomes"]["hg38"]["link_annotation"] = "ftp://ftp.ensembl.org/pub/release-98/gtf/homo_sapiens/Homo_sapiens.GRCh38.98.chr.gtf.gz"
 
 db["genomes"]["mm10"] = {}
-db["genomes"]["mm10"]["desc"] = "<i>Mus musculus</i>, Assembly: <a href='%s' target=_new'>mm10<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>, Annotation: <a href='%s' target=_new>GTF Ensembl 90<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>";
-db["genomes"]["mm10"]["link_assembly"] = "ftp://ftp.ensembl.org/pub/release-90/fasta/mus_musculus/dna/Mus_musculus.GRCm38.dna.primary_assembly.fa.gz"
-db["genomes"]["mm10"]["link_annotation"] = "ftp://ftp.ensembl.org/pub/release-90/gtf/mus_musculus/Mus_musculus.GRCm38.90.gtf.gz"
+db["genomes"]["mm10"]["desc"] = "<i>Mus musculus</i>, Assembly: <a href='%s' target=_new'>mm10<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>, Annotation: <a href='%s' target=_new>GTF Ensembl 98<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>";
+db["genomes"]["mm10"]["link_assembly"] = "ftp://ftp.ensembl.org/pub/release-98/fasta/mus_musculus/dna/Mus_musculus.GRCm38.dna.primary_assembly.fa.gz"
+db["genomes"]["mm10"]["link_annotation"] = "ftp://ftp.ensembl.org/pub/release-98/gtf/mus_musculus/Mus_musculus.GRCm38.98.gtf.gz"
 
 db["genomes"]["mm9"] = {}
 db["genomes"]["mm9"]["desc"] = "<i>Mus musculus</i>, Assembly: <a href='%s' target=_new'>mm10<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>, Annotation: <a href='%s' target=_new>GTF Ensembl 90<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>";
