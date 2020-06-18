@@ -100,6 +100,12 @@ db["access_levels"]["level3"]["experiments"] = 40
 db["access_levels"]["level3"]["libraries"] = 2
 db["access_levels"]["level3"]["diskspace"] = 2000
 
+//level4
+db["access_levels"]["level4"] = {}
+db["access_levels"]["level4"]["experiments"] = 20
+db["access_levels"]["level4"]["libraries"] = 2
+db["access_levels"]["level4"]["diskspace"] = 4000
+
 //level5
 db["access_levels"]["level5"] = {}
 db["access_levels"]["level5"]["experiments"] = 2000
