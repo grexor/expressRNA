@@ -52,11 +52,11 @@ function show_stats_experiments() {
           element_inner.display_value = element_inner.value
           element_inner.display_value1 = element_inner.value
           element_inner.display_value2 = element_inner.value
-          element_inner.label = item + ", " + element_inner.value + " exps"
-          element_inner.display_label = item + "<br>" + element_inner.value + " experiments"
+          element_inner.label = item + ", " + element_inner.value.toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " exps"
+          element_inner.display_label = item + "<br>" + element_inner.value.toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " experiments"
           element_inner.color = "#f1f1f1";
           pie_data.push(element_inner);
-          table_stats_experiments += "<tr><td align=right style='border-right: 1px solid #cacaca; padding-right: 5px;'>" + item.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "</td><td align=right>" + element_inner.value + " experiments</td></tr>";
+          table_stats_experiments += "<tr><td align=right style='border-right: 1px solid #cacaca; padding-right: 5px;'>" + item.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "</td><td align=right>" + element_inner.value.toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " experiments</td></tr>";
         }
         table_stats_experiments += "<tr><td colspan=2 align=right style='font-weight: 600; color: #777777; padding-right: 5px;'>" + sum_all.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " experiments total</td></tr>";
         var stats_experiments_config = {
@@ -105,12 +105,12 @@ function show_stats_experiments() {
           human_number = Number(100*element_inner.fraction).toFixed(0);
           if (human_number==0)
             human_number = "<1";
-          element_inner.display_label = item + "<br>" + element_inner.value + " experiments<br>"+human_number+"%";
+          element_inner.display_label = item + "<br>" + Number(element_inner.value).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " experiments<br>"+human_number+"%";
           element_inner.color = "#f1f1f1";
           pie_data.push(element_inner);
-          table_stats_methods += "<tr><td align=right style='border-right: 1px solid #cacaca; padding-right: 5px;'>" + item + "</td><td align=right>" + element_inner.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " experiments (" + human_number+"%)</td></tr>";
+          table_stats_methods += "<tr><td align=right style='border-right: 1px solid #cacaca; padding-right: 5px;'>" + item + "</td><td align=right>" + Number(element_inner.value).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " experiments (" + human_number+"%)</td></tr>";
         }
-        table_stats_methods += "<tr><td colspan=2 align=right style='font-weight: 600; color: #777777; padding-right: 5px;'>" + sum_all.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " experiments total</td></tr>";
+        table_stats_methods += "<tr><td colspan=2 align=right style='font-weight: 600; color: #777777; padding-right: 5px;'>" + sum_all.toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " experiments total</td></tr>";
         var stats_methods_config = {
             containerId: "div_stats_methods",
             highlightColor: "#FFB347",
@@ -157,7 +157,7 @@ function show_stats_experiments() {
           human_number = Number(100*element_inner.fraction).toFixed(0);
           if (human_number==0)
             human_number = "<1";
-          element_inner.display_label = item + "<br>" + element_inner.value + " million reads<br>"+human_number+"% ";
+          element_inner.display_label = item + "<br>" + Number(element_inner.value).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " million reads<br>"+human_number+"% ";
           element_inner.color = "#f1f1f1";
           pie_data.push(element_inner);
           table_stats_reads += "<tr><td align=right style='border-right: 1px solid #cacaca; padding-right: 5px;'>" + item + "</td><td align=right>" + element_inner.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " million reads (" + human_number + "%)</td></tr>";

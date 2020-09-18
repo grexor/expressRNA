@@ -86,6 +86,7 @@ function menu_clear() {
   $("#menu_profile").attr('style', '');
   $("#menu_analyses").attr('style', '');
   $("#menu_libraries").attr('style', '');
+  $("#menu_species").attr('style', '');
   $("#btn_signout").attr('style', '');
 }
 

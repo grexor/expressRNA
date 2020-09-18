@@ -66,17 +66,26 @@
         <li class="nav-item">
           <a class="nav-link text-nowrap" id="menu_analyses" href="javascript:open_analyses();"><i class="fas fa-brain"></i>&nbsp;Analyses</a>
         </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link text-nowrap dropdown-toggle" href="#" id="menu_species" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-chart-bar"></i>&nbsp;Species
+          </a>
+          <div class="dropdown-menu" aria-labelledby="menu_species">
+            <a class="dropdown-item" href="javascript:load_content('species.html', 'menu_species');"><i class="fas fa-info fa-fw"></i>&nbsp;Expression Pages</a>
+            <a class="dropdown-item" href="javascript:load_content('marpol.html', 'menu_species');"><i class="fas fa-seedling fa-fw"></i>&nbsp;Marchantia polymorpha</a>
+          </div>
+        </li>
         <li class="nav-item dropdown" style='min-width: 120px'>
             <a class="nav-link text-nowrap dropdown-toggle" href="#" id="menu_info" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <i class="fas fa-rss"></i>&nbsp;Information
             </a>
             <div class="dropdown-menu" aria-labelledby="menu_info">
-              <a class="dropdown-item" href="javascript:open_about();"><i class="far fa-address-card"></i>&nbsp;About expressRNA</a>
-              <a class="dropdown-item" href="javascript:open_news_blog();"><i class="fas fa-blog"></i>&nbsp;Blog</a>
-              <a class="dropdown-item" href="javascript:open_help();"><i class="fas fa-book"></i>&nbsp;Documentation</a>
-              <a class="dropdown-item" href="javascript:open_contributors();"><i class="fas fa-hand-spock"></i>&nbsp;Contributors</a>
-              <a class="dropdown-item" href="javascript:open_server_stats();"><i class="far fa-chart-bar"></i>&nbsp;Server Statistics</a>
-              <a class="dropdown-item" href="javascript:open_contact();"><i class="far fa-envelope-open"></i>&nbsp;Contact</a>
+              <a class="dropdown-item" href="javascript:open_about();"><i class="fas fa-info fa-fw"></i>&nbsp;About expressRNA</a>
+              <a class="dropdown-item" href="javascript:open_news_blog();"><i class="fas fa-blog fa-fw"></i>&nbsp;Blog</a>
+              <a class="dropdown-item" href="javascript:open_help();"><i class="fas fa-book fa-fw"></i>&nbsp;Documentation</a>
+              <a class="dropdown-item" href="javascript:open_contributors();"><i class="fas fa-hand-spock fa-fw"></i>&nbsp;Contributors</a>
+              <a class="dropdown-item" href="javascript:open_server_stats();"><i class="far fa-chart-bar fa-fw"></i>&nbsp;Server Statistics</a>
+              <a class="dropdown-item" href="javascript:open_contact();"><i class="far fa-envelope-open fa-fw"></i>&nbsp;Contact</a>
             </div>
         </li>
       </ul>

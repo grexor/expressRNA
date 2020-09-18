@@ -65,6 +65,14 @@ function open_info() {
   $("#content_info").show();
 }
 
+function load_content(filename, menu) {
+  $("body").removeClass("waiting");
+  hide_all();
+  menu_select(menu);
+  $("#content_load").load(filename);
+  $("#content_load").show();
+}
+
 function open_news_blog() {
   $("body").removeClass("waiting");
   hide_all();
@@ -113,6 +121,7 @@ function hide_all() {
   $("#content_server_stats").hide();
   $("#content_contact").hide();
   $("#content_splash").hide();
+  $("#content_load").hide();
   $("#splash_intro").hide();
 }
 
