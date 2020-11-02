@@ -146,6 +146,11 @@ db["genomes"]["mar3"]["desc"] = "<i>Marchantia polymorpha</i>, Assembly: <a href
 db["genomes"]["mar3"]["link_assembly"] = "http://marchantia.info/download/download/JGI_3.1.fasta.gz"
 db["genomes"]["mar3"]["link_annotation"] = "http://marchantia.info/download/download/Mpolymorphav3.1.allTrs.gff3.gz"
 
+db["genomes"]["mar5"] = {}
+db["genomes"]["mar5"]["desc"] = "<i>Marchantia polymorpha</i>, Assembly: <a href='%s' target=_new'>mar5<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>, Annotation: <a href='%s' target=_new>GTF<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>";
+db["genomes"]["mar5"]["link_assembly"] = "https://marchantia.info/download/tak1v5.1/MpTak1_with_female-chromosome.zip"
+db["genomes"]["mar5"]["link_annotation"] = "https://marchantia.info/download/tak1v5.1/MpTak1_with_female-chromosome.zip"
+
 db["genomes"]["tt"] = {}
 db["genomes"]["tt"]["desc"] = "<i>Tetrahymena thermophila</i>, Assembly: <a href='%s' target=_new'>tt<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>, Annotation: <a href='%s' target=_new>Ciliate<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>";
 db["genomes"]["tt"]["link_assembly"] = "http://www.ciliate.org/system/downloads/T_thermophila_June2014_assembly.fasta"

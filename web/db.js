@@ -30,6 +30,7 @@ genomes["dd"] = ["dd", "Dictyostelium discoideum, dd2.7, Ensembl 44"]
 genomes["at"] = ["at", "Arabidopsis thaliana, at, Ensembl 39"]
 genomes["mar3"] = ["mar3", "Marchantia polymorpha, mar3, Ensembl 44"]
 genomes["tt"] = ["tt", "Tetrahymena thermophila, Ciliate assembly and annotation"]
+genomes["mar5"] = ["mar5", "Marchantia polymorpha, mar5"]
 
 methods = {};
 methods["RNAseq"] = ["RNAseq", "RNA-seq"]

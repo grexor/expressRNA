@@ -779,7 +779,7 @@ function edit_analysis() {
           '<textarea name="notes" rows=4 placeholder="Additional Notes">' + adata["notes"] + '</textarea>',
           '<table style="font-size: inherit; font-weight: 200; font-family: \"Helvetica Neue\", sans-serif; color: #444;" border=0><tr><td valign=top width=270>',
           'Allow access to:<textarea style="margin-top: 3px;" name="access" rows=3 placeholder="Enter one e-mail per line">' + analysis_access.join("\n") + '</textarea>',
-          '<input type=checkbox ' + public_analysis + ' id="ana_public" name="ana_public"><label class=unselectable for="ana_public">Make Analysis Public (visible to everyone)</label>',
+          '<br><input type=checkbox ' + public_analysis + ' id="ana_public" name="ana_public"><label class=unselectable for="ana_public">&nbsp;Make Analysis Public (visible to everyone)</label>',
           '</td><td valign=top width=270>',
           'Owners (can edit):<textarea style="margin-top: 3px;" name="owner" rows=3 placeholder="Enter one e-mail per line">' + analysis_owners.join("\n") + '</textarea>',
           '</td></tr></table>',
