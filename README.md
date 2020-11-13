@@ -2,6 +2,8 @@
 
 Web research platform for RNA-seq data analysis
 
+## Documentation
+
 ## Authors
 
 [expressRNA](https://expressRNA.org) is developed and supported by [Gregor Rot](http://rotlab.info) in collaboration with several research laboratories.
