@@ -3,5 +3,6 @@ Disallow: /licence.html
 Disallow: /rnamotifs2
 Disallow: /share
 Disallow: /github.txt
+Disallow: /iCount
 
 Sitemap: http://www.expressrna.org/sitemap.xml
