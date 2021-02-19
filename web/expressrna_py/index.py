@@ -111,6 +111,11 @@ db["genomes"]["hg38"]["desc"] = "<i>Homo sapiens</i>, Assembly: <a href='%s' tar
 db["genomes"]["hg38"]["link_assembly"] = "ftp://ftp.ensembl.org/pub/release-98/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz"
 db["genomes"]["hg38"]["link_annotation"] = "ftp://ftp.ensembl.org/pub/release-98/gtf/homo_sapiens/Homo_sapiens.GRCh38.98.chr.gtf.gz"
 
+db["genomes"]["hg38chr22"] = {}
+db["genomes"]["hg38chr22"]["desc"] = "<i>Homo sapiens</i>, Assembly: <a href='%s' target=_new'>hg38<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>, Annotation: <a href='%s' target=_new>GTF Ensembl 98<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>";
+db["genomes"]["hg38chr22"]["link_assembly"] = "ftp://ftp.ensembl.org/pub/release-98/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz"
+db["genomes"]["hg38chr22"]["link_annotation"] = "ftp://ftp.ensembl.org/pub/release-98/gtf/homo_sapiens/Homo_sapiens.GRCh38.98.chr.gtf.gz"
+
 db["genomes"]["mm10"] = {}
 db["genomes"]["mm10"]["desc"] = "<i>Mus musculus</i>, Assembly: <a href='%s' target=_new'>mm10<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>, Annotation: <a href='%s' target=_new>GTF Ensembl 98<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>";
 db["genomes"]["mm10"]["link_assembly"] = "ftp://ftp.ensembl.org/pub/release-98/fasta/mus_musculus/dna/Mus_musculus.GRCm38.dna.primary_assembly.fa.gz"
