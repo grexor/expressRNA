@@ -2,6 +2,10 @@
 
 Web research platform for RNA-seq data analysis
 
+## Working on
+
+- integration of payment system!
+
 ## Documentation
 
 ## Authors
