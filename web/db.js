@@ -31,6 +31,7 @@ genomes["at"] = ["at", "Arabidopsis thaliana, at, Ensembl 39"]
 genomes["mar3"] = ["mar3", "Marchantia polymorpha, mar3, Ensembl 44"]
 genomes["tt"] = ["tt", "Tetrahymena thermophila, Ciliate assembly and annotation"]
 genomes["mar5"] = ["mar5", "Marchantia polymorpha, mar5"]
+genomes["cab3"] = ["cab3", "Equus caballus"]
 
 methods = {};
 methods["RNAseq"] = ["RNAseq", "RNA-seq"]

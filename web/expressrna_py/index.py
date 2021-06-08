@@ -161,6 +161,11 @@ db["genomes"]["tt"]["desc"] = "<i>Tetrahymena thermophila</i>, Assembly: <a href
 db["genomes"]["tt"]["link_assembly"] = "http://www.ciliate.org/system/downloads/T_thermophila_June2014_assembly.fasta"
 db["genomes"]["tt"]["link_annotation"] = "http://www.ciliate.org/system/downloads/T_thermophila_June2014.gff3"
 
+db["genomes"]["cab3"] = {}
+db["genomes"]["cab3"]["desc"] = "<i>Equus caballus</i>, Assembly: <a href='%s' target=_new'>cab3<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>, Annotation: <a href='%s' target=_new>GTF Ensembl 39<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>";
+db["genomes"]["cab3"]["link_assembly"] = "http://ftp.ensembl.org/pub/release-104/fasta/equus_caballus/dna/Equus_caballus.EquCab3.0.dna.toplevel.fa.gz"
+db["genomes"]["cab3"]["link_annotation"] = "http://ftp.ensembl.org/pub/release-104/gtf/equus_caballus/Equus_caballus.EquCab3.0.104.gtf.gz"
+
 class TableClass():
 
     def log(self, message):
