@@ -216,7 +216,9 @@ function display_libraries() {
       last_change = format_date_time(new Date(temp[i].last_change));
       library_id_descriptive = "<b>" + lib_id + "</b>" + ", stores <b>" + temp[i].num_experiments + " experiments</b>";
       html += "<div class=div_library_result>";
-      html += "<div style='color: #009900;'><img src='media/icon_data.png' style='height:12px; padding-right: 3px;'><a href=\"javascript:open_library('" + lib_id + "', 'ex');\">" + library_id_descriptive + "</a></div>"
+      html += "<div style='color: #009900;'><img src='media/icon_data.png' style='height:12px; padding-right: 3px;'>";
+      link_url = "https://expressrna.org/index.html?action=library&library_id=" + lib_id;
+      html += "<a onclick=\"javascript:open_library('" + lib_id + "', 'ex'); return false;\" href=\"" + link_url + "\">" + library_id_descriptive + "</a></div>"
       html += "<div style='padding-left: 15px;'>";
       html += "<div><b>Name</b>: " + name_search + "</div>"
       html += "<div><b>Notes</b>: " + notes_search + "</div>";

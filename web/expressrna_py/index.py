@@ -107,9 +107,9 @@ db["genomes"]["hg19"]["link_assembly"] = "ftp://ftp.ensembl.org/pub/release-75/f
 db["genomes"]["hg19"]["link_annotation"] = "ftp://ftp.ensembl.org/pub/release-75/gtf/homo_sapiens/Homo_sapiens.GRCh37.75.gtf.gz"
 
 db["genomes"]["hg38"] = {}
-db["genomes"]["hg38"]["desc"] = "<i>Homo sapiens</i>, Assembly: <a href='%s' target=_new'>hg38<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>, Annotation: <a href='%s' target=_new>GTF Ensembl 98<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>";
-db["genomes"]["hg38"]["link_assembly"] = "ftp://ftp.ensembl.org/pub/release-98/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz"
-db["genomes"]["hg38"]["link_annotation"] = "ftp://ftp.ensembl.org/pub/release-98/gtf/homo_sapiens/Homo_sapiens.GRCh38.98.chr.gtf.gz"
+db["genomes"]["hg38"]["desc"] = "<i>Homo sapiens</i>, Assembly: <a href='%s' target=_new'>hg38<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>, Annotation: <a href='%s' target=_new>GTF Ensembl 104<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>";
+db["genomes"]["hg38"]["link_assembly"] = "ftp://ftp.ensembl.org/pub/release-104/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz"
+db["genomes"]["hg38"]["link_annotation"] = "ftp://ftp.ensembl.org/pub/release-104/gtf/homo_sapiens/Homo_sapiens.GRCh38.104.chr.gtf.gz"
 
 db["genomes"]["hg38chr22"] = {}
 db["genomes"]["hg38chr22"]["desc"] = "<i>Homo sapiens</i>, Assembly: <a href='%s' target=_new'>hg38<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>, Annotation: <a href='%s' target=_new>GTF Ensembl 98<img src=media/linkout.png style='height:10px; padding-left: 2px; padding-right: 2px;'></a>";
