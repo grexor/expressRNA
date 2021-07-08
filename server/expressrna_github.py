@@ -16,6 +16,7 @@ def populate_commits(url, repo):
 
 commits = [];
 
+populate_commits("https://api.github.com/repos/grexor/expressrna/commits", "expressrna")
 populate_commits("https://api.github.com/repos/grexor/apa/commits", "apa")
 populate_commits("https://api.github.com/repos/grexor/pybio/commits", "pybio")
 populate_commits("https://api.github.com/repos/grexor/rnamotifs2/commits", "rnamotifs2")
@@ -32,6 +33,7 @@ for i in range(25):
     div.append("<div class='commits_font'><img src=media/checkbox.png width=12px>&nbsp;" + repo + "&nbsp;<a target='_commit' href='" + url + "'>" + date + ": " + message+"</a></div>");
 
 if len(div)>20:
-    f = open(os.path.join(config.expressrna_folder, "github.txt"), "wt")
-    f.write("".join(div))
-    f.close()
+    for erna_folder in config.expressrna_folder:
+        f = open(os.path.join(erna_folder, "github.txt"), "wt")
+        f.write("".join(div))
+        f.close()
