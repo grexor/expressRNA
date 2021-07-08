@@ -608,9 +608,11 @@ function display_analysis_experiments_fill(data_analysis, data, label) {
   {
     lib_id = data[i].lib_id;
     exp_id = data[i].exp_id;
-    library_link = "javascript:open_library('" + lib_id + "');";
+    url_link = "https://expressrna.org/index.html?action=library&library_id=" + lib_id;
     html += "<tr style='font-weight: 300;'>";
-    html += "<td class=nowrap align=center>" + data[i].cid + "</td><td class=notes><a href=" + library_link + ">" + data[i].lib_id + "</a>_e" + data[i].exp_id + "</td>";
+    html += "<td class=nowrap align=center>" + data[i].cid + "</td><td class=notes>";
+    html += "<a href=" + url_link + " onclick=\"open_library(event, '" + url_link + "', '" + data[i].lib_id + "'); return false;\">" + data[i].lib_id + "</a>";
+    html += "_e" + data[i].exp_id + "</td>";
 
     for (var j=0; j<data_analysis.columns.length; j++) {
       column_name = data_analysis.columns[j][1];
