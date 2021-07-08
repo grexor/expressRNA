@@ -92,7 +92,7 @@ function new_library_do(genome, method, seq_type) {
       .done(function(result) {
           search_libraries(); // refresh library list
           data = $.parseJSON(result);
-          open_library(data.lib_id);
+          open_library({"ctrlKey":0, "metaKey":0}, "https://devel.expressrna.org/index.html?action=library&library_id="+data.lib_id, data.lib_id);
           update_user_usage();
       })
       .fail(function(){
@@ -218,7 +218,7 @@ function display_libraries() {
       html += "<div class=div_library_result>";
       html += "<div style='color: #009900;'><img src='media/icon_data.png' style='height:12px; padding-right: 3px;'>";
       link_url = "https://expressrna.org/index.html?action=library&library_id=" + lib_id;
-      html += "<a onclick=\"javascript:open_library('" + lib_id + "', 'ex'); return false;\" href=\"" + link_url + "\">" + library_id_descriptive + "</a></div>"
+      html += "<a onclick=\"javascript:open_library(event, '" + link_url + "', '" + lib_id + "', 'ex'); return false;\" href=\"" + link_url + "\">" + library_id_descriptive + "</a></div>"
       html += "<div style='padding-left: 15px;'>";
       html += "<div><b>Name</b>: " + name_search + "</div>"
       html += "<div><b>Notes</b>: " + notes_search + "</div>";

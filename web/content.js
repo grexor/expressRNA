@@ -125,23 +125,31 @@ function hide_all() {
   $("#splash_intro").hide();
 }
 
-function open_library(library_id, library_module) {
-  db["library"]["library_module"] = library_module;
-  $("body").removeClass("waiting");
-  hide_all();
-  menu_select("menu_libraries");
-  $("#content_library").show();
-  get_library(library_id);
+function open_library(event, url, library_id, library_module) {
+  if (event.ctrlKey || event.metaKey) {
+    window.open(url);
+  } else {
+    db["library"]["library_module"] = library_module;
+    $("body").removeClass("waiting");
+    hide_all();
+    menu_select("menu_libraries");
+    $("#content_library").show();
+    get_library(library_id);
+  }
 }
 
-function open_analysis(analysis_id, analysis_module, pair_type) {
-  db["analysis"]["analysis_module"] = analysis_module;
-  db["analysis"]["pair_type"] = pair_type;
-  db["analysis"]["clip_index"] = "0";
-  db["analysis"]["go_aspect"] = "P";
-  $("body").removeClass("waiting");
-  hide_all();
-  menu_select("menu_analyses");
-  $("#content_analysis").show();
-  get_analysis(analysis_id, pair_type);
+function open_analysis(event, url, analysis_id, analysis_module, pair_type) {
+  if (event.ctrlKey || event.metaKey) {
+    window.open(url);
+  } else {
+    db["analysis"]["analysis_module"] = analysis_module;
+    db["analysis"]["pair_type"] = pair_type;
+    db["analysis"]["clip_index"] = "0";
+    db["analysis"]["go_aspect"] = "P";
+    $("body").removeClass("waiting");
+    hide_all();
+    menu_select("menu_analyses");
+    $("#content_analysis").show();
+    get_analysis(analysis_id, pair_type);
+  }  
 }
