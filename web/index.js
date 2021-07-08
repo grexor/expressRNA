@@ -57,9 +57,9 @@ function process_login_parameters(action, data) {
   else if (action=="licence")
       open_licence();
   else if (action=="analysis")
-      open_analysis(data["analysis_id"], data["module"], data["pair_type"]);
+      open_analysis({"ctrlKey":0, "metaKey":0}, "http://www.expressrna.org/index.html?action=analysis&analysis_id="+data["analysis_id"], data["analysis_id"], data["module"], data["pair_type"]);
   else if (action=="library")
-      open_library(data["library_id"], data["module"]);
+      open_library({"ctrlKey":0, "metaKey":0}, "http://www.expressrna.org/index.html?action=library&library_id="+data["library_id"], data["library_id"], data["module"]);
   else if (action=="newsblog")
       open_news_blog();
   else if (action=="contributors")
