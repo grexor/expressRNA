@@ -24,7 +24,7 @@ populate_commits("https://api.github.com/repos/grexor/rnamotifs2/commits", "rnam
 commits = sorted(commits, key=lambda k: k['sortdate'], reverse=True)
 
 div = []
-for i in range(25):
+for i in range(30):
     message = commits[i]["commit"]["message"];
     date = commits[i]["date"];
     date = commits[i]["date"].strftime("%d %B %Y")
