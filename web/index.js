@@ -44,6 +44,10 @@ function all_documents_loaded() {
 function process_login_parameters(action, data) {
   if (action=="profile")
       open_profile();
+  else if (action=="species")
+      load_content("species.html", "menu_species", "species");
+   else if (action=="marpol")
+      load_content("marpol.html", "menu_species", "marpol");
   else if (action=="about")
       open_about();
   else if (action=="info") {

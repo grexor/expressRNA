@@ -65,12 +65,13 @@ function open_info() {
   $("#content_info").show();
 }
 
-function load_content(filename, menu) {
+function load_content(filename, menu, history) {
   $("body").removeClass("waiting");
   hide_all();
   menu_select(menu);
   $("#content_load").load(filename);
   $("#content_load").show();
+  add_history({"action":history}, "index.html?action="+history);
 }
 
 function open_news_blog() {
