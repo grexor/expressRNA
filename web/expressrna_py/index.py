@@ -1,5 +1,6 @@
 import json
 import cgi
+import urllib
 import psutil
 import os
 import sys
@@ -195,7 +196,7 @@ class TableClass():
     def parse_fields(self, environ):
         request_method = environ["REQUEST_METHOD"]
         if environ["REQUEST_METHOD"]=="GET":
-            pars = cgi.parse_qs(environ['QUERY_STRING'])
+            pars = urllib.parse.parse_qs(environ['QUERY_STRING'])
             for par, [val] in pars.items():
                 pars[par] = val
         if environ["REQUEST_METHOD"]=="POST":
