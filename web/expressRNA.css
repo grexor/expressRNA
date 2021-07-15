@@ -1,3 +1,251 @@
+#splash_intro {
+  height: 100%;
+}
+
+#splash_intro {
+  background: url("media/rna6.jpg") no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+.tippy-tooltip.light-theme {
+  font-family: 'Roboto', sans-serif;
+  font-size: 13px;
+  font-weight: 300;
+  text-align: justify;
+  background-color: #ffffff !important;
+}
+
+.search {
+    border: 0.8px solid #c1c1c1;
+    padding: 2px;
+    padding-left: 4px;
+    border-radius:5px;
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+    outline: none;
+    font-size: 12px;
+    color: #555555;
+    display: none;
+ }
+
+.table_experiments {
+  font-size: 12px !important;
+  border-collapse: collapse;
+  color: #777777 !important;
+}
+
+.table_experiments tr:hover {
+  background-color: #f1f1f1;
+}
+
+.div_column {
+  float: right;
+  border-radius: 5px;
+  padding-left: 3px;
+  padding-right: 3px;
+  margin-right: 5px;
+  margin-bottom: 3px;
+  background-color: #dddddd;
+  color: #666666;
+}
+
+.div_column_light {
+  float: right;
+  border-radius: 5px;
+  padding-left: 3px;
+  padding-right: 3px;
+  margin-right: 5px;
+  margin-bottom: 3px;
+  background-color: #fafafa;
+  color: #666666;
+}
+
+.div_column_value {
+  margin-bottom: 3px;
+}
+
+.exp_row {
+  padding-left: 5px;
+  padding-right: 5px;
+  text-align:left;
+  border-right: 1px solid #e1e1e1;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.button {
+  background-color: #fafafa; /* Green */
+  border: 1px solid #f1f1f1;
+  color: white;
+  padding-left: 3px;
+  padding-right: 3px;
+  padding-top: 1px;
+  padding-bottom: 1px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 13px;
+  border-radius: 5px;
+  float: left;
+  margin-right: 10px;
+}
+
+.button:hover {
+font-weight: 600;
+}
+
+.btn_info {
+margin-right: 10px;
+margin-bottom: 5px;
+height: 16;
+width: 100px;
+background-color: #f1f1f1;
+border-radius: 10px;
+transition: all 0.3s ease 0s;
+vertical-align: center;
+text-align: center;
+padding-top: 4px;
+padding-bottom: 1px;
+user-select: none;
+-webkit-touch-callout: none;
+-webkit-user-select: none;
+-khtml-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+font-size: 12px;
+font-family: Roboto;
+cursor: pointer;
+float: left;
+}
+
+.tippy-tooltip.light-theme {
+  font-family: 'Roboto', sans-serif;
+  font-size: 13px;
+  font-weight: 300;
+  text-align: justify;
+  background-color: #ffffff !important;
+}
+
+ .div_library_result {
+   border-top: 1px dashed #e1e1e1;
+   padding-bottom: 5px;
+   padding-top: 5px;
+ }
+
+ .div_library_result:hover {
+   background-color: #fafafa !important;
+ }
+
+.div_analyses_result {
+  border-top: 1px dashed #e1e1e1;
+  padding-bottom: 5px;
+  padding-top: 5px;
+}
+
+.div_analyses_result:hover {
+  background-color: #fafafa !important;
+}
+
+div.plotly-notifier {
+  visibility: hidden;
+}
+
+b {
+  font-weight: 400;
+}
+
+.tippy-tooltip.light-theme {
+  font-family: 'Roboto', sans-serif;
+  font-size: 13px;
+  font-weight: 100;
+  text-align: justify;
+  background-color: #ffffff !important;
+}
+
+* {
+  font-family: 'Open Sans', sans-serif;
+}
+
+a {
+  text-decoration: none;
+  color: #2a6bcc;
+}
+
+a:hover {
+  text-decoration: none;
+  color: #0D4F8B;
+}
+
+.data-row {
+  font-size: 11px;
+  outline: none;
+}
+
+.header-row {
+  font-size: 11px;
+  outline: none;
+  background-color: #f1f1f1;
+  text-align: left;
+}
+
+.div_center {
+    font-size: 13px;
+    font-family: 'Open Sans', sans-serif;
+    width: 900px;
+    background-color: #ffffff;
+    opacity: 0.8;
+    margin: auto;
+}
+
+#paper_div a:link { color: #885555; }
+#paper_div a:visited { color: #885555; }
+#paper_div a:hover { color: #ff5555; }
+#paper_div a:active { color: #ff5555; }
+
+.div_header {
+  background: linear-gradient(to right, #f1f1f1, #ffffff);
+  font-size: 13px;
+  padding: 3px;
+  color: #000000;
+  margin-bottom: 10px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+}
+
+.div_content {
+  padding-left: 3px;
+  text-align: justify;
+  margin-right: 10px;
+  font-size: 13px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+  line-height: 1.25;
+}
+
+.div_content a {
+  color: #885555;
+  font-weight: 300;
+}
+
+.div_content a:hover {
+  color: #ff5555;
+  font-weight: 300;
+}
+
+.div_git {
+  margin-right: 10px;
+  font-size: 13px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+}
+
 body {
    margin: 0px;
    padding: 0px;
