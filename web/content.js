@@ -140,6 +140,7 @@ function open_library(event, url, library_id, library_module) {
 }
 
 function open_analysis(event, url, analysis_id, analysis_module, pair_type) {
+  console.log(event);
   if (event.ctrlKey || event.metaKey) {
     window.open(url);
   } else {

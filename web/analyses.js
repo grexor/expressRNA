@@ -152,7 +152,7 @@ function display_analyses(data) {
       analysis_notes_search = temp[i].notes_search;
       url_link = "https://expressrna.org/index.html?action=analysis&analysis_id=" + analysis_id;
       html += "<div class=div_analyses_result>";
-      html += "<div><img src='media/analysis4.png' style='height:14px; padding-right: 3px; vertical-align:middle;'><b><a href=\"" + url_link + "\" onclick=\"open_analysis(event, '" + url_link + "', '" + analysis_id + "', 'es', 'same'); return false;\">" + analysis_id + "</b></a></div>"
+      html += "<div><img src='media/analysis4.png' style='height:14px; padding-right: 3px; vertical-align:middle;'><b><a href=\"" + url_link + "\" onclick=\"open_analysis(event, '" + url_link + "', '" + analysis_id + "', 'es', 'combined'); return false;\">" + analysis_id + "</b></a></div>"
       html += "<div style='padding-left: 15px;'>";
       html += "<div><b>Name</b>: " + analysis_name_search + "</div>"
       html += "<div><b>Genome</b>: " + temp[i].genome_search + "</div>"
