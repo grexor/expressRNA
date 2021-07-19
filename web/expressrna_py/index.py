@@ -249,13 +249,14 @@ class TableClass():
                 f = open(target, 'wb')
                 f.write(file_data)
                 f.close()
+                # convert bz2 to gz in case of bz2 upload
+                self.add_ticket(email, "bunzip2 "+target, "bunzip2 " + "%s_e%s.fastq.bz2" % (lib_id, exp_id) + " to convert it to gzip format")
+                self.add_ticket(email, "gzip "+target[:-3], "gzip " + "%s_e%s.fastq" % (lib_id, exp_id))
             if filename.endswith(".gz"):
                 target = os.path.join(exp_folder, "%s_e%s.fastq.gz" % (lib_id, exp_id))
                 f = open(target, 'wb')
                 f.write(file_data)
                 f.close()
-                self.add_ticket(email, "gunzip "+target, "gunzip " + "%s_e%s.fastq.gz" % (lib_id, exp_id) + " to convert it to bz2 format")
-                self.add_ticket(email, "bzip2 "+target[:-3], "bzip2 " + "%s_e%s.fastq" % (lib_id, exp_id))
             self.add_ticket(email, "apa.map -lib_id %s -exp_id %s -cpu 4" % (lib_id, exp_id), "map e%s (library %s) to reference genome %s" % (exp_id, lib_id, library.genome))
             self.add_ticket(email, "apa.map.stats -lib_id %s -exp_id %s" % (lib_id, exp_id), "map statistics for e%s (library %s)" % (exp_id, lib_id))
             self.add_ticket(email, "apa.fastqc /home/gregor/apa/data.apa/%s %s" % (lib_id, lib_id), "fastqc for library %s" % (lib_id))
